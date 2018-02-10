@@ -27,3 +27,9 @@
     }
   }
 }
+
+@include media-breakpoint-down(sm) {
+  #category-page {
+    margin-top: 10rem;
+  }
+}

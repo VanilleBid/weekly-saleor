@@ -72,6 +72,16 @@
   }
   &__logo {
     padding: $global-padding * 2 0;
+    svg {
+      & > .black {
+        fill: #231F20;
+      }
+
+      & > .yellow {
+        fill: #F9D108;
+      }
+    }
+
     .menu-icon-mobile {
       position: relative;
       display: inline-block;
@@ -89,9 +99,6 @@
       @media (max-width: 370px) {
         top: 0;
       }
-    }
-    svg path {
-      fill: $body-color;
     }
   }
   &__search {

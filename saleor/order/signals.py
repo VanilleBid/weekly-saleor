@@ -1,5 +1,6 @@
 import logging
 from django.dispatch import receiver
+from django.utils.translation import pgettext_lazy
 from payments.signals import status_changed
 
 from ..core import analytics

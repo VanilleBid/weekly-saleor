@@ -11,7 +11,7 @@ from ...cart.forms import QuantityField
 from ...core.utils import build_absolute_uri
 from ...discount.utils import decrease_voucher_usage
 from ...order import GroupStatus
-from ...order.emails import send_note_confirmation
+from ...order.emails import send_note_confirmation, send_shipping_confirmation
 from ...order.models import DeliveryGroup, OrderLine, OrderNote
 from ...order.utils import (
     add_variant_to_delivery_group, cancel_order, change_order_line_quantity,
@@ -228,6 +228,14 @@ class ShipGroupForm(forms.ModelForm):
     def save(self, commit=True):
         self.instance.ship(self.cleaned_data.get('tracking_number'))
         return super().save(commit)
+
+    def send_confirmation_email(self):
+        order = self.instance.order
+        email = order.get_user_current_email()
+        url = build_absolute_uri(
+            reverse(
+                'order:details', kwargs={'token': order.token}))
+        send_shipping_confirmation.delay(email, url, self.instance.tracking_number)
 
 
 class CancelGroupForm(forms.ModelForm):

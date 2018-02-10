@@ -36,7 +36,8 @@ maxminddb
 maxminddb-geolite2
 phonenumberslite>=8.8.8
 prices>=0.5.7
-psycopg2>=2.6
+psycopg2>=2.6             ; platform_python_implementation != "PyPy"
+psycopg2cffi>=2.7.6       ; platform_python_implementation == "PyPy"
 purl>=0.4.1
 pytest
 pytest-django
@@ -50,3 +51,4 @@ text-unidecode
 uwsgi>=2.0.0
 celery[redis]
 weasyprint>=0.40
+vatlayer_european_taxes>=0.0.0

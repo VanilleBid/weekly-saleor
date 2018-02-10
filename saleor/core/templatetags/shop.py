@@ -13,3 +13,9 @@ def get_sort_by_url(context, field, descending=False):
     else:
         request_get['sort_by'] = field
     return '%s?%s' % (request.path, urlencode(request_get))
+
+
+@register.filter
+def length_gt(value, arg):
+    """Returns a boolean of whether the value is greater than an argument."""
+    return len(value) > int(arg)

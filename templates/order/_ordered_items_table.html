@@ -83,7 +83,7 @@
         {% if item.tracking_number %}
         <p>
           {% blocktrans trimmed with tracking_number=item.tracking_number context "Order details shipment row text"  %}
-          Tracking number: {{ tracking_number }}
+          Tracking URL: <a href="{{ tracking_number }}" target="_blank">{{ tracking_number }}</a>
           {% endblocktrans %}
         </p>
         {% endif %}
@@ -107,6 +107,21 @@
     </div>
   </div>
 {% endif %}
+
+  <div class="table__row">
+    <div class="row">
+      <div class="col-8 order-details__table-footer">
+        <p>
+          {% trans "Tax" context "Order total tax price header" %}
+        </p>
+      </div>
+      <div class="col-4">
+        <p class="float-right">
+          {% gross order.total_tax html=True %}
+        </p>
+      </div>
+    </div>
+  </div>
 
 {% if order.discount_amount %}
 <div class="table__row">

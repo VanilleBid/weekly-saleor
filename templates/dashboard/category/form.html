@@ -100,6 +100,12 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <img src="{{ form.image.value.thumbnail.400x400 }}" />
+            </div>
+            <div class="row">
+              {{ form.image|materializecss }}
+            </div>
           </div>
           <div class="card-action right-align">
             {% if path %}

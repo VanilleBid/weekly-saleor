@@ -3,7 +3,7 @@
 {% load staticfiles %}
 {% load render_bundle from webpack_loader %}
 
-<html lang="{{ LANGUAGE_CODE }}" class="no-js" data-shipping-options-url="{% url 'cart:shipping-options' %}" data-cart-summary-url="{% url 'cart:cart-summary' %}">
+<html lang="{{ LANGUAGE_CODE }}" class="no-js" data-shipping-options-url="{% url 'cart:shipping-options' %}" data-taxed-url="{% url 'cart:taxed-info' %}" data-cart-summary-url="{% url 'cart:cart-summary' %}">
 <head>
   <title>{% block title %}{{ site.name }}{% endblock %}</title>
   {% block meta %}
@@ -245,23 +245,11 @@
           <a target="_blank" rel="noopener" class="social-footer" href="https://www.facebook.com/mirumeelabs/">
             <svg data-src="{% static "images/facebook-logo.svg" %}" width="45px" height="45px"/>
           </a>
-          <a target="_blank" rel="noopener" class="social-footer" href="https://github.com/mirumee/saleor">
-            <svg data-src="{% static "images/github-logo.svg" %}" width="45px" height="45px"/>
-          </a>
           <a target="_blank" rel="noopener" class="social-footer" href="https://twitter.com/getsaleor">
             <svg data-src="{% static "images/twitter-logo.svg" %}" width="45px" height="45px"/>
           </a>
           <a target="_blank" rel="noopener" class="social-footer" href="https://plus.google.com/+Mirumee">
             <svg data-src="{% static "images/google-logo.svg" %}" width="45px" height="45px"/>
-          </a>
-          <a target="_blank" rel="noopener" class="social-footer" href="https://www.meetup.com/Mirumee-Talks/">
-            <svg data-src="{% static "images/meetup-logo.svg" %}" width="45px" height="45px"/>
-          </a>
-          <a target="_blank" rel="noopener" class="social-footer" href="https://linkedin.com/company/mirumee-software">
-            <svg data-src="{% static "images/linkedin-logo.svg" %}" width="45px" height="45px"/>
-          </a>
-          <a target="_blank" rel="noopener" class="social-footer" href="https://dribbble.com/mirumee">
-            <svg data-src="{% static "images/dribbble-logo.svg" %}" width="45px" height="45px"/>
           </a>
           <a target="_blank" rel="noopener" class="social-footer" href="https://www.instagram.com/explore/tags/mirumee/">
             <svg data-src="{% static "images/instagram-logo.svg" %}" width="45px" height="45px"/>
@@ -271,6 +259,14 @@
     </div>
   </footer>
 {% endblock %}
+<div id="cookie_prompter">
+    <p>
+        Ce site internet utilise des cookies pour améliorer l'expérience des utilisateurs.
+        En utilisant notre site, vous acceptez notre politique des cookies. <a href="/policy.html">En savoir plus</a>
+    </p>
+    <button class="btn primary">J'accepte</button>
+</div>
+</div>
 {% block footer_scripts %}
   <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
   {% render_bundle 'vendor' 'js' %}

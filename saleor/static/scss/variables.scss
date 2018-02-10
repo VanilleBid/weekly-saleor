@@ -10,7 +10,7 @@ $light-gray: #f2f2f2;
 $gray: #D3D1D0;
 $darken-gray: darken($gray, 10%);
 $skull-gray: #828282;
-$blue: #26A5D4;
+$blue: #3e8dad;
 $darken-blue: darken($blue, 10%);
 $red: #EB5757;
 $dark-red: #c53636;
@@ -33,3 +33,15 @@ $theme-colors: (
   light: #f8f9fa,
   dark: #343a40
 );
+
+
+/*** Timeline Configuration ***/
+
+$timeline-width: 3px !default;
+$timeline-circle-radius: 6px !default;
+$timeline-event-margin: 1rem !default;
+$timeline-date-width: 20rem;
+$timeline-sep-width: 2rem;
+
+$primary-color-light: lighten(map_get($theme-colors, "primary"), 15%) !default;
+$label-font-size: .8rem !default;

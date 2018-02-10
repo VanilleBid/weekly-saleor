@@ -1,5 +1,6 @@
 import ast
 import os.path
+import platform
 
 import dj_database_url
 import dj_email_url
@@ -9,6 +10,11 @@ import django_cache_url
 
 def get_list(text):
     return [item.strip() for item in text.split(',')]
+
+
+if platform.python_implementation() == "PyPy":
+    import psycopg2cffi.compat
+    psycopg2cffi.compat.register()
 
 
 DEBUG = ast.literal_eval(os.environ.get('DEBUG', 'True'))
@@ -37,12 +43,13 @@ if os.environ.get('REDIS_URL'):
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://saleor:saleor@localhost:5432/saleor',
+        default='postgres://saleor:saleor@localhost:5432/biglight',
         conn_max_age=600)}
 
+DEFAULT_TAX_RATE_COUNTRY = 'FR'
 
-TIME_ZONE = 'America/Chicago'
-LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Europe/Paris'
+LANGUAGE_CODE = 'fr'
 LOCALE_PATHS = [os.path.join(PROJECT_ROOT, 'locale')]
 USE_I18N = True
 USE_L10N = True
@@ -123,7 +130,7 @@ TEMPLATES = [{
         'string_if_invalid': '<< MISSING VARIABLE "%s" >>' if DEBUG else ''}}]
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = "Secret"  # FIXME
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -248,8 +255,8 @@ AUTH_USER_MODEL = 'userprofile.User'
 
 LOGIN_URL = '/account/login/'
 
-DEFAULT_COUNTRY = 'US'
-DEFAULT_CURRENCY = 'USD'
+DEFAULT_COUNTRY = 'FR'
+DEFAULT_CURRENCY = 'EUR'
 AVAILABLE_CURRENCIES = [DEFAULT_CURRENCY]
 
 OPENEXCHANGERATES_API_KEY = os.environ.get('OPENEXCHANGERATES_API_KEY')
@@ -300,7 +307,7 @@ bootstrap4 = {
 
 TEST_RUNNER = ''
 
-ALLOWED_HOSTS = get_list(os.environ.get('ALLOWED_HOSTS', 'localhost'))
+ALLOWED_HOSTS = get_list(os.environ.get('ALLOWED_HOSTS', '127.0.0.1')) + ['demo.big-light.fr']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 

@@ -15,6 +15,8 @@ from payments.models import BasePayment
 from prices import FixedDiscount, Price
 from satchless.item import ItemLine, ItemSet
 
+from saleor.core.utils.billing import get_tax_price
+
 from . import emails, GroupStatus, OrderStatus
 from .transitions import (
     cancel_delivery_group, process_delivery_group, ship_delivery_group)
@@ -177,9 +179,13 @@ class Order(models.Model, ItemSet):
                          currency=settings.DEFAULT_CURRENCY)
 
     @total.setter
-    def total(self, price):
-        self.total_net = price
-        self.total_tax = Price(price.tax, currency=price.currency)
+    def total(self, price: Price):
+        print(self.billing_address.country.code)
+
+        tax = get_tax_price(None, self, price)
+
+        self.total_net = price.net
+        self.total_tax = tax.tax
 
     def get_subtotal_without_voucher(self):
         if self.get_lines():
@@ -207,7 +213,7 @@ class DeliveryGroup(models.Model, ItemSet):
 
     def __str__(self):
         return pgettext_lazy(
-            'Shipment group str', 'Shipment #%s') % self.pk
+            'Shipment group str', '#%s') % self.pk
 
     def __repr__(self):
         return '%s(%r)' % (self.__class__.__name__, list(self))

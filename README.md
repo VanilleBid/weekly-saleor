@@ -8,9 +8,8 @@ Avast ye landlubbers! Saleor is an open-source e-commerce storefront for Python 
 
 [Saleor homepage](http://getsaleor.com/)
 
-[![Build Status](https://travis-ci.org/mirumee/saleor.png?branch=master)](https://travis-ci.org/mirumee/saleor)
-[![Requirements Status](https://requires.io/github/mirumee/saleor/requirements.svg?branch=master)](https://requires.io/github/mirumee/saleor/requirements/?branch=master)
-[![codecov.io](http://codecov.io/github/mirumee/saleor/coverage.svg?branch=master)](http://codecov.io/github/mirumee/saleor?branch=master)
+[![Build Status](https://travis-ci.org/NyanKiyoshi/weekly-saleor.svg?branch=week-2)](https://travis-ci.org/NyanKiyoshi/weekly-saleor)
+[![codecov](https://codecov.io/gh/NyanKiyoshi/weekly-saleor/branch/week-2/graph/badge.svg)](https://codecov.io/gh/NyanKiyoshi/weekly-saleor)
 
 * * *
 

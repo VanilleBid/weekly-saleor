@@ -128,23 +128,40 @@ export default $(document).ready((e) => {
   let $deliveryForm = $('.deliveryform');
   let crsfToken = $deliveryForm.data('crsf');
   let countrySelect = '#id_country';
+  let radioButtonsAddresses = $('input[name=address][country-code]');
   let $cartSubtotal = $('.cart__subtotal');
+  let $cartGrossPrice = $('.gross_js');
+  let ajaxPost = (resource, data, success) => {
+    $.ajax({
+      url: $('html').data(resource),
+      type: 'POST',
+      data: $.extend({'csrfmiddlewaretoken': crsfToken}, data),
+      success: success
+    });
+  };
   let deliveryAjax = (e) => {
     let newCountry = $(countrySelect).val();
-    $.ajax({
-      url: $('html').data('shipping-options-url'),
-      type: 'POST',
-      data: {
-        'csrfmiddlewaretoken': crsfToken,
-        'country': newCountry
-      },
-      success: (data) => {
-        $cartSubtotal.html(data);
-      }
+    ajaxPost('shipping-options-url', {
+      'country': newCountry
+    },
+    (data) => {
+      $cartSubtotal.html(data);
     });
+  };
+  let addressChanged = (e) => {
+    let newCountryCode = e.target.attributes['country-code'].value;
+    ajaxPost('taxed-url',
+      {'country': newCountryCode},
+      (data) => {
+        $cartGrossPrice.contents().filter(function() {
+          return this.nodeType === 3;
+        }).replaceWith(data.gross.toFixed(2));
+      }
+    );
   };
 
   $cartSubtotal.on('change', countrySelect, deliveryAjax);
+  radioButtonsAddresses.on('change', addressChanged);
 
   if ($.cookie('alert') === 'true') {
     $removeProductSuccess.removeClass('d-none');

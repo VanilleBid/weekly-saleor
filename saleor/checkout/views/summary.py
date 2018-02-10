@@ -4,12 +4,12 @@ from django.template.response import TemplateResponse
 from django.utils.translation import pgettext, pgettext_lazy
 from satchless.item import InsufficientStock
 
+from saleor.core.utils.billing import base_template_kwargs
 from ..forms import (
     AnonymousUserBillingForm, BillingAddressesForm,
     BillingWithoutShippingAddressForm, NoteForm)
 from ...userprofile.forms import get_address_form
 from ...userprofile.models import Address
-from ...order import OrderStatus
 
 
 def create_order(checkout):
@@ -107,12 +107,14 @@ def summary_with_shipping_view(request, checkout):
     if address is not None:
         checkout.billing_address = address
         return handle_order_placement(request, checkout)
+
     return TemplateResponse(
         request, 'checkout/summary.html', context={
             'addresses_form': addresses_form, 'address_form': address_form,
             'checkout': checkout,
             'additional_addresses': additional_addresses,
-            'note_form': note_form})
+            'note_form': note_form,
+            **base_template_kwargs(request, checkout)})
 
 
 def anonymous_summary_without_shipping(request, checkout):
@@ -142,7 +144,8 @@ def anonymous_summary_without_shipping(request, checkout):
         request, 'checkout/summary_without_shipping.html', context={
             'user_form': user_form, 'address_form': address_form,
             'checkout': checkout,
-            'note_form': note_form})
+            'note_form': note_form,
+            **base_template_kwargs(request, checkout)})
 
 
 def summary_without_shipping(request, checkout):
@@ -192,4 +195,5 @@ def summary_without_shipping(request, checkout):
         request, 'checkout/summary_without_shipping.html', context={
             'addresses_form': addresses_form, 'address_form': address_form,
             'checkout': checkout, 'additional_addresses': user_addresses,
-            'note_form': note_form})
+            'note_form': note_form,
+            **base_template_kwargs(request, checkout)})

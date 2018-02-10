@@ -17,6 +17,7 @@ from prices import PriceRange
 from satchless.item import InsufficientStock, Item, ItemRange
 from text_unidecode import unidecode
 from versatileimagefield.fields import PPOIField, VersatileImageField
+from versatileimagefield.placeholder import OnDiscPlaceholderImage
 
 from ..discount.utils import calculate_discounted_price
 from .utils import get_attributes_display_map
@@ -32,6 +33,11 @@ class Category(MPTTModel):
 
     objects = models.Manager()
     tree = TreeManager()
+
+    image = VersatileImageField(
+        upload_to='categories',
+        placeholder_image=OnDiscPlaceholderImage('.placeholder.jpg'),
+        blank=True)
 
     class Meta:
         app_label = 'product'
@@ -312,11 +318,14 @@ class Stock(models.Model):
 class ProductAttribute(models.Model):
     slug = models.SlugField(max_length=50, unique=True)
     name = models.CharField(max_length=100)
+    hidden = models.BooleanField(default=False, null=False)
 
     class Meta:
         ordering = ('slug', )
 
     def __str__(self):
+        # debug purposes!
+        # return '{0.name} ({0.slug})'.format(self)
         return self.name
 
     def get_formfield_name(self):

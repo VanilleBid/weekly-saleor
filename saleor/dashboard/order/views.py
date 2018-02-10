@@ -270,9 +270,12 @@ def ship_delivery_group(request, order_pk, group_pk):
             form.save()
         msg = pgettext_lazy(
             'Dashboard message related to a shipment group',
-            'Shipped %s') % group
+            'Shipped order %s') % group
         messages.success(request, msg)
         group.order.create_history_entry(content=msg, user=request.user)
+
+        form.send_confirmation_email()
+
         return redirect('dashboard:order-details', order_pk=order_pk)
     elif form.errors:
         status = 400

@@ -148,7 +148,8 @@ class ProductForm(forms.ModelForm):
     def prepare_fields_for_attributes(self):
         for attribute in self.product_attributes:
             field_defaults = {
-                'label': attribute.name,
+                # debug purposes => str(attribute)
+                'label': attribute,
                 'required': False,
                 'initial': self.instance.get_attribute(attribute.pk)}
             if attribute.has_values():
@@ -309,7 +310,10 @@ class ProductAttributeForm(forms.ModelForm):
             'name': pgettext_lazy(
                 'Product display name', 'Display name'),
             'slug': pgettext_lazy(
-                'Product internal name', 'Internal name')}
+                'Product internal name', 'Internal name'),
+            'hidden': pgettext_lazy(
+                'Is filter hidden', 'Is filter hidden')
+        }
 
 
 class StockLocationForm(forms.ModelForm):

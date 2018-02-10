@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 
+from saleor.core.utils.billing import base_template_kwargs
 from .discount import add_voucher_form, validate_voucher
 from .shipping import (anonymous_user_shipping_address_view,
                        user_shipping_address_view)
@@ -54,7 +55,8 @@ def shipping_method_view(request, checkout):
         request, 'checkout/shipping_method.html',
         context={
             'shipping_method_form': shipping_method_form,
-            'checkout': checkout})
+            'checkout': checkout,
+            **base_template_kwargs(request, checkout)})
 
 
 @load_checkout

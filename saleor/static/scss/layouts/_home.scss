@@ -39,6 +39,14 @@
       display: block;
       padding-top: 100%;
     }
+    .home--content {
+      background-color: rgba(0, 0, 0, .35);
+      transition: background-color .3s linear;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, .1);
+      }
+    }
   }
   &__block1 {
     .home--square {

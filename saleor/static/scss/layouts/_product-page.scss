@@ -50,6 +50,10 @@
       }
     }
     td {
+      padding-bottom: $global-padding;
+      min-width: 1%;
+    }
+    tr > td:first-child {
       padding-right: $global-padding;
     }
     &__form-error {

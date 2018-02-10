@@ -134,6 +134,14 @@
         {% gross order.shipping_price html=True %}
       </td>
     </tr>
+    <tr>
+      <td>
+        {% trans "Tax" context "Order total tax price header" %}
+      </td>
+      <td class="right-align">
+        {% gross order.total_tax html=True %}
+      </td>
+    </tr>
     {% if order.voucher %}
       <tr>
         <td>

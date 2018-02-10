@@ -1,0 +1,19 @@
+{% load i18n %}
+
+{% block subject %}
+  {% trans "Your Order has been shipped" context "Order confirmation email subject" %}
+{% endblock %}
+
+{% block plain %}
+{% blocktrans context "Order confirmation email text" %}
+Hi!
+
+This is an e-mail notification to inform you that your order has been shipped.
+Thank you for your order. Tracking URL: {{ tracking_url }}
+
+This is an automatically generated email, please do not reply.
+
+Sincerely,
+{{ site_name }}
+{% endblocktrans %}
+{% endblock %}

@@ -749,6 +749,7 @@ def ajax_reorder_product_images(request, product_pk):
 @staff_member_required
 def ajax_upload_image(request, product_pk):
     product = get_object_or_404(Product, pk=product_pk)
+
     form = forms.UploadImageForm(
         request.POST or None, request.FILES or None, product=product)
     status = 200

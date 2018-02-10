@@ -1,0 +1,19 @@
+{% load i18n %}
+
+{% if order.history %}
+  <div class="order-notes__header" id="order-history">
+    <h2 class="print-show print-tabs">{% trans "History" context "Order detail tab" %}</h2>
+    <div class="timeline-outer">
+      <ul class="timeline">
+        {% for event in order.history.all %}
+          <li class="event">
+            <div class="content">
+                <strong>{{ event.date }}</strong>
+              {{ event.content|default:"" }}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

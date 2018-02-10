@@ -84,6 +84,7 @@
               <p>{{note.content}}</p>
           {% endfor %}
         {% endif %}
+
       {% if order.is_open %}
         <div class="order-notes">
           <form method="post" class="form-group">
@@ -93,6 +94,8 @@
           </form>
         </div>
       {% endif %}
+
+      {% include "order/_order_history.html" %}
     </div>
   </div>
 {% endblock content %}

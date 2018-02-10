@@ -9,8 +9,8 @@ from ...product.utils import (
 register = Library()
 
 
-ERRORS = {PaymentStatus.ERROR, PaymentStatus.REJECTED}
-SUCCESSES = {PaymentStatus.CONFIRMED, PaymentStatus.REFUNDED}
+ERRORS = {PaymentStatus.ERROR, PaymentStatus.REJECTED, OrderStatus.CLOSED}
+SUCCESSES = {PaymentStatus.CONFIRMED, PaymentStatus.REFUNDED, OrderStatus.OPEN}
 
 
 LABEL_DANGER = 'danger'
