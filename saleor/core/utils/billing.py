@@ -1,7 +1,7 @@
 from decimal import Decimal
 from prices import Price
 
-from TaxRate.TaxRate import RATES
+from TaxRate import RATES
 from saleor import settings
 
 
