@@ -74,8 +74,6 @@ def send_test_mail(request):
         'fail_silently': False
     }
 
-    send_mail(**data)
-
     return JsonResponse({
         'EMAIL_USE_TLS': settings.EMAIL_USE_TLS,
         'EMAIL_BACKEND': settings.EMAIL_BACKEND,
@@ -85,6 +83,7 @@ def send_test_mail(request):
         'EMAIL_PORT': settings.EMAIL_PORT,
         'DEFAULT_FROM_EMAIL': settings.DEFAULT_FROM_EMAIL,
         'results': {
+            'sent': send_mail(**data),
             **data
         }
     })
