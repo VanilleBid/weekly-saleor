@@ -65,14 +65,30 @@ if not EMAIL_URL and SENDGRID_USERNAME and SENDGRID_PASSWORD:
         SENDGRID_USERNAME, SENDGRID_PASSWORD)
 email_config = dj_email_url.parse(EMAIL_URL or 'console://')
 
-EMAIL_FILE_PATH = email_config['EMAIL_FILE_PATH']
-EMAIL_HOST_USER = email_config['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = email_config['EMAIL_HOST_PASSWORD']
-EMAIL_HOST = email_config['EMAIL_HOST']
-EMAIL_PORT = email_config['EMAIL_PORT']
-EMAIL_BACKEND = email_config['EMAIL_BACKEND']
-EMAIL_USE_TLS = email_config['EMAIL_USE_TLS']
-EMAIL_USE_SSL = email_config['EMAIL_USE_SSL']
+EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', None) or \
+                email_config['EMAIL_FILE_PATH']
+
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', None) or \
+                email_config['EMAIL_HOST_USER']
+
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', None) or \
+                email_config['EMAIL_HOST_PASSWORD']
+
+EMAIL_HOST = os.environ.get('EMAIL_HOST', None) or \
+                email_config['EMAIL_HOST']
+
+EMAIL_PORT = os.environ.get('EMAIL_PORT', None) or \
+                email_config['EMAIL_PORT']
+
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', None) or \
+                email_config['EMAIL_BACKEND']
+
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', None) or \
+                email_config['EMAIL_USE_TLS']
+
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', None) or \
+                email_config['EMAIL_USE_SSL']
+
 
 ENABLE_SSL = ast.literal_eval(
     os.environ.get('ENABLE_SSL', 'False'))

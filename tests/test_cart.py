@@ -753,21 +753,21 @@ def test_get_shipment_options(client: Client,
 
     assert response.status_code == 200
 
-    assert shipments.min_price.net == 12.0
+    assert shipments.min_price.net == 10.0
     assert shipments.max_price.net == 31.0
 
     assert response.context['cart_total'].net == 10.0
     assert response.context['shipping_required'] is True
 
     total_shipping_range = response.context['total_with_shipping']
-    assert total_shipping_range.min_price.net == 22.0
+    assert total_shipping_range.min_price.net == 20.0
     assert total_shipping_range.max_price.net == 41.0
 
     response = client.post('/cart/shipingoptions/', {})
     assert response.context['default_country_options'] is None
 
 
-def test_get_cart_data(request_cart_with_item):
+def test_get_cart_data(request_cart_with_item, shipping_method):
     shipment_option = get_shipment_options('PL')
     cart_data = utils.get_cart_data(
         request_cart_with_item, shipment_option, 'USD', None)

@@ -182,12 +182,13 @@ class Order(models.Model, ItemSet):
 
     @total.setter
     def total(self, price: Price):
-        print(self.billing_address.country.code)
-
-        tax = get_tax_price(None, self, price)
+        if price.tax == 0:
+            tax = get_tax_price(None, self, price)
+            self.total_tax = tax.tax
+        else:
+            self.total_tax = price.tax
 
         self.total_net = price.net
-        self.total_tax = tax.tax
 
     def get_subtotal_without_voucher(self):
         if self.get_lines():

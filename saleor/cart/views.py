@@ -1,5 +1,5 @@
 """Cart-related views."""
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -57,9 +57,13 @@ def index(request, cart):
 @get_or_empty_db_cart(cart_queryset=Cart.objects.for_display())
 def get_taxed_total(request, cart):
     """Retrieve the estimations for gross price using tax from country."""
-    return JsonResponse({
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    resp = {
         'gross': float(get_tax_price(request, total=cart.get_total()).gross)
-    })
+    }
+    return JsonResponse(resp)
 
 
 @get_or_empty_db_cart(cart_queryset=Cart.objects.for_display())

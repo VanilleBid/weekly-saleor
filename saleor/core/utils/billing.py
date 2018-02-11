@@ -1,3 +1,5 @@
+from typing import Union
+
 from decimal import Decimal
 from prices import Price
 
@@ -5,13 +7,18 @@ from TaxRate import RATES
 from saleor import settings
 
 
-def get_tax_country_code(code, price):
+def get_tax_country_code(code, price: Union[Price, float]):
     rate = RATES.get(code, None)
     if not rate:
         rate = RATES[settings.DEFAULT_TAX_RATE_COUNTRY]
 
-    p = Price(gross=Decimal(rate.get_taxed(price.gross)),
-              net=price.gross, currency=price.currency)
+    if type(price) is Price:
+        gross = price.gross
+    else:
+        gross = price
+
+    taxed_price = rate.get_taxed(gross)
+    p = Price(gross=Decimal(taxed_price), net=gross, currency=price.currency)
 
     return p
 

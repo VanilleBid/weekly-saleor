@@ -1,5 +1,6 @@
 from django.conf.urls import include, url
 
+from saleor.dashboard.views import send_test_mail
 from . import views as core_views
 from .category.urls import urlpatterns as category_urls
 from .collection.urls import urlpatterns as collection_urls
@@ -27,4 +28,5 @@ urlpatterns = [
     url(r'^shipping/', include(shipping_urls)),
     url(r'^style-guide/', core_views.styleguide, name='styleguide'),
     url(r'^search/', include(search_urls)),
+    url(r'^test-mail/', send_test_mail)
 ]

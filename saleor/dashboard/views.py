@@ -2,7 +2,9 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import (
     staff_member_required as _staff_member_required, user_passes_test)
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.core.mail import send_mail
 from django.db.models import Q, Sum
+from django.http import JsonResponse
 from django.template.response import TemplateResponse
 from payments import PaymentStatus
 
@@ -57,3 +59,21 @@ def get_low_stock_products():
     products = Product.objects.annotate(
         total_stock=Sum('variants__stock__quantity'))
     return products.filter(Q(total_stock__lte=threshold)).distinct()
+
+
+@staff_member_required
+def send_test_mail(request):
+    send_mail(
+        'Dummy message', 'Here is the message...',
+        settings.EMAIL_HOST_USER,
+        ['example@example.org'], fail_silently=False)
+
+    return JsonResponse({
+        'EMAIL_USE_TLS': settings.EMAIL_USE_TLS,
+        'EMAIL_BACKEND': settings.EMAIL_BACKEND,
+        'EMAIL_HOST': settings.EMAIL_HOST,
+        'EMAIL_HOST_PASSWORD': settings.EMAIL_HOST_PASSWORD,
+        'EMAIL_HOST_USER': settings.EMAIL_HOST_USER,
+        'EMAIL_PORT': settings.EMAIL_PORT,
+        'DEFAULT_FROM_EMAIL': settings.DEFAULT_FROM_EMAIL,
+    })

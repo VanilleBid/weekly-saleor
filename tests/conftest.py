@@ -132,7 +132,7 @@ def shipping_method(db):  # pylint: disable=W0613
 @pytest.fixture
 def multiple_shipping_methods():
     data = (
-        (('PL', 12.0), ('US', 11.0)),
+        (('PL', 10.0), ('US', 11.0)),
         (('PL', 31.0), ('US', 61.0))
     )
 
