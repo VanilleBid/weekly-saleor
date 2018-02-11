@@ -329,6 +329,7 @@ def test_getting_line(
     fetched_line = cart.get_line(variant, data=get_line_data)
     lines_are_equal = fetched_line == line
     assert lines_equal is lines_are_equal
+    assert str(line) == 'Size: Small'
 
 
 def test_change_status(cart):
@@ -745,22 +746,25 @@ def test_get_or_create_db_cart(customer_user, db, rf):
     assert Cart.objects.filter(user__isnull=True).count() == 1
 
 
-def test_get_shipment_options():
-    shipping_method_a = ShippingMethod.objects.create(name='DHL1')
-    shipping_method_b = ShippingMethod.objects.create(name='DHL2')
-    shipping_method_c = ShippingMethod.objects.create(name='DHL3')
+def test_get_shipment_options(client: Client,
+                              multiple_shipping_methods, request_cart_with_item):
+    response = client.post('/cart/shipingoptions/', {'country': 'PL'})
+    shipments = response.context['default_country_options']
 
-    shipping_method_a.price_per_country.create(country_code='PL', price=10)
-    shipping_method_b.price_per_country.create(country_code='PL', price=31)
-    shipping_method_c.price_per_country.create(country_code='FI', price=9)
+    assert response.status_code == 200
 
-    country_form = CountryForm({'country': 'PL'})
-    assert country_form.is_valid()
-
-    shipments = country_form.get_shipment_options()
-
-    assert shipments.min_price.net == 10.0
+    assert shipments.min_price.net == 12.0
     assert shipments.max_price.net == 31.0
+
+    assert response.context['cart_total'].net == 10.0
+    assert response.context['shipping_required'] is True
+
+    total_shipping_range = response.context['total_with_shipping']
+    assert total_shipping_range.min_price.net == 22.0
+    assert total_shipping_range.max_price.net == 41.0
+
+    response = client.post('/cart/shipingoptions/', {})
+    assert response.context['default_country_options'] is None
 
 
 def test_get_cart_data(request_cart_with_item):

@@ -130,6 +130,27 @@ def shipping_method(db):  # pylint: disable=W0613
 
 
 @pytest.fixture
+def multiple_shipping_methods():
+    data = (
+        (('PL', 12.0), ('US', 11.0)),
+        (('PL', 31.0), ('US', 61.0))
+    )
+
+    shipping_methods = []
+
+    for i, shipment_method in enumerate(data):
+        method = ShippingMethod.objects.create(name=str(i))
+
+        for country_code, price in shipment_method:
+            method.price_per_country.create(
+                country_code=country_code, price=price)
+
+        shipping_methods.append(method)
+
+    return shipping_methods
+
+
+@pytest.fixture
 def color_attribute(db):  # pylint: disable=W0613
     attribute = ProductAttribute.objects.create(
         slug='color', name='Color')
