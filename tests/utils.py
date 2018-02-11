@@ -20,3 +20,7 @@ def filter_products_by_attribute(queryset, attribute_id, value):
     in_product = Q(attributes__contains={key: value})
     in_variant = Q(variants__attributes__contains={key: value})
     return queryset.filter(in_product | in_variant)
+
+
+def assert_decimal(a, b, diff=0.0001):
+    assert abs(a - b) < diff

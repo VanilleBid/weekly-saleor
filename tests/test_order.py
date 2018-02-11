@@ -1,11 +1,12 @@
 from decimal import Decimal
-from django.test.client import RequestFactory
 from django.urls import reverse
+from django_countries.fields import Country
 from prices import Price
 
 from saleor.order import models, OrderStatus
 from saleor.order.forms import OrderNoteForm
 from saleor.order.utils import add_variant_to_delivery_group
+from saleor.userprofile.models import Address
 from tests.utils import get_redirect_location
 
 
@@ -21,12 +22,27 @@ def test_total_property_empty_value():
     assert order.total is None
 
 
-def test_total_setter():
+def test_total_setter(billing_address: Address, tax_rates_countries: dict):
     price = Price(net=10, gross=20, currency='USD')
     order = models.Order()
     order.total = price
     assert order.total_net.net == 10
     assert order.total_tax.net == 10
+
+    # testing the tax applying from the billing address
+    order.billing_address = billing_address
+    price = Price(net=10, currency='EUR')
+
+    assert order.total_net.net == 10
+
+    for country, tax_rate in tax_rates_countries.items():
+        billing_address.country = Country(country)
+        order.total = price
+
+        expected_tax = Decimal(10 * tax_rate)
+
+        assert order.total_net.net == 10
+        assert order.total_tax.net - expected_tax < 0.0001
 
 
 def test_add_variant_to_delivery_group_adds_line_for_new_variant(

@@ -5,7 +5,8 @@ from unittest.mock import MagicMock, Mock
 from django.contrib.auth.models import AnonymousUser
 from django.core import signing
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.test import Client
 from django.urls import reverse
 from django_babel.templatetags.babel import currencyfmt
 from prices import Price
@@ -14,10 +15,11 @@ from satchless.item import InsufficientStock
 
 from saleor.cart import CartStatus, forms, utils
 from saleor.cart.context_processors import cart_counter
+from saleor.cart.forms import CountryForm
 from saleor.cart.models import Cart, ProductGroup, find_open_cart_for_user
 from saleor.cart.views import update
 from saleor.discount.models import Sale
-from saleor.product.models import Category
+from saleor.shipping.models import ShippingMethod
 from saleor.shipping.utils import get_shipment_options
 
 
@@ -30,8 +32,8 @@ def cart_request_factory(rf, monkeypatch):
         else:
             request.user = user
         request.discounts = Sale.objects.all()
-        monkeypatch.setattr(request, 'get_signed_cookie',
-                            Mock(return_value=token))
+        monkeypatch.setattr(
+            request, 'get_signed_cookie', Mock(return_value=token))
         return request
     return create_request
 
@@ -153,8 +155,6 @@ def test_get_user_cart(
 
     # test against getting closed carts
     Cart.objects.create(user=admin_user, status=CartStatus.CANCELED)
-    queryset = Cart.objects.all()
-    carts = list(queryset)
     cart = utils.get_user_cart(admin_user)
     assert Cart.objects.all().count() == 5
     assert cart is None
@@ -169,8 +169,8 @@ def test_get_or_create_cart_from_request(
     anonymous_cart = Cart()
     mock_get_for_user = Mock(return_value=user_cart)
     mock_get_for_anonymous = Mock(return_value=anonymous_cart)
-    monkeypatch.setattr('saleor.cart.utils.get_or_create_user_cart',
-                        mock_get_for_user)
+    monkeypatch.setattr(
+        'saleor.cart.utils.get_or_create_user_cart', mock_get_for_user)
     monkeypatch.setattr(
         'saleor.cart.utils.get_or_create_anonymous_cart_from_token',
         mock_get_for_anonymous)
@@ -191,8 +191,8 @@ def test_get_cart_from_request(
     request = cart_request_factory(user=customer_user, token=token)
     user_cart = Cart(user=customer_user)
     mock_get_for_user = Mock(return_value=user_cart)
-    monkeypatch.setattr('saleor.cart.utils.get_user_cart',
-                        mock_get_for_user)
+    monkeypatch.setattr(
+        'saleor.cart.utils.get_user_cart', mock_get_for_user)
     returned_cart = utils.get_cart_from_request(request, queryset)
     mock_get_for_user.assert_called_once_with(customer_user, queryset)
     assert returned_cart == user_cart
@@ -200,8 +200,8 @@ def test_get_cart_from_request(
     assert list(returned_cart.discounts) == list(request.discounts)
 
     mock_get_for_user = Mock(return_value=None)
-    monkeypatch.setattr('saleor.cart.utils.get_user_cart',
-                        mock_get_for_user)
+    monkeypatch.setattr(
+        'saleor.cart.utils.get_user_cart', mock_get_for_user)
     returned_cart = utils.get_cart_from_request(request, queryset)
     mock_get_for_user.assert_called_once_with(customer_user, queryset)
     assert not Cart.objects.filter(token=returned_cart.token).exists()
@@ -320,8 +320,7 @@ def test_adding_invalid_quantity(cart, product_in_stock):
 @pytest.mark.parametrize('create_line_data, get_line_data, lines_equal', [
     (None, None, True),
     ({'gift-wrap': True}, None, False),
-    ({'gift-wrap': True}, {'gift-wrap': True}, True)
-])
+    ({'gift-wrap': True}, {'gift-wrap': True}, True)])
 def test_getting_line(
         create_line_data, get_line_data, lines_equal, cart, product_in_stock):
     variant = product_in_stock.variants.get()
@@ -330,6 +329,7 @@ def test_getting_line(
     fetched_line = cart.get_line(variant, data=get_line_data)
     lines_are_equal = fetched_line == line
     assert lines_equal is lines_are_equal
+    assert str(line) == 'Size: Small'
 
 
 def test_change_status(cart):
@@ -524,6 +524,24 @@ def test_view_cart(client, sale, product_in_stock, request_cart):
     assert response.status_code == 200
 
 
+def test_view_get_taxed_total(client, tax_rates_countries, product_in_stock, request_cart):
+    def _send_request(country_code):
+        #: type: JsonResponse
+        response = client.post('/cart/taxed/', {'country': country_code})
+        data = json.loads(response.content.decode('utf-8'))
+
+        assert response.status_code == 200
+        return data
+
+    variant = product_in_stock.variants.get()
+    request_cart.add(variant, 1)
+
+    cart_total = float(request_cart.get_total().net)
+
+    for country, tax_rate in tax_rates_countries.items():
+        assert _send_request(country)['gross'] == cart_total * (1 + tax_rate)
+
+
 def test_view_update_cart_quantity(
         client, local_currency, product_in_stock, request_cart):
     variant = product_in_stock.variants.get()
@@ -540,8 +558,7 @@ def test_view_invalid_update_cart(client, product_in_stock, request_cart):
     variant = product_in_stock.variants.get()
     request_cart.add(variant, 1)
     response = client.post(
-        '/cart/update/%s/' % (variant.pk,),
-        {},
+        '/cart/update/%s/' % (variant.pk,), {},
         HTTP_X_REQUESTED_WITH='XMLHttpRequest')
     resp_decoded = json.loads(response.content.decode('utf-8'))
     assert response.status_code == 400
@@ -727,6 +744,27 @@ def test_get_or_create_db_cart(customer_user, db, rf):
     request.user = AnonymousUser()
     decorated_view(request)
     assert Cart.objects.filter(user__isnull=True).count() == 1
+
+
+def test_get_shipment_options(client: Client,
+                              multiple_shipping_methods, request_cart_with_item):
+    response = client.post('/cart/shipingoptions/', {'country': 'PL'})
+    shipments = response.context['default_country_options']
+
+    assert response.status_code == 200
+
+    assert shipments.min_price.net == 10.0
+    assert shipments.max_price.net == 31.0
+
+    assert response.context['cart_total'].net == 10.0
+    assert response.context['shipping_required'] is True
+
+    total_shipping_range = response.context['total_with_shipping']
+    assert total_shipping_range.min_price.net == 20.0
+    assert total_shipping_range.max_price.net == 41.0
+
+    response = client.post('/cart/shipingoptions/', {})
+    assert response.context['default_country_options'] is None
 
 
 def test_get_cart_data(request_cart_with_item, shipping_method):

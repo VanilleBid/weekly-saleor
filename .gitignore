@@ -1,5 +1,4 @@
 *.py[cod]
-.*
 !.babelrc
 !.codeclimate.yml
 !.coveragerc
@@ -28,3 +27,4 @@ dist/
 /static/
 /saleor/static/assets/
 webpack-bundle.json
+/templates/templated_email/html/compiled/

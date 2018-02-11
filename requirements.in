@@ -1,7 +1,7 @@
 Babel>=2.5
 boto3
 cairosvg
-Django<2.0.0
+Django>=1.11
 dj_database_url>=0.3.0
 dj_email_url>=0.0.4
 django-babel>=0.6.1
@@ -48,7 +48,7 @@ requests>=1.2.0
 satchless>=1.1.2,<1.2a0
 social-auth-app-django>=2.0.0
 text-unidecode
-uwsgi>=2.0.0
+uwsgi>=2.0.0 ; platform_system != "Windows"
 celery[redis]
 weasyprint>=0.40
-vatlayer_european_taxes>=0.0.0
+vatlayer_european_taxes>=0.0.1.3

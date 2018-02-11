@@ -15,15 +15,14 @@ from payments.models import BasePayment
 from prices import FixedDiscount, Price
 from satchless.item import ItemLine, ItemSet
 
-from saleor.core.utils.billing import get_tax_price
-
-from . import emails, GroupStatus, OrderStatus
-from .transitions import (
-    cancel_delivery_group, process_delivery_group, ship_delivery_group)
+from ..core.utils.billing import get_tax_price
 from ..core.utils import build_absolute_uri
 from ..discount.models import Voucher
 from ..product.models import Product
 from ..userprofile.models import Address
+from .transitions import (
+    cancel_delivery_group, process_delivery_group, ship_delivery_group)
+from . import GroupStatus, OrderStatus, emails
 
 
 class OrderQuerySet(models.QuerySet):
@@ -133,17 +132,19 @@ class Order(models.Model, ItemSet):
         email = self.get_user_current_email()
         payment_url = build_absolute_uri(
             reverse('order:details', kwargs={'token': self.token}))
-        emails.send_order_confirmation.delay(email, payment_url)
+        emails.send_order_confirmation.delay(email, payment_url, self.pk)
 
     def get_last_payment_status(self):
         last_payment = self.payments.last()
         if last_payment:
             return last_payment.status
+        return None
 
     def get_last_payment_status_display(self):
         last_payment = self.payments.last()
         if last_payment:
             return last_payment.get_status_display()
+        return None
 
     def is_pre_authorized(self):
         return self.payments.filter(status=PaymentStatus.PREAUTH).exists()
@@ -160,8 +161,7 @@ class Order(models.Model, ItemSet):
         statuses = set([group.status for group in self.groups.all()])
         return (
             OrderStatus.OPEN if GroupStatus.NEW in statuses
-            else OrderStatus.CLOSED
-        )
+            else OrderStatus.CLOSED)
 
     @property
     def is_open(self):
@@ -175,17 +175,20 @@ class Order(models.Model, ItemSet):
     def total(self):
         if self.total_net is not None:
             gross = self.total_net.net + self.total_tax.gross
-            return Price(net=self.total_net.net, gross=gross,
-                         currency=settings.DEFAULT_CURRENCY)
+            return Price(
+                net=self.total_net.net, gross=gross,
+                currency=settings.DEFAULT_CURRENCY)
+        return None
 
     @total.setter
     def total(self, price: Price):
-        print(self.billing_address.country.code)
-
-        tax = get_tax_price(None, self, price)
+        if price.tax == 0:
+            tax = get_tax_price(None, self, price)
+            self.total_tax = tax.tax
+        else:
+            self.total_tax = price.tax
 
         self.total_net = price.net
-        self.total_tax = tax.tax
 
     def get_subtotal_without_voucher(self):
         if self.get_lines():
@@ -199,8 +202,9 @@ class Order(models.Model, ItemSet):
 class DeliveryGroup(models.Model, ItemSet):
     """Represents a single shipment.
 
-    A single order can consist of many shipment groups.
+    A single order can consist of multiple shipment groups.
     """
+
     status = FSMField(
         max_length=32, default=GroupStatus.NEW, choices=GroupStatus.CHOICES,
         protected=True)
@@ -291,6 +295,7 @@ class PaymentQuerySet(models.QuerySet):
         objects = list(self.all()[:1])
         if objects:
             return objects[0]
+        return None
 
 
 class Payment(BasePayment):
