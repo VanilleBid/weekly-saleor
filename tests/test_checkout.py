@@ -280,3 +280,12 @@ def test_note_in_created_order(request_cart, customer_user, billing_address):
     checkout.note = 'test_note'
     order = checkout.create_order()
     assert order.notes.values()[0].get('content') == 'test_note'
+
+
+def test_is_shipping_same_as_billing(request_cart, customer_user, billing_address):
+    checkout = Checkout(request_cart, customer_user, 'tracking_code')
+
+    checkout.billing_address = billing_address
+    checkout.shipping_address = billing_address
+
+    assert checkout.is_shipping_same_as_billing is True
