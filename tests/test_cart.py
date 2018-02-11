@@ -5,7 +5,8 @@ from unittest.mock import MagicMock, Mock
 from django.contrib.auth.models import AnonymousUser
 from django.core import signing
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.test import Client
 from django.urls import reverse
 from django_babel.templatetags.babel import currencyfmt
 from prices import Price
@@ -14,9 +15,11 @@ from satchless.item import InsufficientStock
 
 from saleor.cart import CartStatus, forms, utils
 from saleor.cart.context_processors import cart_counter
+from saleor.cart.forms import CountryForm
 from saleor.cart.models import Cart, ProductGroup, find_open_cart_for_user
 from saleor.cart.views import update
 from saleor.discount.models import Sale
+from saleor.shipping.models import ShippingMethod
 from saleor.shipping.utils import get_shipment_options
 
 
@@ -520,6 +523,24 @@ def test_view_cart(client, sale, product_in_stock, request_cart):
     assert response.status_code == 200
 
 
+def test_view_get_taxed_total(client, tax_rates_countries, product_in_stock, request_cart):
+    def _send_request(country_code):
+        #: type: JsonResponse
+        response = client.post('/cart/taxed/', {'country': country_code})
+        data = json.loads(response.content.decode('utf-8'))
+
+        assert response.status_code == 200
+        return data
+
+    variant = product_in_stock.variants.get()
+    request_cart.add(variant, 1)
+
+    cart_total = float(request_cart.get_total().net)
+
+    for country, tax_rate in tax_rates_countries.items():
+        assert _send_request(country)['gross'] == cart_total * (1 + tax_rate)
+
+
 def test_view_update_cart_quantity(
         client, local_currency, product_in_stock, request_cart):
     variant = product_in_stock.variants.get()
@@ -724,7 +745,25 @@ def test_get_or_create_db_cart(customer_user, db, rf):
     assert Cart.objects.filter(user__isnull=True).count() == 1
 
 
-def test_get_cart_data(request_cart_with_item, shipping_method):
+def test_get_shipment_options():
+    shipping_method_a = ShippingMethod.objects.create(name='DHL1')
+    shipping_method_b = ShippingMethod.objects.create(name='DHL2')
+    shipping_method_c = ShippingMethod.objects.create(name='DHL3')
+
+    shipping_method_a.price_per_country.create(country_code='PL', price=10)
+    shipping_method_b.price_per_country.create(country_code='PL', price=31)
+    shipping_method_c.price_per_country.create(country_code='FI', price=9)
+
+    country_form = CountryForm({'country': 'PL'})
+    assert country_form.is_valid()
+
+    shipments = country_form.get_shipment_options()
+
+    assert shipments.min_price.net == 10.0
+    assert shipments.max_price.net == 31.0
+
+
+def test_get_cart_data(request_cart_with_item):
     shipment_option = get_shipment_options('PL')
     cart_data = utils.get_cart_data(
         request_cart_with_item, shipment_option, 'USD', None)

@@ -124,9 +124,9 @@ def billing_address(db):  # pylint: disable=W0613
 
 @pytest.fixture
 def shipping_method(db):  # pylint: disable=W0613
-    shipping_method = ShippingMethod.objects.create(name='DHL')
-    shipping_method.price_per_country.create(price=10)
-    return shipping_method
+    method = ShippingMethod.objects.create(name='DHL')
+    method.price_per_country.create(price=10)
+    return method
 
 
 @pytest.fixture
@@ -642,3 +642,8 @@ def closed_orders(billing_address):
 def collection(db):
     collection = Collection.objects.create(name='Collection', slug='collection')
     return collection
+
+
+@pytest.fixture
+def tax_rates_countries():
+    return {'FR': .20, 'FI': .24}
