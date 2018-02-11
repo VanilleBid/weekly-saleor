@@ -4,7 +4,7 @@ from django.contrib.admin.views.decorators import (
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.mail import send_mail
 from django.db.models import Q, Sum
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.template.response import TemplateResponse
 from payments import PaymentStatus
 
@@ -63,10 +63,18 @@ def get_low_stock_products():
 
 @staff_member_required
 def send_test_mail(request):
-    send_mail(
-        'Dummy message', 'Here is the message...',
-        settings.EMAIL_HOST_USER,
-        ['example@example.org'], fail_silently=False)
+    if 'recipient' not in request.GET:
+        return HttpResponseBadRequest()
+
+    data = {
+        'subject': 'Dummy message',
+        'message': 'Here is the message...',
+        'from_email': settings.EMAIL_HOST_USER,
+        'recipient_list': request.GET.getlist('recipient'),
+        'fail_silently': False
+    }
+
+    send_mail(**data)
 
     return JsonResponse({
         'EMAIL_USE_TLS': settings.EMAIL_USE_TLS,
@@ -76,4 +84,7 @@ def send_test_mail(request):
         'EMAIL_HOST_USER': settings.EMAIL_HOST_USER,
         'EMAIL_PORT': settings.EMAIL_PORT,
         'DEFAULT_FROM_EMAIL': settings.DEFAULT_FROM_EMAIL,
+        'results': {
+            **data
+        }
     })

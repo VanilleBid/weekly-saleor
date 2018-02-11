@@ -1,17 +1,21 @@
 from unittest.mock import Mock
 
 import pytest
+from decimal import Decimal
 from django.shortcuts import reverse
+from django.test import RequestFactory
+from prices import Price
 
 from saleor.core.utils import (
     Country, create_superuser, get_country_by_ip, get_currency_for_country,
     random_data)
+from saleor.core.utils.billing import get_tax_country_code, get_tax_price
 from saleor.discount.models import Sale, Voucher
 from saleor.order.models import Order
 from saleor.product.models import Product
 from saleor.shipping.models import ShippingMethod
 from saleor.userprofile.models import Address, User
-
+from tests.utils import assert_decimal
 
 type_schema = {
     'Vegetable': {
@@ -131,7 +135,7 @@ def test_create_fake_order(db):
     how_many = 5
     for _ in random_data.create_orders(how_many):
         pass
-    Order.objects.all().count() == 5
+    assert Order.objects.all().count() == 5
 
 
 def test_create_product_sales(db):
@@ -155,3 +159,63 @@ def test_manifest(client, site_settings):
     assert content['name'] == site_settings.site.name
     assert content['short_name'] == site_settings.site.name
     assert content['description'] == site_settings.description
+
+
+def test_get_tax_country_code():
+    assert get_tax_country_code('AT', Price(Decimal(10.0))).gross == Decimal(12)
+    assert get_tax_country_code('AT', Decimal(10.0)).gross == Decimal(12)
+
+
+def test_get_tax_price(order_with_lines: Order, billing_address):
+    order = order_with_lines
+    order.billing_address = billing_address
+    order.shipping_address = shipping_address = Address.objects.create(
+        first_name='John', last_name='Doe',
+        company_name='Mirumee Software',
+        street_address_1='Tęczowa 7',
+        city='Wrocław',
+        postal_code='53-601',
+        country='PL',
+        phone='+48713988102')
+
+    request_factory = RequestFactory()
+    order_total = order.get_total()
+
+    croatia_taxed_price = order_total.gross * Decimal(1.25)
+    poland_taxed_price = order_total.gross * Decimal(1.23)
+
+    croatia_taxed_price_10usd = Decimal(10.0) * Decimal(1.25)
+    default_taxed_price_10usd = Decimal(10.0) * Decimal(1.20)
+
+    requests = (
+        (request_factory.post('/test_HR', {'country': 'HR'}),
+         croatia_taxed_price,
+         croatia_taxed_price_10usd),
+
+        (request_factory.post('/test_default_missing', {}),
+         poland_taxed_price,
+         default_taxed_price_10usd),
+
+        (request_factory.post('/test_default_None'),
+         poland_taxed_price,
+         default_taxed_price_10usd)
+    )
+
+    for rq, expected_price, expected_price_10usd in requests:
+        assert_decimal(get_tax_price(rq, checkout=order).gross, expected_price)
+        assert_decimal(get_tax_price(rq, total=10).gross, expected_price_10usd)
+
+    shipping_address.country = Country('HR')
+
+    assert_decimal(
+        get_tax_price(None, checkout=order, get_first_shipping_addr=True).gross,
+        croatia_taxed_price)
+
+    assert_decimal(
+        get_tax_price(None, checkout=order, get_first_shipping_addr=False).gross,
+        poland_taxed_price)
+
+    order.shipping_address = None
+    assert_decimal(
+        get_tax_price(None, checkout=order, get_first_shipping_addr=True).gross,
+        poland_taxed_price)

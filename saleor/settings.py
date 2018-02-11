@@ -47,6 +47,7 @@ DATABASES = {
         conn_max_age=600)}
 
 DEFAULT_TAX_RATE_COUNTRY = 'FR'
+FALLBACK_TAX_RATE = 0.20
 
 TIME_ZONE = 'Europe/Paris'
 LANGUAGE_CODE = 'fr'
@@ -275,13 +276,22 @@ PAYMENT_HOST = get_host
 PAYMENT_MODEL = 'order.Payment'
 
 PAYMENT_VARIANTS = {
-    'default': ('payments.dummy.DummyProvider', {})}
+    'default': ('payments.dummy.DummyProvider', {}),
+    'paypal': ('payments.paypal.PaypalProvider', {
+        'client_id': 'AXkRzYLglaQy1TttKYrXgxksBVOx2YxLoCvRESMaCzfkwUmzkr5QEk8WymY_lOyAlw0zZRuWewBSezqJ',
+        'secret': 'EKmqV3fvknmriea3G1SrAxwujK9PF_mNGbhGhL_bOA39fbOsWJZeW2OZSHWY3QFUC8h2p1QeLhzC8jNP',
+        'endpoint': 'https://api.sandbox.paypal.com',
+        'capture': False})
+}
+
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 CHECKOUT_PAYMENT_CHOICES = [
-    ('default', 'Dummy provider')]
+    ('default', 'Dummy provider'),
+    ('paypal', 'Paypal')
+]
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'}

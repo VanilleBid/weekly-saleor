@@ -56,7 +56,7 @@ def shipping_method_view(request, checkout):
         context={
             'shipping_method_form': shipping_method_form,
             'checkout': checkout,
-            **base_template_kwargs(request, checkout)})
+            **base_template_kwargs(request, checkout, get_first_shipping_addr=True)})
 
 
 @load_checkout
