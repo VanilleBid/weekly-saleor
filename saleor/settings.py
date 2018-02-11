@@ -12,6 +12,15 @@ def get_list(text):
     return [item.strip() for item in text.split(',')]
 
 
+def env_get_or_get(key, default_obj: dict, default_obj_key=None):
+    res = os.environ.get(key, None)
+    if not res:
+        if default_obj_key is None:
+            default_obj_key = key
+        res = default_obj.get(default_obj_key, None)
+    return res
+
+
 if platform.python_implementation() == "PyPy":
     import psycopg2cffi.compat
     psycopg2cffi.compat.register()
@@ -66,30 +75,14 @@ if not EMAIL_URL and SENDGRID_USERNAME and SENDGRID_PASSWORD:
         SENDGRID_USERNAME, SENDGRID_PASSWORD)
 email_config = dj_email_url.parse(EMAIL_URL or 'console://')
 
-EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', None) or \
-                email_config['EMAIL_FILE_PATH']
-
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', None) or \
-                email_config['EMAIL_HOST_USER']
-
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', None) or \
-                email_config['EMAIL_HOST_PASSWORD']
-
-EMAIL_HOST = os.environ.get('EMAIL_HOST', None) or \
-                email_config['EMAIL_HOST']
-
-EMAIL_PORT = os.environ.get('EMAIL_PORT', None) or \
-                email_config['EMAIL_PORT']
-
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', None) or \
-                email_config['EMAIL_BACKEND']
-
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', None) or \
-                email_config['EMAIL_USE_TLS']
-
-EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', None) or \
-                email_config['EMAIL_USE_SSL']
-
+EMAIL_FILE_PATH = env_get_or_get('EMAIL_FILE_PATH', email_config)
+EMAIL_HOST_USER = env_get_or_get('EMAIL_HOST_USER', email_config)
+EMAIL_HOST_PASSWORD = env_get_or_get('EMAIL_HOST_PASSWORD', email_config)
+EMAIL_HOST = env_get_or_get('EMAIL_HOST', email_config)
+EMAIL_PORT = env_get_or_get('EMAIL_PORT', email_config)
+EMAIL_BACKEND = env_get_or_get('EMAIL_BACKEND', email_config)
+EMAIL_USE_TLS = env_get_or_get('EMAIL_USE_TLS', email_config)
+EMAIL_USE_SSL = env_get_or_get('EMAIL_USE_SSL', email_config)
 
 ENABLE_SSL = ast.literal_eval(
     os.environ.get('ENABLE_SSL', 'False'))
