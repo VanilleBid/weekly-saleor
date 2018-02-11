@@ -51,4 +51,4 @@ text-unidecode
 uwsgi>=2.0.0 ; platform_system != "Windows"
 celery[redis]
 weasyprint>=0.40
-vatlayer_european_taxes>=0.0.1.2
+vatlayer_european_taxes>=0.0.1.3

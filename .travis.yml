@@ -20,6 +20,7 @@ env:
   global:
     - DJANGO_SETTINGS_MODULE=tests.settings
     - DATABASE_URL='postgres://postgres@localhost:5432/saleor'
+    - TAX_RATE_SAVE_PATH="${TRAVIS_BUILD_DIR}/.taxrates.json"
   matrix:
   - DJANGO="1.11"
   - DJANGO="2.0"
