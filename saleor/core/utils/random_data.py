@@ -1,8 +1,8 @@
+from collections import defaultdict
 import itertools
 import os
 import random
 import unicodedata
-from collections import defaultdict
 
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
@@ -13,13 +13,13 @@ from faker.providers import BaseProvider
 from payments import PaymentStatus
 from prices import Price
 
-from ...discount import VoucherType, DiscountValueType
+from ...discount import DiscountValueType, VoucherType
 from ...discount.models import Sale, Voucher
 from ...order import GroupStatus
 from ...order.models import DeliveryGroup, Order, OrderLine, Payment
 from ...product.models import (
-    AttributeChoiceValue, Category, Product, ProductAttribute, ProductImage,
-    ProductType, ProductVariant, Stock, StockLocation)
+    AttributeChoiceValue, Category, Collection, Product, ProductAttribute,
+    ProductImage, ProductType, ProductVariant, Stock, StockLocation)
 from ...shipping.models import ANY_COUNTRY, ShippingMethod
 from ...userprofile.models import Address, User
 from ...userprofile.utils import store_user_address
@@ -37,75 +37,56 @@ DEFAULT_SCHEMA = {
         'product_attributes': {
             'Color': ['Blue', 'White'],
             'Collar': ['Round', 'V-Neck', 'Polo'],
-            'Brand': ['Saleor']
-        },
+            'Brand': ['Saleor']},
         'variant_attributes': {
-            'Size': ['XS', 'S', 'M', 'L', 'XL', 'XXL']
-        },
+            'Size': ['XS', 'S', 'M', 'L', 'XL', 'XXL']},
         'images_dir': 't-shirts/',
-        'is_shipping_required': True
-    },
+        'is_shipping_required': True},
     'Mugs': {
         'category': 'Accessories',
         'product_attributes': {
-            'Brand': ['Saleor']
-        },
+            'Brand': ['Saleor']},
         'variant_attributes': {},
         'images_dir': 'mugs/',
-        'is_shipping_required': True
-    },
+        'is_shipping_required': True},
     'Coffee': {
         'category': 'Groceries',
         'product_attributes': {
             'Coffee Genre': ['Arabica', 'Robusta'],
-            'Brand': ['Saleor']
-        },
+            'Brand': ['Saleor']},
         'variant_attributes': {
-            'Box Size': ['100g', '250g', '500g', '1kg']
-        },
+            'Box Size': ['100g', '250g', '500g', '1kg']},
         'different_variant_prices': True,
         'images_dir': 'coffee/',
-        'is_shipping_required': True
-    },
+        'is_shipping_required': True},
     'Candy': {
         'category': 'Groceries',
         'product_attributes': {
             'Flavor': ['Sour', 'Sweet'],
-            'Brand': ['Saleor']
-        },
+            'Brand': ['Saleor']},
         'variant_attributes': {
-            'Candy Box Size': ['100g', '250g', '500g']
-        },
+            'Candy Box Size': ['100g', '250g', '500g']},
         'images_dir': 'candy/',
-        'different_variant_prices': True,
-        'is_shipping_required': True
-    },
+        'is_shipping_required': True},
     'E-books': {
         'category': 'Books',
         'product_attributes': {
             'Author': ['John Doe', 'Milionare Pirate'],
             'Publisher': ['Mirumee Press', 'Saleor Publishing'],
-            'Language': ['English', 'Pirate']
-        },
+            'Language': ['English', 'Pirate']},
         'variant_attributes': {},
         'images_dir': 'books/',
-        'is_shipping_required': False
-    },
+        'is_shipping_required': False},
     'Books': {
         'category': 'Books',
         'product_attributes': {
             'Author': ['John Doe', 'Milionare Pirate'],
             'Publisher': ['Mirumee Press', 'Saleor Publishing'],
-            'Language': ['English', 'Pirate']
-        },
+            'Language': ['English', 'Pirate']},
         'variant_attributes': {
-            'Cover': ['Soft', 'Hard']
-        },
+            'Cover': ['Soft', 'Hard']},
         'images_dir': 'books/',
-        'different_variant_prices': True,
-        'is_shipping_required': True
-    }
-}
+        'is_shipping_required': True}}
 
 
 def create_attributes_and_values(attribute_data):
@@ -256,6 +237,8 @@ class SaleorProvider(BaseProvider):
 
     def shipping_method(self):
         return random.choice(ShippingMethod.objects.all())
+
+
 fake.add_provider(SaleorProvider)
 
 
@@ -277,6 +260,11 @@ def get_or_create_category(name, **kwargs):
 
 def get_or_create_product_type(name, **kwargs):
     return ProductType.objects.get_or_create(name=name, defaults=kwargs)[0]
+
+
+def get_or_create_collection(name, **kwargs):
+    kwargs['slug'] = fake.slug(name)
+    return Collection.objects.get_or_create(name=name, defaults=kwargs)[0]
 
 
 def create_product(**kwargs):
@@ -372,7 +360,10 @@ def create_fake_user():
 def create_payment(delivery_group):
     order = delivery_group.order
     status = random.choice(
-        [PaymentStatus.WAITING, PaymentStatus.PREAUTH, PaymentStatus.CONFIRMED])
+        [
+            PaymentStatus.WAITING,
+            PaymentStatus.PREAUTH,
+            PaymentStatus.CONFIRMED])
     payment = Payment.objects.create(
         order=order,
         status=status,
@@ -547,3 +538,16 @@ def add_address_to_admin(email):
     address = create_address()
     user = User.objects.get(email=email)
     store_user_address(user, address, True, True)
+
+
+def create_fake_collection():
+    collection = get_or_create_collection(name='%s collection' % fake.word())
+    products = Product.objects.order_by('?')[:4]
+    collection.products.add(*products)
+    return collection
+
+
+def create_collections(how_many=2):
+    for dummy in range(how_many):
+        collection = create_fake_collection()
+        yield 'Collection: %s' % (collection,)

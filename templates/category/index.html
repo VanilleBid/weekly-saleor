@@ -10,14 +10,14 @@
   {{ block.super }}
 {% endblock footer_scripts %}
 
-{% block title %}{{ category }} — {{ block.super }}{% endblock %}
+{% block title %}{{ object }} — {{ block.super }}{% endblock %}
 
 {% block meta_tags %}
-  <meta property="og:title" content="{{ category }}">
-  <meta property="og:description" content="{{ category.description }}">
+  <meta property="og:title" content="{{ object }}">
+  <meta property="og:description" content="{{ object.description }}">
   <meta property="og:image" content="{% static "images/block1.png" %}">
 
-  {% build_absolute_uri request=request location=category.get_absolute_url as category_url %}
+  {% build_absolute_uri request=request location=object.get_absolute_url as category_url %}
   <meta property="og:url" content="{{ category_url }}">
   <link rel="canonical" href="{{ category_url }}?page={{ products_paginated.number }}">
 
@@ -50,10 +50,10 @@
         <div class="col-md-7">
           <ul class="breadcrumbs list-unstyled d-none d-md-block">
             <li><a href="{% url 'home' %}">{% trans "Home"  context 'Category breadcrumbs home' %}</a></li>
-            {% for ancestor in category.get_ancestors %}
+            {% for ancestor in object.get_ancestors %}
               <li><a href='{{ ancestor.get_absolute_url }}'>{{ ancestor.name }}</a></li>
             {% endfor %}
-            <li><a href='{{ category.get_absolute_url }}'>{{ category.name }}</a></li>
+            <li><a href='{{ object.get_absolute_url }}'>{{ object.name }}</a></li>
           </ul>
         </div>
         <div class="col-md-5 filters-menu__wrapper">
@@ -119,13 +119,13 @@
         </div>
       </div>
     </div>
-    {% if category.get_children|length_is:0 %}
+    {% if object.get_children|length_is:0 %}
     <div class="row">
       <div class="col-md-4 col-lg-3">
         <div class="product-filters">
           <div class="product-filters__categories">
             <h2>
-              <strong>{{ category.name }}</strong>
+              <strong>{{ object.name }}</strong>
             </h2>
           </div>
         </div>
@@ -225,7 +225,7 @@
 
     {% else %}
       <div class="row">
-      {% for child in category.get_children %}
+      {% for child in object.get_children %}
         <div class="cat-img">
 
           <a href="{{ child.get_absolute_url }}">

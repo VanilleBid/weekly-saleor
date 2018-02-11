@@ -4,7 +4,9 @@ from django.template.response import TemplateResponse
 from django.utils.translation import pgettext, pgettext_lazy
 from satchless.item import InsufficientStock
 
-from saleor.core.utils.billing import base_template_kwargs
+from ...core.utils.billing import base_template_kwargs
+from ...userprofile.forms import get_address_form
+from ...userprofile.models import Address
 from ..forms import (
     AnonymousUserBillingForm, BillingAddressesForm,
     BillingWithoutShippingAddressForm, NoteForm)

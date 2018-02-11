@@ -1,10 +1,10 @@
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 
-from saleor.core.utils.billing import base_template_kwargs
-from ..forms import AnonymousUserShippingForm, ShippingAddressesForm
+from ...core.utils.billing import base_template_kwargs
 from ...userprofile.forms import get_address_form
 from ...userprofile.models import Address
+from ..forms import AnonymousUserShippingForm, ShippingAddressesForm
 
 
 def anonymous_user_shipping_address_view(request, checkout):
