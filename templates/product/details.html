@@ -89,8 +89,8 @@
               {% for image in images %}
                 {% if images|length > 1 %}
                   <li data-target="#carousel-example-generic" data-slide-to="{{ forloop.counter0 }}"{% if forloop.first %} class="active"{% endif %}>
-                    <img data-src="{% get_thumbnail image.image method="crop" size="60x60" %}"
-                         data-srcset="{% get_thumbnail image.image method="crop" size="60x60" %} 1x, {% get_thumbnail image.image method="crop" size="120x120" %} 2x"
+                    <img data-src="{% get_thumbnail image.image method="fill_crop" size="60x60" %}"
+                         data-srcset="{% get_thumbnail image.image method="fill_crop" size="60x60" %} 1x, {% get_thumbnail image.image method="fill_crop" size="120x120" %} 2x"
                          alt=""
                          class="lazyload lazypreload"
                          src="{% placeholder size=60 %}">
