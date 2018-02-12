@@ -1,0 +1,31 @@
+<mjml>
+  <mj-head>
+    <mj-include path="../shared/styles" />
+  </mj-head>
+  <mj-body>
+    <mj-container>
+      <mj-section css-class="no-display">
+        <mj-column>
+          <mj-text>
+            {% load i18n %}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-include path="../shared/header" />
+      <mj-section>
+        <mj-column>
+          <mj-text font-size="16px">
+            {% trans "Hi!" context "Password reset e-mail text" %}
+          </mj-text>
+          <mj-text>
+            {% blocktrans trimmed context "Note confirmation e-mail text" %}
+              <p>This is an e-mail notification to inform you that your order has been shipped.</p>
+              <p>Thank you for your order. Tracking URL: {{ tracking_url }}</p>
+            {% endblocktrans %}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-include path="../shared/footer" />
+    </mj-container>
+  </mj-body>
+</mjml>
