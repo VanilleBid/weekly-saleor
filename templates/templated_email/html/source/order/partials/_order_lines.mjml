@@ -27,6 +27,14 @@
         </tr>
         <tr>
           <td colspan="3" style="text-align: right;">
+            {% trans "VAT" context "E-mail order lines summary table" %}
+          </td>
+          <td style="text-align: right;">
+            {% gross order.total_tax html=True %}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" style="text-align: right;">
             <strong>{% trans "Total" context "E-mail order lines summary table" %}</strong>
           </td>
           <td style="text-align: right;">
