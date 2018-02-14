@@ -17,6 +17,8 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
+    ROBOTS_TXT = b'User-agent: *\nDisallow: /'
+
     def robots(request):
-        return HttpResponse(b'User-agent: *\nDisallow: /', content_type='text/plain')
+        return HttpResponse(ROBOTS_TXT, content_type='text/plain')
     urlpatterns.append(url(r'^robots\.txt$', robots, name='robots'))
