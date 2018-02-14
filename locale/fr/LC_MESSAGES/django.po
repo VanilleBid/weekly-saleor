@@ -1394,7 +1394,7 @@ msgstr "Ajouter une note à votre commande"
 #: templates/checkout/summary.html:14
 msgctxt "Checkout summary primary action"
 msgid "Order &amp Pay"
-msgstr "Commander &amp Payer"
+msgstr "Commander & Payer"
 
 #: templates/checkout/summary_without_shipping.html:8
 msgctxt "Checkout summary without shipping title"
@@ -4344,7 +4344,7 @@ msgstr ""
 #: templates/home.html:12
 msgctxt "Homepage title"
 msgid "Promo &amp; Sale"
-msgstr "Promotion &amp; Soldes"
+msgstr "Promotion & Soldes"
 
 #: templates/home.html:13
 msgctxt "Homepage title"
@@ -4359,7 +4359,7 @@ msgstr "Acheter maintenant"
 #: templates/home.html:29
 msgctxt "Homepage title"
 msgid "Size &amp; Colours"
-msgstr "Taille &amp; Couleurs"
+msgstr "Taille & Couleurs"
 
 #: templates/home.html:41
 msgctxt "Homepage title"
@@ -5284,3 +5284,28 @@ msgstr "Date de début"
 msgctxt "Voucher date restrictions"
 msgid "End date"
 msgstr "Date de fin"
+
+#: templates/templated_email/html/compiled/confirm_order.html:160
+msgctxt "E-mail order lines summary table"
+msgid "VAT"
+msgstr "TVA"
+
+#: templates/templated_email/html/compiled/confirm_order.html:177
+msgctxt "E-mail order line summary header"
+msgid "Item"
+msgstr "Article"
+
+#: templates/templated_email/html/compiled/confirm_order.html:178
+msgctxt "E-mail order line summary header"
+msgid "Quantity"
+msgstr "Quantité"
+
+#: templates/templated_email/html/compiled/confirm_order.html:179
+msgctxt "E-mail order line summary header"
+msgid "Per unit"
+msgstr "Par unité"
+
+#: templates/templated_email/html/compiled/confirm_order.html:180
+msgctxt "E-mail order line summary header"
+msgid "Subtotal"
+msgstr "Sous-total"
