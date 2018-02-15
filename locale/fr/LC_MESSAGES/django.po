@@ -5309,3 +5309,27 @@ msgstr "Par unité"
 msgctxt "E-mail order line summary header"
 msgid "Subtotal"
 msgstr "Sous-total"
+
+#: saleor/product/models.py:97
+msgid "This product is available within %d to %d days."
+msgstr "Ce produit est disponible sous %d à %d jours."
+
+#: saleor/product/models.py:97
+msgid "This product is available within %d days."
+msgstr "Ce produit est disponible sous %d jours."
+
+#: templates/dashboard/product/_stock_table.html:10
+msgid "Min Days"
+msgstr "Nombre de jours (min)"
+
+#: templates/dashboard/product/_stock_table.html:11
+msgid "Max Days"
+msgstr "Nombre de jours (max)"
+
+#: saleor/dashboard/product/forms.py:38
+msgid "Min availability days"
+msgstr "Disponibilité : nombre de jours minimum"
+
+#: saleor/dashboard/product/forms.py:39
+msgid "Max availability days"
+msgstr "Disponibilité : nombre de jours maximum"
