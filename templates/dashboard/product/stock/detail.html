@@ -56,6 +56,8 @@
             <div class="col s12">
               <p class="text-padding">{% trans "Location" context "Dashboard stock details view" %}: {{ stock.location }}</p>
               <p class="text-padding">{% trans "Quantity" context "Dashboard stock details view" %}: {{ stock.quantity }}</p>
+              <p class="text-padding">{% trans "Availability min days" context "Availability min days" %}: {{ stock.min_days }}</p>
+              <p class="text-padding">{% trans "Availability max days" context "Availability max days" %}: {{ stock.max_days }}</p>
               <p class="text-padding">{% trans "Allocated" context "Dashboard stock details view" %}: {{ stock.quantity_allocated }}</p>
             </div>
           </div>

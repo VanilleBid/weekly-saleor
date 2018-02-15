@@ -3,8 +3,11 @@ import json
 from unittest.mock import Mock
 
 import pytest
+from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.encoding import smart_text
+
+from saleor.product.models import Product, ProductVariant, Stock, StockLocation
 from tests.utils import filter_products_by_attribute
 
 from saleor.cart import CartStatus, utils
@@ -107,6 +110,58 @@ def test_availability(product_in_stock, monkeypatch, settings):
     availability = get_availability(product_in_stock, local_currency='PLN')
     assert availability.price_range_local_currency.min_price.currency == 'PLN'
     assert availability.available
+
+
+def test_get_availability_range(product_in_stock: Product, client):
+    variant = product_in_stock.variants.first()  # type: ProductVariant
+    stock = variant.stock.first()  # type: Stock
+    warehouse_2 = StockLocation.objects.create(name='Warehouse 2')
+    warehouse_3 = StockLocation.objects.create(name='Warehouse 3')
+
+    def _expect(expected, product=product_in_stock):
+        expected_format = 'This product is available within %s.'
+        html_format = '<p class="alert alert-warning">' + expected_format
+
+        rq = client.get(product.get_absolute_url())  # type: TemplateResponse
+
+        assert rq.status_code == 200
+        resp_content = rq.content.decode('utf-8')
+
+        if expected:
+            html_expected = html_format % expected
+            expected = expected_format % expected
+            assert html_expected in resp_content
+        else:
+            assert html_format % expected not in resp_content
+
+        assert product.availability_range == expected
+
+    _expect('')
+
+    stock.min_days = 1
+    stock.save()
+    _expect('1 days')
+
+    stock.min_days = 0
+    stock.max_days = 1
+    stock.save()
+    _expect('1 days')
+
+    stock.min_days = 12
+    stock.max_days = 14
+    stock.save()
+    _expect('12 to 14 days')
+
+    Stock.objects.create(
+        variant=variant, cost_price=100, quantity=5, quantity_allocated=5,
+        location=warehouse_2,
+        min_days=1)
+    Stock.objects.create(
+        variant=variant, cost_price=10, quantity=5, quantity_allocated=0,
+        location=warehouse_3,
+        min_days=10)
+    stock.save()
+    _expect('1 to 14 days')
 
 
 def test_available_products_only_published(product_list):
