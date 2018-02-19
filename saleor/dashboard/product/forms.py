@@ -4,7 +4,7 @@ from django.forms.models import ModelChoiceIterator
 from django.forms.widgets import CheckboxSelectMultiple
 from django.utils.encoding import smart_text
 from django.utils.text import slugify
-from django.utils.translation import pgettext_lazy
+from django.utils.translation import pgettext_lazy, gettext_lazy
 
 from . import ProductBulkAction
 from ...product.models import (
@@ -33,7 +33,9 @@ class StockForm(forms.ModelForm):
             'quantity': pgettext_lazy(
                 'Integer number', 'Quantity'),
             'cost_price': pgettext_lazy(
-                'Currency amount', 'Cost price')}
+                'Currency amount', 'Cost price'),
+            'min_days': gettext_lazy('Min availability days'),
+            'max_days': gettext_lazy('Max availability days')}
 
     def __init__(self, *args, **kwargs):
         self.variant = kwargs.pop('variant')

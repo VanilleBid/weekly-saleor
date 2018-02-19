@@ -6,6 +6,8 @@ from django.shortcuts import reverse
 from django.test import RequestFactory
 from prices import Price
 
+from saleor import settings
+from saleor.core.urls import ROBOTS_TXT
 from saleor.core.utils import (
     Country, create_superuser, get_country_by_ip, get_currency_for_country,
     random_data)
@@ -219,3 +221,8 @@ def test_get_tax_price(order_with_lines: Order, billing_address):
     assert_decimal(
         get_tax_price(None, checkout=order, get_first_shipping_addr=True).gross,
         poland_taxed_price)
+
+
+def test_get_robots_txt(client):
+    if settings.DEBUG:
+        assert client.get('/robots.txt').content == ROBOTS_TXT

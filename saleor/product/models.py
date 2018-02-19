@@ -9,7 +9,7 @@ from django.db.models import F, Max, Q
 from django.urls import reverse
 from django.utils.encoding import smart_text
 from django.utils.text import slugify
-from django.utils.translation import pgettext_lazy
+from django.utils.translation import pgettext_lazy, gettext_lazy
 from django_prices.models import Price, PriceField
 from mptt.managers import TreeManager
 from mptt.models import MPTTModel
@@ -91,6 +91,15 @@ class ProductQuerySet(models.QuerySet):
         return self.filter(
             Q(available_on__lte=today) | Q(available_on__isnull=True),
             Q(is_published=True))
+
+
+_BASE_AVAILABILITY_MSG = 'This product is available %s'
+
+AVAILABILITY_MSG_FROM_TO = gettext_lazy(
+    _BASE_AVAILABILITY_MSG % 'within %d to %d days.')
+
+AVAILABILITY_MSG_WITHIN = gettext_lazy(
+    _BASE_AVAILABILITY_MSG % 'within %d days.')
 
 
 class Product(models.Model, ItemRange):
@@ -175,6 +184,65 @@ class Product(models.Model, ItemRange):
             return None
         grosses = sorted(grosses, key=lambda x: x.tax)
         return PriceRange(min(grosses), max(grosses))
+
+    def _get_stocks(self):
+        for variant in self.variants.all():
+            for stock in variant.stock.all():
+                yield stock
+
+    def _get_availability(self):
+        mins, maxs = [], []
+
+        for stock in self._get_stocks():
+            if stock.min_days:
+                mins.append(stock.min_days)
+
+            if stock.max_days:
+                maxs.append(stock.max_days)
+
+        return mins, maxs
+
+    def _get_availability_range(self):
+        mins, maxs = self._get_availability()
+        min_days, max_days = 0, 0
+
+        if mins:
+            if len(mins) > 2:
+                min_days = min(*mins)
+            else:
+                min_days = mins[0]
+        if maxs:
+            max_days = max(0, *maxs)
+
+        return min_days, max_days
+
+    def _format_availability(self):
+        min_days, max_days = self._get_availability_range()
+
+        s = ''
+        within_days = 0
+
+        if min_days:
+            if max_days:
+                return AVAILABILITY_MSG_FROM_TO % (min_days, max_days)
+            else:
+                within_days = min_days
+        elif max_days:
+            within_days = max_days
+
+        if within_days:
+            s = AVAILABILITY_MSG_WITHIN % within_days
+
+        return s
+
+    def get_availability_range(self):
+        if self.variants.exists():
+            return self._format_availability()
+        return ''
+
+    @property
+    def availability_range(self):
+        return self.get_availability_range()
 
 
 class ProductVariant(models.Model, Item):
@@ -303,6 +371,9 @@ class Stock(models.Model):
     cost_price = PriceField(
         currency=settings.DEFAULT_CURRENCY, max_digits=12, decimal_places=2,
         blank=True, null=True)
+
+    min_days = models.PositiveIntegerField(blank=True, null=True)
+    max_days = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
         app_label = 'product'

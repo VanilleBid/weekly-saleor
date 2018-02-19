@@ -17,3 +17,8 @@ Sincerely,
 {{ site_name }}
 {% endblocktrans %}
 {% endblock %}
+
+
+{% block html %}
+{% include 'templated_email/html/compiled/confirm_shipping.html' %}
+{% endblock %}

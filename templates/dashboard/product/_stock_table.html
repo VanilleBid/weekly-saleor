@@ -7,6 +7,8 @@
     <tr>
       <th class="wide">{% trans "Location" %}</th>
       <th>{% trans "Quantity" %}</th>
+      <th>{% trans "Min Days" %}</th>
+      <th>{% trans "Max Days" %}</th>
       <th>{% trans "Allocated" %}</th>
       <th class="right-align">{% trans "Cost" %}</th>
       <th class="right-align">{% trans "Gross margin" %}</th>
@@ -17,6 +19,8 @@
       <tr class="{% if stock_item.quantity_available == 0 %}danger{% endif %}" data-action-go="{% url "dashboard:variant-stock-details" product_pk=product.pk variant_pk=variant.pk stock_pk=stock_item.pk %}">
         <td class="wide">{{ stock_item.location }}</td>
         <td>{{ stock_item.quantity }}</td>
+        <td>{{ stock_item.min_days }}</td>
+        <td>{{ stock_item.max_days }}</td>
         <td>{{ stock_item.quantity_allocated }}</td>
         <td class="right-align">{% if stock_item.cost_price %}{% gross stock_item.cost_price %}{% else %}-{% endif %}</td>
         <td class="right-align">

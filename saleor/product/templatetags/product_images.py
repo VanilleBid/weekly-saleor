@@ -16,7 +16,7 @@ register = template.Library()
 
 
 class ThumbnailImage(SizedImage):
-    filename_key = 'thumbnail'
+    filename_key = 'fit'
 
     def __init__(self, *args, **kwargs):
         super(ThumbnailImage, self).__init__(*args, **kwargs)
@@ -45,7 +45,7 @@ class ThumbnailImage(SizedImage):
         return imagefile
 
 
-versatileimagefield_registry.register_sizer('fill_crop', ThumbnailImage)
+versatileimagefield_registry.register_sizer('fit', ThumbnailImage)
 
 
 # cache available sizes at module level

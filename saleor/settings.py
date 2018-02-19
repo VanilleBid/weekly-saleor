@@ -271,9 +271,10 @@ PAYMENT_MODEL = 'order.Payment'
 PAYMENT_VARIANTS = {
     'default': ('payments.dummy.DummyProvider', {}),
     'paypal': ('payments.paypal.PaypalProvider', {
-        'client_id': 'AXkRzYLglaQy1TttKYrXgxksBVOx2YxLoCvRESMaCzfkwUmzkr5QEk8WymY_lOyAlw0zZRuWewBSezqJ',
-        'secret': 'EKmqV3fvknmriea3G1SrAxwujK9PF_mNGbhGhL_bOA39fbOsWJZeW2OZSHWY3QFUC8h2p1QeLhzC8jNP',
-        'endpoint': 'https://api.sandbox.paypal.com',
+        'client_id': os.environ.get('PAYPAL_CLIENT_ID'),
+        'secret': os.environ.get('PAYPAL_SECRET'),
+        'endpoint': os.environ.get(
+            'PAYPAL_ENDPOINT', 'https://api.sandbox.paypal.com'),
         'capture': False})
 }
 

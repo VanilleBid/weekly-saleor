@@ -1,6 +1,8 @@
 from django.conf.urls import url
+from django.http import HttpResponse
 from impersonate.views import stop_impersonate
 
+from saleor import settings
 from . import views
 
 urlpatterns = [
@@ -13,3 +15,10 @@ urlpatterns = [
     url(r'^404', views.handle_404, name='handle-404'),
     url(r'^manifest\.json$', views.manifest, name='manifest'),
 ]
+
+if settings.DEBUG:
+    ROBOTS_TXT = b'User-agent: *\nDisallow: /'
+
+    def robots(request):
+        return HttpResponse(ROBOTS_TXT, content_type='text/plain')
+    urlpatterns.append(url(r'^robots\.txt$', robots, name='robots'))

@@ -1,4 +1,26 @@
 .order-details {
+  &__payment {
+    display: flex;
+    flex-grow: 1;
+    align-content: space-between;
+
+    >a {
+      width: 100%;
+      margin: 0 0 0 1rem;
+
+      &:first-child {
+        margin: inherit;
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      flex-direction: column;
+      > a {
+        margin: 1rem 0 0;
+      }
+    }
+
+  }
   &__header {
     margin: $global-margin 0 $global-margin * 2;
   }
