@@ -273,7 +273,8 @@ PAYMENT_VARIANTS = {
     'paypal': ('payments.paypal.PaypalProvider', {
         'client_id': os.environ.get('PAYPAL_CLIENT_ID'),
         'secret': os.environ.get('PAYPAL_SECRET'),
-        'endpoint': os.environ.get('PAYPAL_ENDPOINT', 'https://api.sandbox.paypal.com'),
+        'endpoint': os.environ.get(
+            'PAYPAL_ENDPOINT', 'https://api.sandbox.paypal.com'),
         'capture': False})
 }
 

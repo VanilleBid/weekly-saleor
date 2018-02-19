@@ -185,16 +185,20 @@ class Product(models.Model, ItemRange):
         grosses = sorted(grosses, key=lambda x: x.tax)
         return PriceRange(min(grosses), max(grosses))
 
+    def _get_stocks(self):
+        for variant in self.variants.all():
+            for stock in variant.stock.all():
+                yield stock
+
     def _get_availability(self):
         mins, maxs = [], []
 
-        for variant in self.variants.all():
-            for stock in variant.stock.all():
-                if stock.min_days:
-                    mins.append(stock.min_days)
+        for stock in self._get_stocks():
+            if stock.min_days:
+                mins.append(stock.min_days)
 
-                if stock.max_days:
-                    maxs.append(stock.max_days)
+            if stock.max_days:
+                maxs.append(stock.max_days)
 
         return mins, maxs
 

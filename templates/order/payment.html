@@ -47,13 +47,13 @@
             </h1>
             <form method="post" action="{% url 'order:cancel-payment' token=order.token %}" class="checkout-form">
               {% csrf_token %}
-              <p>{% blocktrans trimmed context "Payment pending text" %}
+              <p class="alert alert-warning">{% blocktrans trimmed context "Payment pending text" %}
                 We are currently waiting for an external service to authorize
                 your payment for this order.
               {% endblocktrans %}</p>
               <p>{% trans "Current status:" context "Payment status text" %}
                 <br>
-                <span class="label label-default">
+                <span class="label label-default font-weight-bold">
                 {{ waiting_payment.get_status_display }}
                 </span>
               </p>
@@ -65,9 +65,11 @@
                 transaction succeeds you might end up being charged twice.
               {% endblocktrans %}</p>
               {% bootstrap_form waiting_payment_form %}
-              <button type="submit" class="btn danger">
-                {% trans "I understand, allow me to pay again" context "Payment pending action" %}
-              </button>
+              <div class="text-center">
+                <button type="submit" class="btn danger">
+                  {% trans "I understand, allow me to pay again" context "Payment pending action" %}
+                </button>
+              </div>
             </form>
           {% elif payment_form %}
             <h1>
@@ -85,10 +87,13 @@
               {% endblock %}
             </form>
           {% else %}
-            <p>{% trans "You've authorized transaction. Order is in processing" context "Payment details text" %}</p>
+            <p class="alert alert-success">{% trans "You've authorized transaction. Order is in processing" context "Payment details text" %}</p>
           {% endif %}
         {% endif %}
       {% endif %}
+
+      <hr/>
+
       {% include 'order/_ordered_items_table.html' %}
     </div>
   </div>
