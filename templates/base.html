@@ -259,6 +259,15 @@
           </a>
         </div>
       </div>
+
+      <div class="row policies">
+        <a rel="nofollow" href="{% url "privacy-policy" %}">
+          {% trans "Privacy Policy" context "Main navigation item" %}
+        </a>&mdash;
+        <a rel="nofollow" href="{% url "selling-contract" %}">
+          {% trans "Selling Contract" context "Main navigation item" %}
+        </a>
+      </div>
     </div>
   </footer>
 {% endblock %}

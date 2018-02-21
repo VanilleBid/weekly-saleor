@@ -9,7 +9,7 @@ from ...userprofile.forms import get_address_form
 from ...userprofile.models import Address
 from ..forms import (
     AnonymousUserBillingForm, BillingAddressesForm,
-    BillingWithoutShippingAddressForm, NoteForm)
+    BillingWithoutShippingAddressForm, NoteForm, ContractAcceptanceForm)
 from ...userprofile.forms import get_address_form
 from ...userprofile.models import Address
 
@@ -46,6 +46,11 @@ def handle_order_placement(request, checkout):
         msg = pgettext('Checkout warning', 'Please review your checkout.')
         messages.warning(request, msg)
     return redirect_url
+
+
+def get_and_check_contract_acceptance(data):
+    contract_form = ContractAcceptanceForm(data or None)
+    return contract_form, contract_form.is_valid()
 
 
 def get_billing_forms_with_shipping(
@@ -94,6 +99,9 @@ def summary_with_shipping_view(request, checkout):
 
     Will create an order if all data is valid.
     """
+    contract_form, \
+        contract_accepted = get_and_check_contract_acceptance(request.POST)
+
     note_form = NoteForm(request.POST or None, checkout=checkout)
     if note_form.is_valid():
         note_form.set_checkout_note()
@@ -106,7 +114,8 @@ def summary_with_shipping_view(request, checkout):
         request.POST or None, additional_addresses,
         checkout.billing_address or Address(country=request.country),
         checkout.shipping_address)
-    if address is not None:
+
+    if contract_accepted and address is not None:
         checkout.billing_address = address
         return handle_order_placement(request, checkout)
 
@@ -116,6 +125,7 @@ def summary_with_shipping_view(request, checkout):
             'checkout': checkout,
             'additional_addresses': additional_addresses,
             'note_form': note_form,
+            'contract_form': contract_form,
             **base_template_kwargs(request, checkout)})
 
 

@@ -38,6 +38,14 @@
       margin-right: $global-margin;
     }
   }
+  .policies {
+    text-align: center;
+    display: block;
+    padding: 2rem;
+  }
+  .policies, .policies a {
+    color: lighten($gray-700, 30%);
+  }
 }
 
 .maincontent {

@@ -115,6 +115,17 @@ class AnonymousUserBillingForm(forms.Form):
         label=pgettext_lazy('Billing form field label', 'Email'))
 
 
+class ContractAcceptanceForm(forms.Form):
+    """A form requiring the user to check a checkbox to say they accept the
+    contract."""
+
+    contract = forms.BooleanField(
+        required=True,
+        label=pgettext_lazy(
+            'Contract accept checkbox',
+            'I read and I accept the selling contract'))
+
+
 class NoteForm(forms.Form):
     """Form to add a note to an order."""
 

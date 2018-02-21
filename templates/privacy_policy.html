@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+  <h1>Privacy Policy of {{ site.name }}</h1>
+  <h2>Please fill me.</h2>
+
+  <hr/>
+
+  <p>Note that you can load locale translated policies (static files)</p>
+  <ul>
+    <li>using the get_current_language();</li>
+    <li>or put a list of languages for the user.</li>
+  </ul>
+</div>
+{% endblock %}

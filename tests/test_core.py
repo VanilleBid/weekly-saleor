@@ -245,3 +245,15 @@ def test_get_tax_price(order_with_lines: Order, billing_address):
 def test_get_robots_txt(client):
     if settings.DEBUG:
         assert client.get('/robots.txt').content == ROBOTS_TXT
+
+
+def test_get_privacy_policy(client):
+    response = client.get(reverse('privacy-policy'))
+    assert response.status_code == 200
+    assert b'Privacy Policy' in response.content
+
+
+def test_get_selling_contract(client):
+    response = client.get(reverse('selling-contract'))
+    assert response.status_code == 200
+    assert b'Selling Contract' in response.content
