@@ -1,15 +1,17 @@
 .order-details {
   &__payment {
     display: flex;
-    flex-grow: 1;
+    margin: 0 auto;
+    flex-direction: row-reverse;
     align-content: space-between;
 
     >a {
-      width: 100%;
-      margin: 0 0 0 1rem;
+      margin: 0 1rem 0 0;
+      display: flex;
+      align-items: center;
 
       &:first-child {
-        margin: inherit;
+        margin: 0 0 0 auto;
       }
     }
 
@@ -17,6 +19,10 @@
       flex-direction: column;
       > a {
         margin: 1rem 0 0;
+        width: 100%;
+        &.btn.primary {
+          padding: 1rem 2rem;
+        }
       }
     }
 

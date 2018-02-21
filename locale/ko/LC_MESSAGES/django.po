@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-21 01:49+0100\n"
+"POT-Creation-Date: 2018-02-21 04:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Jihan Chung <jihanchung20@gmail.com>, 2017\n"
 "Language-Team: Korean (https://www.transifex.com/mirumee/teams/34782/ko/)\n"
@@ -490,12 +490,12 @@ msgctxt "Permission description"
 msgid "Can edit product properties"
 msgstr "상품 옵션을 수정할 수 있습니다"
 
-#: saleor/product/models.py:352
+#: saleor/product/models.py:348
 msgctxt "Permission description"
 msgid "Can view stock location"
 msgstr "재고 위치를 볼 수 있습니다"
 
-#: saleor/product/models.py:355
+#: saleor/product/models.py:351
 msgctxt "Permission description"
 msgid "Can edit stock location"
 msgstr "재고 위치를 수정할 수 있습니다"
@@ -4447,22 +4447,30 @@ msgctxt "Order detail text"
 msgid "Order %(order)s: %(order_status)s"
 msgstr "주문 %(order)s:%(order_status)s"
 
-#: templates/order/details.html:56
-msgctxt "Order details link text"
-msgid "Payment details"
-msgstr "결제 상세"
-
-#: templates/order/details.html:60
+#: templates/order/details.html:59
 msgctxt "Order details primary action"
 msgid "Pay for order"
 msgstr "주문을 위한 결제"
 
-#: templates/order/details.html:67
+#: templates/order/details.html:65
+msgctxt "Order details link text"
+msgid "Payment details"
+msgstr "결제 상세"
+
+#: templates/order/details.html:70
+#, fuzzy
+#| msgctxt "Order detail action"
+#| msgid "Invoice"
+msgctxt "Order details link text"
+msgid "Invoice"
+msgstr "인보이스"
+
+#: templates/order/details.html:76
 msgctxt "Order notes list"
 msgid "Notes"
 msgstr ""
 
-#: templates/order/details.html:72
+#: templates/order/details.html:81
 #, python-format
 msgid ""
 "\n"
@@ -4470,12 +4478,12 @@ msgid ""
 "                  "
 msgstr ""
 
-#: templates/order/details.html:76
+#: templates/order/details.html:85
 msgctxt "Order note author is staff"
 msgid "staff"
 msgstr ""
 
-#: templates/order/details.html:77
+#: templates/order/details.html:86
 #, python-format
 msgid ""
 "\n"
@@ -4484,7 +4492,7 @@ msgid ""
 "                  "
 msgstr ""
 
-#: templates/order/details.html:81
+#: templates/order/details.html:90
 #, python-format
 msgid ""
 "\n"
@@ -4492,7 +4500,7 @@ msgid ""
 "                  "
 msgstr ""
 
-#: templates/order/details.html:86
+#: templates/order/details.html:95
 #, python-format
 msgid ""
 "\n"
@@ -4541,23 +4549,23 @@ msgstr ""
 "우), 새로운 결제를 시도하기 전에 기다리셔야 합니다. 이전 거래를 기다리지 않"
 "고 다시 결제를 시도할 경우, 중복 결제가 될 수 있음을 주의하시기 바랍니다."
 
-#: templates/order/payment.html:69
+#: templates/order/payment.html:70
 msgctxt "Payment pending action"
 msgid "I understand, allow me to pay again"
 msgstr "이해하였습니다. 다시 결제하기를 원합니다."
 
-#: templates/order/payment.html:74
+#: templates/order/payment.html:76
 #, python-format
 msgctxt "Payment details title"
 msgid "Pay for order %(order)s"
 msgstr "%(order)s 주문을 위한 결제"
 
-#: templates/order/payment.html:83
+#: templates/order/payment.html:85
 msgctxt "Payment details primary action"
 msgid "Proceed to payment"
 msgstr "결제 진행"
 
-#: templates/order/payment.html:88
+#: templates/order/payment.html:90
 msgctxt "Payment details text"
 msgid "You've authorized transaction. Order is in processing"
 msgstr "거래가 승인되었습니다. 주문이 진행 중에 있습니다."

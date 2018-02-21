@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-21 01:49+0100\n"
+"POT-Creation-Date: 2018-02-21 04:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Saito Kotaro, 2017\n"
 "Language-Team: Japanese (https://www.transifex.com/mirumee/teams/34782/ja/)\n"
@@ -487,12 +487,12 @@ msgctxt "Permission description"
 msgid "Can edit product properties"
 msgstr ""
 
-#: saleor/product/models.py:352
+#: saleor/product/models.py:348
 msgctxt "Permission description"
 msgid "Can view stock location"
 msgstr ""
 
-#: saleor/product/models.py:355
+#: saleor/product/models.py:351
 msgctxt "Permission description"
 msgid "Can edit stock location"
 msgstr ""
@@ -4421,22 +4421,27 @@ msgctxt "Order detail text"
 msgid "Order %(order)s: %(order_status)s"
 msgstr ""
 
-#: templates/order/details.html:56
-msgctxt "Order details link text"
-msgid "Payment details"
-msgstr ""
-
-#: templates/order/details.html:60
+#: templates/order/details.html:59
 msgctxt "Order details primary action"
 msgid "Pay for order"
 msgstr ""
 
-#: templates/order/details.html:67
+#: templates/order/details.html:65
+msgctxt "Order details link text"
+msgid "Payment details"
+msgstr ""
+
+#: templates/order/details.html:70
+msgctxt "Order details link text"
+msgid "Invoice"
+msgstr ""
+
+#: templates/order/details.html:76
 msgctxt "Order notes list"
 msgid "Notes"
 msgstr ""
 
-#: templates/order/details.html:72
+#: templates/order/details.html:81
 #, python-format
 msgid ""
 "\n"
@@ -4444,12 +4449,12 @@ msgid ""
 "                  "
 msgstr ""
 
-#: templates/order/details.html:76
+#: templates/order/details.html:85
 msgctxt "Order note author is staff"
 msgid "staff"
 msgstr ""
 
-#: templates/order/details.html:77
+#: templates/order/details.html:86
 #, python-format
 msgid ""
 "\n"
@@ -4458,7 +4463,7 @@ msgid ""
 "                  "
 msgstr ""
 
-#: templates/order/details.html:81
+#: templates/order/details.html:90
 #, python-format
 msgid ""
 "\n"
@@ -4466,7 +4471,7 @@ msgid ""
 "                  "
 msgstr ""
 
-#: templates/order/details.html:86
+#: templates/order/details.html:95
 #, python-format
 msgid ""
 "\n"
@@ -4512,23 +4517,23 @@ msgid ""
 "the previous transaction succeeds you might end up being charged twice."
 msgstr ""
 
-#: templates/order/payment.html:69
+#: templates/order/payment.html:70
 msgctxt "Payment pending action"
 msgid "I understand, allow me to pay again"
 msgstr ""
 
-#: templates/order/payment.html:74
+#: templates/order/payment.html:76
 #, python-format
 msgctxt "Payment details title"
 msgid "Pay for order %(order)s"
 msgstr ""
 
-#: templates/order/payment.html:83
+#: templates/order/payment.html:85
 msgctxt "Payment details primary action"
 msgid "Proceed to payment"
 msgstr ""
 
-#: templates/order/payment.html:88
+#: templates/order/payment.html:90
 msgctxt "Payment details text"
 msgid "You've authorized transaction. Order is in processing"
 msgstr ""

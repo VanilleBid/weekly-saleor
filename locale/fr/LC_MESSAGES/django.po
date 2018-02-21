@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-21 01:49+0100\n"
+"POT-Creation-Date: 2018-02-21 04:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: KOCAK Mikail <wibberry@gmail.com>, 2018\n"
 "Language-Team: French (https://www.transifex.com/mirumee/teams/34782/fr/)\n"
@@ -501,12 +501,12 @@ msgctxt "Permission description"
 msgid "Can edit product properties"
 msgstr "Peut modifier les propriétés des produits"
 
-#: saleor/product/models.py:352
+#: saleor/product/models.py:348
 msgctxt "Permission description"
 msgid "Can view stock location"
 msgstr "Peut voir les localisations des stocks"
 
-#: saleor/product/models.py:355
+#: saleor/product/models.py:351
 msgctxt "Permission description"
 msgid "Can edit stock location"
 msgstr "Peut modifier les localisations des stocks"
@@ -4501,7 +4501,7 @@ msgstr "Quantité"
 #| msgctxt "E-mail order line summary header"
 #| msgid "Per unit (excl. VAT)"
 msgctxt "Order details column title"
-msgid "Price per Unit (Net)"
+msgid "Price per Unit (excl. VAT)"
 msgstr "Prix unitaire (HT)"
 
 #: templates/order/_ordered_items_table.html:82
@@ -4527,7 +4527,6 @@ msgstr "Frais de livraison total"
 
 #: templates/order/_ordered_items_table.html:146
 #, fuzzy
-#| msgctxt "E-mail order lines summary table"
 msgctxt "Order details total text"
 msgid "Total (with VAT)"
 msgstr "Total HT"
@@ -4607,22 +4606,30 @@ msgctxt "Order detail text"
 msgid "Order %(order)s: %(order_status)s"
 msgstr "Commande %(order)s: %(order_status)s"
 
-#: templates/order/details.html:56
-msgctxt "Order details link text"
-msgid "Payment details"
-msgstr "Détails de paiement"
-
-#: templates/order/details.html:60
+#: templates/order/details.html:59
 msgctxt "Order details primary action"
 msgid "Pay for order"
 msgstr "Payer pour la commande"
 
-#: templates/order/details.html:67
+#: templates/order/details.html:65
+msgctxt "Order details link text"
+msgid "Payment details"
+msgstr "Détails de paiement"
+
+#: templates/order/details.html:70
+#, fuzzy
+#| msgctxt "Order detail action"
+#| msgid "Invoice"
+msgctxt "Order details link text"
+msgid "Invoice"
+msgstr "Facture"
+
+#: templates/order/details.html:76
 msgctxt "Order notes list"
 msgid "Notes"
 msgstr "Notes"
 
-#: templates/order/details.html:72
+#: templates/order/details.html:81
 #, python-format
 msgid ""
 "\n"
@@ -4632,12 +4639,12 @@ msgstr ""
 "\n"
 "                    %(date)s par vous"
 
-#: templates/order/details.html:76
+#: templates/order/details.html:85
 msgctxt "Order note author is staff"
 msgid "staff"
 msgstr "équipe"
 
-#: templates/order/details.html:77
+#: templates/order/details.html:86
 #, python-format
 msgid ""
 "\n"
@@ -4648,7 +4655,7 @@ msgstr ""
 "\n"
 "%(date)s par <span class=\"text-muted\">%(author)s</span>"
 
-#: templates/order/details.html:81
+#: templates/order/details.html:90
 #, python-format
 msgid ""
 "\n"
@@ -4659,7 +4666,7 @@ msgstr ""
 "                    %(date)s par %(author)s\n"
 "                  "
 
-#: templates/order/details.html:86
+#: templates/order/details.html:95
 #, python-format
 msgid ""
 "\n"
@@ -4714,23 +4721,23 @@ msgstr ""
 "avant de procéder à une nouvelle tentative de paiement. Vous pourriez être "
 "débité deux fois si la précédante tentative aboutit."
 
-#: templates/order/payment.html:69
+#: templates/order/payment.html:70
 msgctxt "Payment pending action"
 msgid "I understand, allow me to pay again"
 msgstr "Je comprends, laissez moi payer à nouveau"
 
-#: templates/order/payment.html:74
+#: templates/order/payment.html:76
 #, python-format
 msgctxt "Payment details title"
 msgid "Pay for order %(order)s"
 msgstr "Payer pour la commande %(order)s"
 
-#: templates/order/payment.html:83
+#: templates/order/payment.html:85
 msgctxt "Payment details primary action"
 msgid "Proceed to payment"
 msgstr "Procéder au paiement"
 
-#: templates/order/payment.html:88
+#: templates/order/payment.html:90
 msgctxt "Payment details text"
 msgid "You've authorized transaction. Order is in processing"
 msgstr ""

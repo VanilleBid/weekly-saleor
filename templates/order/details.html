@@ -51,21 +51,25 @@
         {% endblocktrans %}
       </h2>
 
-      {% if order.is_open %}
-        <div class="order-details__payment">
-          {% if not order.is_fully_paid %}
-            {% if not order.is_pre_authorized %}
-              <a href="{% url "order:payment" token=order.token %}" class="btn primary">
-                {% trans "Pay for order" context "Order details primary action" %}
-              </a>
+      <div class="order-details__payment">
+        {% if order.is_open %}
+            {% if not order.is_fully_paid %}
+              {% if not order.is_pre_authorized %}
+                <a href="{% url "order:payment" token=order.token %}" class="btn primary">
+                  {% trans "Pay for order" context "Order details primary action" %}
+                </a>
+              {% endif %}
             {% endif %}
-          {% endif %}
 
-          <a href="{% url "order:payment" token=order.token %}" class="btn secondary">
+            <a href="{% url "order:payment" token=order.token %}" class="btn secondary">
               {% trans "Payment details" context "Order details link text" %}
-          </a>
-        </div>
-      {% endif %}
+            </a>
+        {% endif %}
+
+        <a href="{% url "order:invoice" token=order.token %}" class="btn secondary">
+          {% trans "Invoice" context "Order details link text" %}
+        </a>
+      </div>
 
       {% include "order/_ordered_items_table.html" %}
         {% if notes %}
