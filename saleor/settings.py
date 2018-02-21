@@ -1,15 +1,40 @@
 import ast
 import os.path
 import platform
+from datetime import timedelta
 
 import dj_database_url
 import dj_email_url
 from django.contrib.messages import constants as messages
 import django_cache_url
+from invoice_generator import models
 
 
 def get_list(text):
     return [item.strip() for item in text.split(',')]
+
+
+def env_get_list(key, default=None):
+    res = []
+    line = ''
+
+    if key not in os.environ:
+        return default
+
+    text = os.environ[key]
+
+    def _append():
+        res.append(line)
+
+    prev_char = None
+    for c in text:
+        if c == ';' and prev_char != '\\':
+            _append()
+            line = ''
+        else:
+            line += c
+    _append()
+    return res
 
 
 def env_get_or_get(key, default_obj: dict, default_obj_key=None):
@@ -58,6 +83,9 @@ DATABASES = {
 DEFAULT_TAX_RATE_COUNTRY = 'FR'
 FALLBACK_TAX_RATE = 0.20
 
+MAX_DELIVERY_DAYS = 21
+MIN_DELIVERY_DAYS = 14
+
 TIME_ZONE = 'Europe/Paris'
 LANGUAGE_CODE = 'fr'
 LOCALE_PATHS = [os.path.join(PROJECT_ROOT, 'locale')]
@@ -92,6 +120,8 @@ ORDER_FROM_EMAIL = os.getenv('ORDER_FROM_EMAIL', DEFAULT_FROM_EMAIL)
 
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
+
+REAL_STATIC_ROOT = os.path.join(PROJECT_ROOT, 'saleor', 'static')
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
@@ -158,6 +188,7 @@ MIDDLEWARE = [
 INSTALLED_APPS = [
     # External apps that need to go before django's
     'storages',
+    'invoice_generator.apps.InvoiceGeneratorConfig',
 
     # Django modules
     'django.contrib.contenttypes',
@@ -426,3 +457,21 @@ IMPERSONATE = {
     'CUSTOM_USER_QUERYSET': 'saleor.userprofile.impersonate.get_impersonatable_users',  # noqa
     'USE_HTTP_REFERER': True,
     'CUSTOM_ALLOW': 'saleor.userprofile.impersonate.can_impersonate'}
+
+# Invoice data about the vendor
+INVOICE_VENDOR_ADDRESS = models.Address(
+    name=os.environ.get('INVOICE_VENDOR_NAME', 'Mirumee Software'),
+    street=os.environ.get('INVOICE_VENDOR_STREET', 'Tęczowa 7'),
+    postcode=os.environ.get('INVOICE_VENDOR_POSTCODE', '53-601'),
+    city=os.environ.get('INVOICE_VENDOR_CITY', 'Wrocław'))
+
+INVOICE_EXECUTIVE = models.Executive(
+    os.environ.get('INVOICE_EXECUTIVE_NAME', 'John Doe'),
+    os.environ.get('INVOICE_EXECUTIVE_TEXT', '\\a'))
+
+INVOICE_VENDOR = models.Vendor(
+    INVOICE_EXECUTIVE, address=INVOICE_VENDOR_ADDRESS,
+    vat_number=os.environ.get('INVOICE_VAT_NUMBER', 'PL00000000000'),
+    additional_text=env_get_list('INVOICE_ADDITIONAL_TEXT', tuple()))
+
+SIREN_CODE = os.environ.get('SIREN_CODE', 'SR_00')

@@ -539,7 +539,9 @@ def test_view_get_taxed_total(client, tax_rates_countries, product_in_stock, req
     cart_total = float(request_cart.get_total().net)
 
     for country, tax_rate in tax_rates_countries.items():
-        assert _send_request(country)['gross'] == cart_total * (1 + tax_rate)
+        resp = _send_request(country)
+        assert resp['gross'] == cart_total * (1 + tax_rate)
+        assert resp['rate'] == tax_rate
 
 
 def test_view_update_cart_quantity(

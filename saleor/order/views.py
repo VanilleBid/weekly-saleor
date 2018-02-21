@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.http import Http404, HttpResponseForbidden
+from django.http import Http404, HttpResponseForbidden, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.utils.translation import pgettext_lazy
@@ -18,6 +18,7 @@ from .forms import (
     OrderNoteForm, PasswordForm, PaymentDeleteForm, PaymentMethodsForm)
 from .models import Order, OrderNote, Payment
 from .utils import attach_order_to_user, check_order_status
+from .invoice import create_invoice_pdf
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +41,20 @@ def details(request, token):
                 note_form.save()
                 return redirect('order:details', token=order.token)
     return TemplateResponse(request, 'order/details.html', ctx)
+
+
+@login_required
+def invoice(request, token):
+    order = get_object_or_404(Order.objects, token=token)
+
+    if order.user != request.user:
+        raise Http404
+
+    pdf = create_invoice_pdf(order).write_pdf()
+    response = HttpResponse(pdf, content_type='application/pdf')
+    name = "invoice-%s" % order.id
+    response['Content-Disposition'] = 'filename=%s' % name
+    return response
 
 
 def payment(request, token):

@@ -1,3 +1,5 @@
+import datetime
+
 from decimal import Decimal
 from uuid import uuid4
 
@@ -8,6 +10,7 @@ from django.db.models import Q
 from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy
+from django.utils.functional import cached_property
 from django_fsm import FSMField, transition
 from django_prices.models import PriceField
 from payments import PaymentStatus, PurchasedItem
@@ -15,7 +18,7 @@ from payments.models import BasePayment
 from prices import FixedDiscount, Price
 from satchless.item import ItemLine, ItemSet
 
-from ..core.utils.billing import get_tax_price
+from ..core.utils.billing import get_tax_price, float_rate_to_percentage
 from ..core.utils import build_absolute_uri
 from ..discount.models import Voucher
 from ..product.models import Product
@@ -67,12 +70,17 @@ class Order(models.Model, ItemSet):
     total_tax = PriceField(
         currency=settings.DEFAULT_CURRENCY, max_digits=12, decimal_places=2,
         blank=True, null=True)
+    tax_rate = models.PositiveIntegerField(
+        default=int(settings.FALLBACK_TAX_RATE * 100))
     voucher = models.ForeignKey(
         Voucher, null=True, related_name='+', on_delete=models.SET_NULL)
     discount_amount = PriceField(
         currency=settings.DEFAULT_CURRENCY, max_digits=12, decimal_places=2,
         blank=True, null=True)
     discount_name = models.CharField(max_length=255, default='', blank=True)
+
+    min_delivery_date = models.DateField(null=True, blank=True)
+    max_delivery_date = models.DateField(null=True, blank=True)
 
     objects = OrderQuerySet.as_manager()
 
@@ -83,6 +91,29 @@ class Order(models.Model, ItemSet):
              pgettext_lazy('Permission description', 'Can view orders')),
             ('edit_order',
              pgettext_lazy('Permission description', 'Can edit orders')))
+
+    @cached_property
+    def date(self):
+        return self.created.date()
+
+    def create_delivery_dates(self, min_days, max_days):
+        def _get_maximals():
+            res = [settings.MIN_DELIVERY_DAYS, settings.MAX_DELIVERY_DAYS]
+
+            for pos, items in enumerate((min_days, max_days)):
+                for val in items:
+                    if val > res[pos]:
+                        res[pos] = val
+
+            return res
+
+        min_days, max_days = _get_maximals()
+
+        min_delta = datetime.timedelta(days=min_days)
+        max_delta = datetime.timedelta(days=max_days)
+
+        self.min_delivery_date = self.date + min_delta
+        self.max_delivery_date = self.date + max_delta
 
     def save(self, *args, **kwargs):
         if not self.token:
@@ -152,8 +183,34 @@ class Order(models.Model, ItemSet):
     def create_history_entry(self, content, user=None):
         self.history.create(content=content, user=user)
 
+    def default_min_delivery(self):
+        res = self.date + datetime.timedelta(
+            days=settings.MIN_DELIVERY_DAYS)
+        return res
+
+    def default_max_delivery(self):
+        res = self.date + datetime.timedelta(
+            days=settings.MAX_DELIVERY_DAYS)
+        return res
+
     def is_shipping_required(self):
         return any(group.is_shipping_required() for group in self.groups.all())
+
+    @cached_property
+    def shipping_required(self):
+        return self.is_shipping_required()
+
+    @property
+    def shipping_date(self):
+        if not self.min_delivery_date:
+            return self.default_min_delivery()
+        return self.min_delivery_date
+
+    @property
+    def max_shipping_date(self):
+        if not self.max_delivery_date:
+            return self.default_max_delivery()
+        return self.max_delivery_date
 
     @property
     def status(self):
@@ -183,8 +240,9 @@ class Order(models.Model, ItemSet):
     @total.setter
     def total(self, price: Price):
         if price.tax == 0:
-            tax = get_tax_price(None, self, price)
-            self.total_tax = tax.tax
+            taxed, rate = get_tax_price(None, self, price)
+            self.total_tax = taxed.tax
+            self.tax_rate = float_rate_to_percentage(rate)
         else:
             self.total_tax = price.tax
 

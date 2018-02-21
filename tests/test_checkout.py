@@ -1,3 +1,4 @@
+from datetime import timedelta
 from unittest.mock import MagicMock, Mock
 
 from django.conf import settings
@@ -5,10 +6,12 @@ from django.contrib.auth.models import AnonymousUser
 from prices import Price
 import pytest
 from satchless.item import InsufficientStock
+from typing import Tuple, Union
 
 from saleor.checkout import views
 from saleor.checkout.core import STORAGE_SESSION_KEY, Checkout
 from saleor.checkout.forms import NoteForm
+from saleor.product.models import StockLocation, Stock
 
 from saleor.shipping.models import ShippingMethodCountry
 from saleor.userprofile.models import Address
@@ -122,7 +125,7 @@ def test_checkout_shipping_address_with_anonymous_user(user, shipping):
     (Mock(get=Mock(return_value='shipping')), 'shipping'),
     (Mock(get=Mock(side_effect=Address.DoesNotExist)), None)])
 def test_checkout_shipping_address_with_storage(
-        address_objects, shipping, monkeypatch):
+    address_objects, shipping, monkeypatch):
     monkeypatch.setattr(
         'saleor.checkout.core.Address.objects', address_objects)
     checkout = Checkout(Mock(), AnonymousUser(), 'tracking_code')
@@ -161,7 +164,7 @@ def test_checkout_shipping_address_setter():
     (Mock(country=Mock(code='DE')), Mock(country_code='PL'), None),
     (None, Mock(country_code='PL'), None)])
 def test_checkout_shipping_method(
-        shipping_address, shipping_method, value, monkeypatch):
+    shipping_address, shipping_method, value, monkeypatch):
     queryset = Mock(get=Mock(return_value=shipping_method))
     monkeypatch.setattr(Checkout, 'shipping_address', shipping_address)
     monkeypatch.setattr(
@@ -256,6 +259,110 @@ def test_checkout_create_order_insufficient_stock(
     checkout = Checkout(request_cart, customer_user, 'tracking_code')
     with pytest.raises(InsufficientStock):
         checkout.create_order()
+
+
+def test_checkout_create_order_with_delivery_dates(
+        checkout: Checkout, variant_list):
+
+    settings.MIN_DELIVERY_DAYS, settings.MAX_DELIVERY_DAYS = 5, 10
+
+    variants = variant_list
+    product_type = variants[0].product.product_type
+    product_type.is_shipping_required = True
+    product_type.save()
+
+    for i in range(3):
+        warehouse = StockLocation.objects.create(name='Warehouse %d' % i)
+
+        for variant in variants:
+            Stock.objects.create(
+                variant=variant, cost_price=1, quantity=100,
+                location=warehouse)
+
+            checkout.cart.add(variant, quantity=2, check_quantity=True)
+
+    class TestCase:
+        TESTS = []
+
+        __slots__ = ('products_data', 'expected')
+
+        def __init__(self, expected, *products_data):
+            self.expected = expected
+            self.products_data = products_data
+            self.TESTS.append(self)
+
+        def data_for_stock(self, product_no):
+            if product_no < len(self.products_data):
+                values = self.products_data[product_no]
+            else:
+                values = tuple()
+
+            j = 0
+            while True:
+                yield j < len(values) and values[j] or (None, None)
+                j += 1
+
+        @classmethod
+        def run(cls):
+            for test_ in cls.TESTS:
+                test_.prepare()
+
+                it = test_()
+                test_data = next(it)
+
+                try:
+                    next(it, None)
+                except AssertionError as e:
+                    raise AssertionError(
+                        'Order created at: {}, expected +{}'.format(*test_data)
+                    ) from e
+
+        def prepare(self):
+            for variant_no, variant_ in enumerate(variants):
+                for stock_cls, stock_data in zip(
+                    variant_.stock.all(),
+                    self.data_for_stock(variant_no)
+                ):
+                    stock_cls.min_days, stock_cls.max_days = stock_data
+                    stock_cls.save()
+
+        def __call__(self):
+            order = checkout.create_order()
+            date = order.date
+
+            yield date, self.expected
+
+            expecting = date + timedelta(days=self.expected[0])
+            assert order.shipping_date == expecting
+
+            expecting = date + timedelta(days=self.expected[1])
+            assert order.max_shipping_date == expecting
+
+    unset = (None, None)
+
+    # check if the biggest value of the minimum days is applied
+    # check if the biggest value of the maximum days is applied
+    TestCase(
+        (10, 31),
+
+        ((10, 21), (7, 31), unset),  # product1
+        ((9, 20), unset, unset),  # product2
+    )
+
+    # check if the biggest value of the minimum days is taken from the settings
+    # check if the biggest value of the maximum days is taken from the settings
+    TestCase(
+        (settings.MIN_DELIVERY_DAYS, settings.MAX_DELIVERY_DAYS),
+
+        ((2, 9), (6, 8), unset),  # product1
+    )
+
+    # test with no values
+    TestCase(
+        (settings.MIN_DELIVERY_DAYS, settings.MAX_DELIVERY_DAYS)
+    )
+
+    TestCase.run()
 
 
 @pytest.mark.parametrize('note_value', [

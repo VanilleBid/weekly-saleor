@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-30 09:47-0600\n"
+"POT-Creation-Date: 2018-02-21 01:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Jihan Chung <jihanchung20@gmail.com>, 2017\n"
 "Language-Team: Korean (https://www.transifex.com/mirumee/teams/34782/ko/)\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: saleor/cart/__init__.py:20
@@ -127,19 +127,20 @@ msgstr "이메일"
 #: saleor/checkout/views/discount.py:62
 msgctxt "Checkout warning"
 msgid "This voucher has expired. Please review your checkout."
-msgstr "이 바우처는 기한이 초과되었습니다. 당신의 체크아웃을 다시 확인하여 주세요."
+msgstr ""
+"이 바우처는 기한이 초과되었습니다. 당신의 체크아웃을 다시 확인하여 주세요."
 
-#: saleor/checkout/views/summary.py:29
+#: saleor/checkout/views/summary.py:31
 msgctxt "Order status history entry"
 msgid "Order was placed"
 msgstr "주문되었습니다"
 
-#: saleor/checkout/views/summary.py:44
+#: saleor/checkout/views/summary.py:46
 msgctxt "Checkout warning"
 msgid "Please review your checkout."
 msgstr "당신의 체크아웃을 확인하여 주세요."
 
-#: saleor/core/filters.py:24
+#: saleor/core/filters.py:27
 #, python-format
 msgctxt "Number of matching records in the dashboard list"
 msgid "Found %(counter)d matching record"
@@ -211,98 +212,98 @@ msgctxt "Voucher type"
 msgid "Free shipping"
 msgstr "무료 배송"
 
-#: saleor/discount/models.py:90
+#: saleor/discount/models.py:89
 #, python-format
 msgctxt "Voucher type"
 msgid "%(discount)s off shipping"
 msgstr "%(discount)s 할인 배송"
 
-#: saleor/discount/models.py:94
+#: saleor/discount/models.py:93
 #, python-format
 msgctxt "Voucher type"
 msgid "%(discount)s off %(product)s"
 msgstr "%(product)s은 %(discount)s 할인"
 
-#: saleor/discount/models.py:99
+#: saleor/discount/models.py:98
 #, python-format
 msgctxt "Voucher type"
 msgid "%(discount)s off %(category)s"
 msgstr "%(category)s 상품 구매 시 %(discount)s 할인"
 
-#: saleor/discount/models.py:102
+#: saleor/discount/models.py:101
 #, python-format
 msgctxt "Voucher type"
 msgid "%(discount)s off"
 msgstr "%(discount)s 할인"
 
-#: saleor/discount/models.py:108
+#: saleor/discount/models.py:107
 msgctxt "Voucher"
 msgid "Any country"
 msgstr "모든 국가"
 
-#: saleor/discount/models.py:138
+#: saleor/discount/models.py:137
 #, python-format
 msgctxt "Voucher not applicable"
 msgid "This offer is only valid for orders over %(amount)s."
 msgstr "이 할인은 오직 %(amount)s 이상 주문 건에 대해서만 적용됩니다."
 
-#: saleor/discount/models.py:151
+#: saleor/discount/models.py:149
 msgctxt "Voucher not applicable"
 msgid "Your order does not require shipping."
 msgstr "당신의 주문은 배송이 필요치 않습니다."
 
-#: saleor/discount/models.py:157
+#: saleor/discount/models.py:155
 msgctxt "Voucher not applicable"
 msgid "Please select a shipping method first."
 msgstr "우선 배송 방식을 선택해 주세요."
 
-#: saleor/discount/models.py:163
+#: saleor/discount/models.py:161
 #, python-format
 msgctxt "Voucher not applicable"
 msgid "This offer is only valid in %(country)s."
 msgstr "이는 오직 %(country)s 에만 적용됩니다."
 
-#: saleor/discount/models.py:182
+#: saleor/discount/models.py:179
 msgctxt "Voucher not applicable"
 msgid "This offer is only valid for selected items."
 msgstr "오직 선택된 상품에 적용됩니다."
 
-#: saleor/discount/models.py:213
+#: saleor/discount/models.py:207
 msgctxt "Permission description"
 msgid "Can view sales"
 msgstr "할인 상품을 볼 수 있습니다"
 
-#: saleor/discount/models.py:215
+#: saleor/discount/models.py:209
 msgctxt "Permission description"
 msgid "Can edit sales"
 msgstr "할인 상품을 수정할 수 있습니다"
 
-#: saleor/discount/models.py:249
+#: saleor/discount/models.py:243
 msgctxt "Voucher not applicable"
 msgid "Discount not applicable for this product"
 msgstr "이 상품에는 할인이 적용되지 않습니다"
 
-#: saleor/order/__init__.py:9
+#: saleor/order/__init__.py:19
 msgctxt "order status"
 msgid "Open"
 msgstr ""
 
-#: saleor/order/__init__.py:10
+#: saleor/order/__init__.py:20
 msgctxt "order status"
 msgid "Closed"
 msgstr ""
 
-#: saleor/order/__init__.py:19
+#: saleor/order/__init__.py:29
 msgctxt "group status"
 msgid "Processing"
 msgstr ""
 
-#: saleor/order/__init__.py:20
+#: saleor/order/__init__.py:30
 msgctxt "group status"
 msgid "Cancelled"
 msgstr ""
 
-#: saleor/order/__init__.py:21
+#: saleor/order/__init__.py:31
 msgctxt "group status"
 msgid "Shipped"
 msgstr ""
@@ -322,52 +323,52 @@ msgctxt "Order note"
 msgid "Add note to order"
 msgstr ""
 
-#: saleor/order/models.py:82
+#: saleor/order/models.py:91
 msgctxt "Permission description"
 msgid "Can view orders"
 msgstr "주문을 볼 수 있습니다"
 
-#: saleor/order/models.py:84
+#: saleor/order/models.py:93
 msgctxt "Permission description"
 msgid "Can edit orders"
 msgstr "주문을 수정할 수 있습니다"
 
-#: saleor/order/models.py:210
+#: saleor/order/models.py:278
 #, python-format
 msgctxt "Shipment group str"
-msgid "Shipment #%s"
+msgid "#%s"
 msgstr ""
 
-#: saleor/order/signals.py:17
+#: saleor/order/signals.py:16
 msgctxt "Order status history entry"
 msgid "Order fully paid"
 msgstr "주문한 상품이 모두 결제 되었습니다"
 
-#: saleor/order/utils.py:160 saleor/order/utils.py:179
+#: saleor/order/utils.py:168 saleor/order/utils.py:189
 msgctxt "Order status history entry"
 msgid "Order cancelled. No items in order"
 msgstr "주문이 취소 되어 구매할 상품이 없습니다."
 
-#: saleor/order/views.py:100
+#: saleor/order/views.py:115
 #, python-format
 msgctxt "Payment description"
 msgid "Order %(order_number)s"
 msgstr "%(order_number)s에 대한 주문"
 
-#: saleor/order/views.py:119
+#: saleor/order/views.py:134
 msgctxt "Payment gateway error"
 msgid ""
 "Oops, it looks like we were unable to contact the selected payment service"
 msgstr "죄송합니다.  선택된 결제 서비스를 사용할 수 없습니다."
 
-#: saleor/order/views.py:178
+#: saleor/order/views.py:197
 msgctxt "Connect order with user warning message"
 msgid ""
 "We couldn't assign the order to your account as the email addresses don't "
 "match"
 msgstr ""
 
-#: saleor/order/views.py:185
+#: saleor/order/views.py:204
 msgctxt "storefront message"
 msgid "The order is now assigned to your account"
 msgstr ""
@@ -437,54 +438,64 @@ msgctxt "Product list sorting form"
 msgid "Sort by"
 msgstr "정렬"
 
-#: saleor/product/filters.py:79
+#: saleor/product/filters.py:91
 #, python-format
 msgctxt "Validation error for sort_by filter"
 msgid "%(value)s is not a valid sorting option"
 msgstr ""
 
-#: saleor/product/forms.py:21
+#: saleor/product/forms.py:18
 #, python-format
 msgctxt "Variant choice field label"
 msgid "%(variant_label)s - %(price)s"
 msgstr "%(variant_label)s - %(price)s"
 
-#: saleor/product/models.py:40
+#: saleor/product/models.py:46
 msgctxt "Permission description"
 msgid "Can view categories"
 msgstr "카테고리를 볼 수 있습니다"
 
-#: saleor/product/models.py:42
+#: saleor/product/models.py:48
 msgctxt "Permission description"
 msgid "Can edit categories"
 msgstr "카테고리를 수정할 수 있습니다"
 
-#: saleor/product/models.py:110
+#: saleor/product/models.py:97
+#, python-format
+msgid "This product is available within %(from)d to %(to)d days."
+msgstr ""
+
+#: saleor/product/models.py:100
+#, python-format
+msgid "This product is available within %(from)d days."
+msgstr ""
+
+#: saleor/product/models.py:124
 msgctxt "Permission description"
 msgid "Can view products"
 msgstr "상품을 볼 수 있습니다"
 
-#: saleor/product/models.py:112
+#: saleor/product/models.py:126
 msgctxt "Permission description"
 msgid "Can edit products"
 msgstr "상품을 수정할 수 있습니다"
 
-#: saleor/product/models.py:115
+#: saleor/product/models.py:129
 msgctxt "Permission description"
 msgid "Can view product properties"
 msgstr "상품 옵션을 볼 수 있습니다"
 
-#: saleor/product/models.py:118
+#: saleor/product/models.py:132
 msgctxt "Permission description"
 msgid "Can edit product properties"
 msgstr "상품 옵션을 수정할 수 있습니다"
 
-#: saleor/product/models.py:278
+#: saleor/product/models.py:352
 msgctxt "Permission description"
 msgid "Can view stock location"
 msgstr "재고 위치를 볼 수 있습니다"
 
-#: saleor/product/models.py:281
+#: saleor/product/models.py:355
 msgctxt "Permission description"
 msgid "Can edit stock location"
 msgstr "재고 위치를 수정할 수 있습니다"
@@ -504,11 +515,11 @@ msgctxt "Password"
 msgid "Password"
 msgstr ""
 
-#: saleor/registration/views.py:24
+#: saleor/registration/views.py:25
 msgid "You have been successfully logged out."
 msgstr "성공적으로 로그아웃 되었습니다."
 
-#: saleor/registration/views.py:38
+#: saleor/registration/views.py:39
 msgid "User has been created"
 msgstr "사용자가 생성 되었습니다"
 
@@ -642,92 +653,92 @@ msgctxt "Address field"
 msgid "ZIP code"
 msgstr "우편번호"
 
-#: saleor/userprofile/i18n.py:71 saleor/userprofile/i18n.py:119
+#: saleor/userprofile/i18n.py:66 saleor/userprofile/i18n.py:113
 msgctxt "Country"
 msgid "Country"
 msgstr ""
 
-#: saleor/userprofile/i18n.py:103
+#: saleor/userprofile/i18n.py:97
 msgctxt "Personal name"
 msgid "Given name"
 msgstr ""
 
-#: saleor/userprofile/i18n.py:105
+#: saleor/userprofile/i18n.py:99
 msgctxt "Personal name"
 msgid "Family name"
 msgstr ""
 
-#: saleor/userprofile/i18n.py:107
+#: saleor/userprofile/i18n.py:101
 msgctxt "Company or organization"
 msgid "Company or organization"
 msgstr ""
 
-#: saleor/userprofile/i18n.py:109 saleor/userprofile/i18n.py:111
+#: saleor/userprofile/i18n.py:103 saleor/userprofile/i18n.py:105
 msgctxt "Address"
 msgid "Address"
 msgstr ""
 
-#: saleor/userprofile/i18n.py:113
+#: saleor/userprofile/i18n.py:107
 msgctxt "City"
 msgid "City"
 msgstr ""
 
-#: saleor/userprofile/i18n.py:115
+#: saleor/userprofile/i18n.py:109
 msgctxt "City area"
 msgid "District"
 msgstr ""
 
-#: saleor/userprofile/i18n.py:117
+#: saleor/userprofile/i18n.py:111
 msgctxt "Postal code"
 msgid "Postal code"
 msgstr ""
 
-#: saleor/userprofile/i18n.py:121
+#: saleor/userprofile/i18n.py:115
 msgctxt "Country area"
 msgid "State or province"
 msgstr ""
 
-#: saleor/userprofile/i18n.py:123
+#: saleor/userprofile/i18n.py:117
 msgctxt "Phone number"
 msgid "Phone number"
 msgstr ""
 
-#: saleor/userprofile/i18n.py:169
+#: saleor/userprofile/i18n.py:163
 msgctxt "Address form"
 msgid "This value is invalid for selected country"
 msgstr "이 입력값은 선택된 국가에는 적용되지 않습니다."
 
-#: saleor/userprofile/models.py:110
+#: saleor/userprofile/models.py:109
 msgctxt "Permission description"
 msgid "Can view users"
 msgstr "사용자들을 볼 수 있습니다"
 
-#: saleor/userprofile/models.py:112
+#: saleor/userprofile/models.py:111
 msgctxt "Permission description"
 msgid "Can edit users"
 msgstr "사용자들을 수정할 수 있습니다"
 
-#: saleor/userprofile/models.py:114
+#: saleor/userprofile/models.py:113
 msgctxt "Permission description"
 msgid "Can view groups"
 msgstr "그룹을 볼 수 있습니다"
 
-#: saleor/userprofile/models.py:116
+#: saleor/userprofile/models.py:115
 msgctxt "Permission description"
 msgid "Can edit groups"
 msgstr "그룹을 수정 할 수 있습니다"
 
-#: saleor/userprofile/models.py:118
+#: saleor/userprofile/models.py:117
 msgctxt "Permission description"
 msgid "Can view staff"
 msgstr "스태프를 볼 수 있습니다"
 
-#: saleor/userprofile/models.py:120
+#: saleor/userprofile/models.py:119
 msgctxt "Permission description"
 msgid "Can edit staff"
 msgstr "스태프를 수정할 수 있습니다"
 
-#: saleor/userprofile/models.py:122
+#: saleor/userprofile/models.py:121
 msgctxt "Permission description"
 msgid "Can impersonate users"
 msgstr "가상유저 사용 가능"
@@ -757,12 +768,12 @@ msgctxt "Storefront message"
 msgid "Password successfully changed."
 msgstr "비밀번호가 성공적으로 변경되었습니다."
 
-#: saleor/userprofile/views.py:46
+#: saleor/userprofile/views.py:47
 msgctxt "Storefront message"
 msgid "Address successfully updated."
 msgstr "주소가 성공적으로 변경되었습니다."
 
-#: saleor/userprofile/views.py:61
+#: saleor/userprofile/views.py:62
 msgctxt "Storefront message"
 msgid "Address successfully removed"
 msgstr "주소가 성공적으로 삭제 되었습니다."
@@ -772,32 +783,12 @@ msgctxt "Eror page not found"
 msgid "Page not found"
 msgstr ""
 
-#: templates/account/email/password_reset_message.txt:1
-#, python-format
-msgid ""
-"Hello from %(site_name)s!\n"
-"\n"
-"You're receiving this e-mail because you or someone else has requested a password for your user account at %(domain)s.\n"
-"It can be safely ignored if you did not request a password reset. Click the link below to reset your password."
-msgstr ""
-"%(site_name)s 에 오신 것을 환영합니다!\n"
-"\n"
-"당신의 계정으로 %(domain)s 에서 비밀번호를 요청하였으므로, 이 이메일을 송부합니다.\n"
-"\n"
-"만약 당신이 비밀번호 초기화를 하지 않았다면, 안전하게 이 메시지를 무시하셔도 좋습니다."
-
-#: templates/account/email/password_reset_message.txt:8
-#, python-format
-msgid ""
-"Thank you for using %(site_name)s!\n"
-"%(domain)s"
-msgstr ""
-"%(site_name)s 를 사용하여 주셔서 감사합니다.\n"
-"%(domain)s"
-
-#: templates/account/email/password_reset_subject.txt:3
-msgid "Password Reset E-mail"
-msgstr "비밀번호 초기화 이메일"
+#. Translators: Layout may break if character length is different than four.
+#: templates/_items.html:27 templates/category/_items.html:28
+#: templates/product/_items.html:29
+msgctxt "Sale (discount) label for item in product list"
+msgid "Sale"
+msgstr "할인"
 
 #: templates/account/login.html:5
 msgctxt "Login page title"
@@ -809,12 +800,12 @@ msgctxt "Login form secondary title"
 msgid "Don't have an account yet?"
 msgstr "아직 계정이 없으신가요?"
 
-#: templates/account/login.html:20
+#: templates/account/login.html:21
 msgctxt "Login form secondary action"
 msgid "Register"
 msgstr "회원가입"
 
-#: templates/account/login.html:25
+#: templates/account/login.html:26
 msgctxt "Login form title"
 msgid "Log in"
 msgstr "로그인"
@@ -845,15 +836,14 @@ msgstr "구글"
 
 #: templates/account/password_change.html:7 templates/cart/index.html:11
 #: templates/order/details.html:18 templates/order/payment.html:20
-#: templates/product/details.html:38
-#: templates/userprofile/address_edit.html:16
+#: templates/product/details.html:39 templates/userprofile/address_edit.html:16
 #: templates/userprofile/details.html:17
 msgctxt "Main navigation item"
 msgid "Home"
 msgstr "홈"
 
-#: templates/account/password_change.html:8 templates/base.html:57
-#: templates/base.html:215 templates/order/details.html:23
+#: templates/account/password_change.html:8 templates/base.html:60
+#: templates/base.html:218 templates/order/details.html:23
 #: templates/order/payment.html:25 templates/userprofile/details.html:20
 msgctxt "Main navigation item"
 msgid "Your account"
@@ -889,7 +879,9 @@ msgctxt "Password reset form help text"
 msgid ""
 "Please let us know the email you have used to register or purchase at our "
 "store."
-msgstr "당신이 사용하고 있는 혹은 스토어에서 구매 시 사용한 이메일을 적어 주시기 바랍니다."
+msgstr ""
+"당신이 사용하고 있는 혹은 스토어에서 구매 시 사용한 이메일을 적어 주시기 바랍"
+"니다."
 
 #: templates/account/password_reset.html:30
 msgctxt "Password reset primary action"
@@ -911,7 +903,9 @@ msgctxt "Password reset done text"
 msgid ""
 "We have sent you an e-mail. Please contact us if you do not receive it "
 "within a few minutes."
-msgstr "이메일을 전송하였습니다. 몇분 안에 이메일을 못 받으실 경우 저희쪽으로 연락 주시기 바랍니다."
+msgstr ""
+"이메일을 전송하였습니다. 몇분 안에 이메일을 못 받으실 경우 저희쪽으로 연락 주"
+"시기 바랍니다."
 
 #: templates/account/password_reset_from_key.html:6
 msgctxt "Password reset from key page title"
@@ -930,8 +924,8 @@ msgid ""
 "used.<br> Please request a <a href=\"%(passwd_reset_url)s\">new password "
 "reset</a>."
 msgstr ""
-"비밀번호 초기화 링크가 사용불가합니다. <br> <a href=\"%(passwd_reset_url)s\">새로운 비밀번호 "
-"초기화</a>를 요청하여 주시기 바랍니다."
+"비밀번호 초기화 링크가 사용불가합니다. <br> <a href=\"%(passwd_reset_url)s\">"
+"새로운 비밀번호 초기화</a>를 요청하여 주시기 바랍니다."
 
 #: templates/account/password_reset_from_key.html:24
 msgctxt "Password reset from key form title"
@@ -958,7 +952,9 @@ msgctxt "Password reset from key form title"
 msgid ""
 "Sorry but this link is no longer valid. If you forget your password, please "
 "use link below."
-msgstr "죄송합니다. 이 링크가 더이상 유효하지 않으니, 아래의 링크를 사용하시기 바랍니다."
+msgstr ""
+"죄송합니다. 이 링크가 더이상 유효하지 않으니, 아래의 링크를 사용하시기 바랍니"
+"다."
 
 #: templates/account/password_reset_from_key.html:42
 msgctxt "Reset my password link"
@@ -982,8 +978,11 @@ msgstr "당신의 비밀번호가 변경 되었습니다."
 #: templates/account/password_reset_from_key_done.html:10
 #, python-format
 msgctxt "Password reset from key done text"
-msgid "You can now <a href=\"%(login_url)s\">sign in</a> using your new password"
-msgstr "지금 새로운 비밀번호를 이용하여 <a href=\"%(login_url)s\">로그인</a>할 수 있습니다"
+msgid ""
+"You can now <a href=\"%(login_url)s\">sign in</a> using your new password"
+msgstr ""
+"지금 새로운 비밀번호를 이용하여 <a href=\"%(login_url)s\">로그인</a>할 수 있"
+"습니다"
 
 #: templates/account/password_set.html:14
 msgctxt "Password set form legend"
@@ -1020,56 +1019,56 @@ msgctxt "Signup form primary action"
 msgid "Create an account"
 msgstr "계정 생성"
 
-#: templates/base.html:13
+#: templates/base.html:14
 msgctxt "Meta author text"
 msgid "Mirumee Software"
 msgstr "미루미 소프트웨어"
 
-#: templates/base.html:51 templates/base.html:204
+#: templates/base.html:54 templates/base.html:207
 msgctxt "Main navigation item"
 msgid "Dashboard"
 msgstr "대시보드"
 
-#: templates/base.html:62 templates/base.html:221
+#: templates/base.html:65 templates/base.html:224
 msgctxt "Main navigation item"
 msgid "Stop impersonating"
 msgstr "가상유저 사용 중지"
 
-#: templates/base.html:68 templates/base.html:227
+#: templates/base.html:71 templates/base.html:230
 msgctxt "Main navigation item"
 msgid "Log out"
 msgstr "로그아웃"
 
-#: templates/base.html:74 templates/base.html:233
+#: templates/base.html:77 templates/base.html:236
 msgctxt "Main navigation item"
 msgid "Register"
 msgstr "가입"
 
-#: templates/base.html:78 templates/base.html:238
+#: templates/base.html:81 templates/base.html:241
 msgctxt "Main navigation item"
 msgid "Log in"
 msgstr "로그인"
 
-#: templates/base.html:93
+#: templates/base.html:96
 msgctxt "Hamburger button text"
 msgid "menu"
 msgstr "메뉴"
 
-#: templates/base.html:110
+#: templates/base.html:113
 msgid "Search for product"
 msgstr "제품 검색"
 
-#: templates/base.html:122 templates/base.html:197
+#: templates/base.html:125 templates/base.html:200
 msgctxt "Main navigation item"
 msgid "Your Cart"
 msgstr "당신의 카트"
 
-#: templates/base.html:209
+#: templates/base.html:212
 msgctxt "Main navigation item"
 msgid "Style guide"
 msgstr "스타일 가이드"
 
-#: templates/cart/_subtotal_table.html:9 templates/cart_dropdown.html:33
+#: templates/cart/_subtotal_table.html:9 templates/cart_dropdown.html:36
 #: templates/dashboard/order/detail.html:394
 msgctxt "Order subtotal"
 msgid "Subtotal"
@@ -1120,47 +1119,45 @@ msgctxt "Cart primary action"
 msgid "Checkout"
 msgstr "체크아웃"
 
-#: templates/cart/index.html:86 templates/cart_dropdown.html:54
+#: templates/cart/index.html:86 templates/cart_dropdown.html:57
 msgctxt "Empty cart message"
 msgid "There are no products in your shopping cart."
 msgstr "쇼핑 카트에 제품이 없습니다"
 
-#: templates/cart/index.html:87 templates/cart_dropdown.html:56
+#: templates/cart/index.html:87 templates/cart_dropdown.html:62
 msgctxt "Empty cart link"
 msgid "Check out our sales"
 msgstr "판매 상품을 확인해 보세요"
 
-#: templates/cart_dropdown.html:35
+#: templates/cart_dropdown.html:38
 msgctxt "Cart dropdown text"
 msgid "(Shipment calculated at checkout)"
 msgstr ""
 
-#: templates/cart_dropdown.html:46
+#: templates/cart_dropdown.html:42
+msgid "excluding VAT"
+msgstr ""
+
+#: templates/cart_dropdown.html:49
 msgctxt "Cart dropdown secondary action"
 msgid "Go to cart"
 msgstr "카트로 이동"
 
-#: templates/cart_dropdown.html:49
+#: templates/cart_dropdown.html:52
 msgctxt "Cart dropdown primary action"
 msgid "Checkout"
 msgstr "체크아웃"
-
-#. Translators: Layout may break if character length is different than four.
-#: templates/category/_items.html:28
-msgctxt "Sale (discount) label for item in product list"
-msgid "Sale"
-msgstr "할인"
 
 #: templates/category/index.html:52
 msgctxt "Category breadcrumbs home"
 msgid "Home"
 msgstr "홈"
 
-#: templates/category/index.html:71
+#: templates/category/index.html:71 templates/product/product_list_base.html:47
 msgid "Sort by: <b>name</b>"
 msgstr ""
 
-#: templates/category/index.html:75
+#: templates/category/index.html:75 templates/product/product_list_base.html:51
 msgid "Sort by: <b>price</b>"
 msgstr ""
 
@@ -1169,25 +1166,31 @@ msgctxt "Category page filters"
 msgid "Sort by"
 msgstr "정렬"
 
-#: templates/category/index.html:99
+#: templates/category/index.html:99 templates/product/product_list_base.html:76
 msgctxt "sort by option"
 msgid "ascending"
 msgstr "오름순"
 
 #: templates/category/index.html:105
+#: templates/product/product_list_base.html:82
 msgctxt "sort by option"
 msgid "descending"
 msgstr "내림순"
 
-#: templates/category/index.html:140
+#: templates/category/index.html:134 templates/product/_filters.html:14
 msgctxt "Filter heading title"
 msgid "Filters"
 msgstr "검색필터"
 
-#: templates/category/index.html:143
+#: templates/category/index.html:137
 msgctxt "Category page filters"
 msgid "Clear filters"
 msgstr "검색필터 초기화"
+
+#: templates/category/index.html:146 templates/category/index.html:192
+msgctxt "Category price filter"
+msgid "Update"
+msgstr "업데이트"
 
 #: templates/category/index.html:171
 msgctxt "Category price filter"
@@ -1199,17 +1202,16 @@ msgctxt "Category price filter"
 msgid "to"
 msgstr "까지"
 
-#: templates/category/index.html:192
-msgctxt "Category price filter"
-msgid "Update"
-msgstr "업데이트"
-
-#: templates/category/index.html:217 templates/search/results.html:34
+#: templates/category/index.html:217
+#: templates/product/product_list_base.html:124
+#: templates/search/results.html:34
 msgctxt "Search without results text"
 msgid "Sorry, no matches found for your request."
 msgstr "죄송합니다. 당신의 요청에 맞는 결과가 없습니다."
 
-#: templates/category/index.html:218 templates/search/results.html:35
+#: templates/category/index.html:218
+#: templates/product/product_list_base.html:125
+#: templates/search/results.html:35
 msgctxt "Search without results text"
 msgid "Try again or shop new arrivals."
 msgstr "다시 시도하거나, 새로 도착한 상품을 구매하세요."
@@ -1245,31 +1247,42 @@ msgid "Promo code"
 msgstr "프로모션 코드"
 
 #: templates/checkout/details.html:68
+#, fuzzy
+#| msgctxt "Order review section title"
+#| msgid "Total"
 msgctxt "Order review section title"
-msgid "Total"
+msgid "Total Net"
 msgstr "총합"
 
-#: templates/checkout/login.html:5
+#: templates/checkout/details.html:76
+#, fuzzy
+#| msgctxt "Order review section title"
+#| msgid "Total"
+msgctxt "Order review section title"
+msgid "Total Gross"
+msgstr "총합"
+
+#: templates/checkout/login.html:6
 msgctxt "Checkout login page title"
 msgid "Login"
 msgstr "로그인"
 
-#: templates/checkout/login.html:11
+#: templates/checkout/login.html:12
 msgctxt "Checkout login page title"
 msgid "New customer?"
 msgstr "새로운 고객인가요?"
 
-#: templates/checkout/login.html:15
+#: templates/checkout/login.html:18
 msgctxt "Checkout login page new users action"
 msgid "Continue"
 msgstr "계속"
 
-#: templates/checkout/login.html:18
+#: templates/checkout/login.html:21
 msgctxt "Checkout login page new users message"
 msgid "Registration is not required!"
 msgstr "가입이 필요치 않습니다!"
 
-#: templates/checkout/login.html:23
+#: templates/checkout/login.html:26
 msgctxt "Checkout login form title"
 msgid "Existing customer? Log in."
 msgstr "기존 고객이면 로그인 해주시기 바랍니다."
@@ -1368,42 +1381,50 @@ msgctxt "Checkout summary without shipping action"
 msgid "Place order"
 msgstr "결제 주문"
 
+#: templates/collection/index.html:7
+#, fuzzy
+#| msgctxt "Main navigation item"
+#| msgid "Home"
+msgctxt "Site breadcrumbs home"
+msgid "Home"
+msgstr "홈"
+
 #: templates/dashboard/base.html:11
 msgctxt "Dashboard default page title"
 msgid "Dashboard - Saleor"
 msgstr "대시보드 - Saleor"
 
-#: templates/dashboard/base.html:40
+#: templates/dashboard/base.html:41
 msgctxt "Dashboard top navigation action"
 msgid "Visit storefront"
 msgstr "스토어 방문"
 
-#: templates/dashboard/base.html:45
+#: templates/dashboard/base.html:46
 msgctxt "Dashboard top navigation action"
 msgid "Style guide"
 msgstr "스타일 가이드"
 
-#: templates/dashboard/base.html:50
+#: templates/dashboard/base.html:51
 msgctxt "Dashboard top navigation action"
 msgid "Log out"
 msgstr "로그아웃"
 
-#: templates/dashboard/base.html:79
+#: templates/dashboard/base.html:80
 msgctxt "Dashboard search"
 msgid "Search"
 msgstr "검색"
 
-#: templates/dashboard/base.html:94 templates/dashboard/base.html:255
+#: templates/dashboard/base.html:95 templates/dashboard/base.html:256
 msgctxt "Dashboard homepage"
 msgid "Home"
 msgstr "홈"
 
-#: templates/dashboard/base.html:100
+#: templates/dashboard/base.html:101
 msgctxt "Dashboard catalogue"
 msgid "Catalogue"
 msgstr "카탈로그"
 
-#: templates/dashboard/base.html:106 templates/dashboard/product/form.html:29
+#: templates/dashboard/base.html:107 templates/dashboard/product/form.html:29
 #: templates/dashboard/product/list.html:10
 #: templates/dashboard/product/list.html:38
 #: templates/dashboard/product/product_image/list.html:29
@@ -1414,7 +1435,7 @@ msgctxt "Dashboard products list"
 msgid "Products"
 msgstr "상품"
 
-#: templates/dashboard/base.html:113
+#: templates/dashboard/base.html:114
 #: templates/dashboard/category/detail.html:33
 #: templates/dashboard/category/detail.html:39
 #: templates/dashboard/category/form.html:13
@@ -1424,27 +1445,27 @@ msgctxt "Dashboard categories list"
 msgid "Categories"
 msgstr "카테고리"
 
-#: templates/dashboard/base.html:120
+#: templates/dashboard/base.html:121
 msgctxt "Dashboard stock loactions list"
 msgid "Stock locations"
 msgstr "재고 위치"
 
-#: templates/dashboard/base.html:127
+#: templates/dashboard/base.html:128
 msgctxt "Dashboard side navigation link"
 msgid "Collections"
 msgstr ""
 
-#: templates/dashboard/base.html:137
+#: templates/dashboard/base.html:138
 msgctxt "Dashboard discounts list"
 msgid "Discounts"
 msgstr "할인"
 
-#: templates/dashboard/base.html:143
+#: templates/dashboard/base.html:144
 msgctxt "Dashboard sales (discounts) list"
 msgid "Sales"
 msgstr "할인"
 
-#: templates/dashboard/base.html:150
+#: templates/dashboard/base.html:151
 #: templates/dashboard/discount/voucher/form.html:12
 #: templates/dashboard/discount/voucher/form.html:43
 #: templates/dashboard/discount/voucher/list.html:9
@@ -1453,24 +1474,22 @@ msgctxt "Dashboard vouchers list"
 msgid "Vouchers"
 msgstr "바우처"
 
-#: templates/dashboard/base.html:160
+#: templates/dashboard/base.html:161
 msgctxt "Dashboard sales. `Sales' is noun of to sell"
 msgid "Sales"
 msgstr "판매"
 
-#: templates/dashboard/base.html:166
+#: templates/dashboard/base.html:167
 #: templates/dashboard/order/address_form.html:7
 #: templates/dashboard/order/address_form.html:23
 #: templates/dashboard/order/detail.html:12
 #: templates/dashboard/order/detail.html:50
-#: templates/dashboard/order/list.html:7
-#: templates/dashboard/order/list.html:15
+#: templates/dashboard/order/list.html:7 templates/dashboard/order/list.html:15
 msgctxt "Dashboard orders list"
 msgid "Orders"
 msgstr "주문"
 
-#: templates/dashboard/base.html:173
-#: templates/dashboard/customer/detail.html:9
+#: templates/dashboard/base.html:174 templates/dashboard/customer/detail.html:9
 #: templates/dashboard/customer/detail.html:25
 #: templates/dashboard/customer/form.html:28
 #: templates/dashboard/customer/list.html:9
@@ -1479,29 +1498,28 @@ msgctxt "Dashboard customers list"
 msgid "Customers"
 msgstr "고객"
 
-#: templates/dashboard/base.html:183
+#: templates/dashboard/base.html:184
 msgctxt "Management section"
 msgid "Staff management"
 msgstr "스태프 관리"
 
-#: templates/dashboard/base.html:189
+#: templates/dashboard/base.html:190
 msgctxt "Dashboard staff members list"
 msgid "Staff members"
 msgstr "스태프 멤버"
 
-#: templates/dashboard/base.html:196 templates/dashboard/group/detail.html:28
-#: templates/dashboard/group/list.html:8
-#: templates/dashboard/group/list.html:28
+#: templates/dashboard/base.html:197 templates/dashboard/group/detail.html:28
+#: templates/dashboard/group/list.html:8 templates/dashboard/group/list.html:28
 msgctxt "Dashboard groups list"
 msgid "Groups"
 msgstr "그룹"
 
-#: templates/dashboard/base.html:206
+#: templates/dashboard/base.html:207
 msgctxt "Dashboard configuration"
 msgid "Configuration"
 msgstr "설정"
 
-#: templates/dashboard/base.html:212
+#: templates/dashboard/base.html:213
 #: templates/dashboard/product/product_type/form.html:29
 #: templates/dashboard/product/product_type/list.html:9
 #: templates/dashboard/product/product_type/list.html:29
@@ -1509,7 +1527,7 @@ msgctxt "Dashboard product types list"
 msgid "Product types"
 msgstr "상품 타입"
 
-#: templates/dashboard/base.html:219
+#: templates/dashboard/base.html:220
 #: templates/dashboard/product/product_attribute/form.html:29
 #: templates/dashboard/product/product_attribute/list.html:8
 #: templates/dashboard/product/product_attribute/list.html:28
@@ -1518,26 +1536,26 @@ msgctxt "Dashboard attributes list"
 msgid "Attributes"
 msgstr "속성"
 
-#: templates/dashboard/base.html:226 templates/dashboard/shipping/list.html:9
+#: templates/dashboard/base.html:227 templates/dashboard/shipping/list.html:9
 #: templates/dashboard/shipping/list.html:19
 msgctxt "Dashboard shipping methods list"
 msgid "Shipping methods"
 msgstr "배송 방식"
 
-#: templates/dashboard/base.html:233 templates/dashboard/sites/form.html:11
+#: templates/dashboard/base.html:234 templates/dashboard/sites/form.html:11
 msgctxt "Dashboard site settings"
 msgid "Site settings"
 msgstr "사이트 설정"
 
-#: templates/dashboard/base.html:241
+#: templates/dashboard/base.html:242
 msgctxt "Dashboard software version"
 msgid "Release:"
 msgstr "출시:"
 
 #: templates/dashboard/base_modal.html:23
 #: templates/dashboard/base_modal_confirm_delete.html:22
-#: templates/dashboard/category/form.html:107
-#: templates/dashboard/category/form.html:111
+#: templates/dashboard/category/form.html:113
+#: templates/dashboard/category/form.html:117
 #: templates/dashboard/customer/form.html:60
 #: templates/dashboard/customer/form.html:67
 #: templates/dashboard/discount/sale/form.html:96
@@ -1548,8 +1566,8 @@ msgstr "출시:"
 #: templates/dashboard/order/address_form.html:61
 #: templates/dashboard/product/form.html:114
 #: templates/dashboard/product/form.html:121
-#: templates/dashboard/product/product_attribute/form.html:77
-#: templates/dashboard/product/product_attribute/form.html:84
+#: templates/dashboard/product/product_attribute/form.html:80
+#: templates/dashboard/product/product_attribute/form.html:87
 #: templates/dashboard/product/product_attribute/values/form.html:79
 #: templates/dashboard/product/product_attribute/values/form.html:86
 #: templates/dashboard/product/product_image/form.html:80
@@ -1558,8 +1576,8 @@ msgstr "출시:"
 #: templates/dashboard/product/product_type/form.html:106
 #: templates/dashboard/product/product_variant/form.html:104
 #: templates/dashboard/product/product_variant/form.html:111
-#: templates/dashboard/product/stock/form.html:99
-#: templates/dashboard/product/stock/form.html:106
+#: templates/dashboard/product/stock/form.html:105
+#: templates/dashboard/product/stock/form.html:112
 #: templates/dashboard/product/stock_location/form.html:74
 #: templates/dashboard/product/stock_location/form.html:81
 #: templates/dashboard/shipping/country/form.html:81
@@ -1694,7 +1712,7 @@ msgctxt "Category detail breadcrumbs"
 msgid "Add new category"
 msgstr "새로운 카테고리 추가"
 
-#: templates/dashboard/category/form.html:116
+#: templates/dashboard/category/form.html:122
 #: templates/dashboard/customer/form.html:63
 #: templates/dashboard/discount/sale/form.html:99
 #: templates/dashboard/discount/voucher/form.html:129
@@ -1709,16 +1727,16 @@ msgctxt "Dashboard update action"
 msgid "Update"
 msgstr "업데이트"
 
-#: templates/dashboard/category/form.html:120
+#: templates/dashboard/category/form.html:126
 #: templates/dashboard/discount/sale/form.html:106
 #: templates/dashboard/discount/voucher/form.html:136
 #: templates/dashboard/product/form.html:124
-#: templates/dashboard/product/product_attribute/form.html:87
+#: templates/dashboard/product/product_attribute/form.html:90
 #: templates/dashboard/product/product_attribute/values/form.html:89
 #: templates/dashboard/product/product_image/form.html:90
 #: templates/dashboard/product/product_type/form.html:109
 #: templates/dashboard/product/product_variant/form.html:114
-#: templates/dashboard/product/stock/form.html:109
+#: templates/dashboard/product/stock/form.html:115
 #: templates/dashboard/product/stock_location/form.html:84
 #: templates/dashboard/shipping/country/form.html:91
 #: templates/dashboard/shipping/form.html:88
@@ -1746,8 +1764,7 @@ msgstr "%(category)s 카테고리 제거"
 #: templates/dashboard/category/modal/confirm_delete.html:20
 #, python-format
 msgctxt "Remove category modal title"
-msgid ""
-"Are you sure you want to remove category <strong>%(category)s</strong>?"
+msgid "Are you sure you want to remove category <strong>%(category)s</strong>?"
 msgstr "<strong>%(category)s</strong> 카테고리를 정말 삭제하실 건가요?"
 
 #: templates/dashboard/category/modal/confirm_delete.html:25
@@ -1771,8 +1788,10 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"    Categories are used to organize products into groups that are displayed in the navigation in the storefront.<br>\n"
-"    You can create categories by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"    Categories are used to organize products into groups that are displayed "
+"in the navigation in the storefront.<br>\n"
+"    You can create categories by using the <span class=\"btn-fab-presentation"
+"\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
 "  "
 msgstr ""
 
@@ -1801,23 +1820,31 @@ msgstr ""
 msgid "Collections"
 msgstr ""
 
-#: templates/dashboard/collection/detail.html:47
+#: templates/dashboard/collection/detail.html:32
 msgctxt "Collection action"
 msgid "Remove collection"
 msgstr ""
 
-#: templates/dashboard/collection/detail.html:72
-#: templates/dashboard/collection/detail.html:78
+#: templates/dashboard/collection/detail.html:37
+#, fuzzy
+#| msgctxt "Product action"
+#| msgid "View on site"
+msgctxt "Collection action"
+msgid "View on site"
+msgstr "사이트에서 보기"
+
+#: templates/dashboard/collection/detail.html:62
+#: templates/dashboard/collection/detail.html:68
 msgctxt "Collection secondary action"
 msgid "Cancel"
 msgstr "취소"
 
-#: templates/dashboard/collection/detail.html:74
+#: templates/dashboard/collection/detail.html:64
 msgctxt "Collection detail action"
 msgid "Update"
 msgstr "업데이트"
 
-#: templates/dashboard/collection/detail.html:80
+#: templates/dashboard/collection/detail.html:70
 msgctxt "Collection detail action"
 msgid "Create"
 msgstr "생성"
@@ -1860,7 +1887,8 @@ msgstr ""
 msgid ""
 "\n"
 "    Collections are used to organize products into custom groups.<br>\n"
-"    You can create collections by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"    You can create collections by using the <span class=\"btn-fab-"
+"presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
 "  "
 msgstr ""
 
@@ -2075,8 +2103,10 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"    Sales are used to create discounts on particular products or whole categories.<br>\n"
-"    You can create sales by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"    Sales are used to create discounts on particular products or whole "
+"categories.<br>\n"
+"    You can create sales by using the <span class=\"btn-fab-presentation"
+"\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
 "  "
 msgstr ""
 
@@ -2160,8 +2190,10 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"    Vouchers allows creating promotional codes for all purchases, specific products or shipping.<br>\n"
-"    You can create vouchers by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"    Vouchers allows creating promotional codes for all purchases, specific "
+"products or shipping.<br>\n"
+"    You can create vouchers by using the <span class=\"btn-fab-presentation"
+"\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
 "  "
 msgstr ""
 
@@ -2227,8 +2259,10 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"    Groups are designed to manage staff member roles and their permission.<br>\n"
-"    You can create groups by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"    Groups are designed to manage staff member roles and their permission."
+"<br>\n"
+"    You can create groups by using the <span class=\"btn-fab-presentation"
+"\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
 "  "
 msgstr ""
 
@@ -2313,8 +2347,7 @@ msgctxt "Orders table header"
 msgid "Total"
 msgstr "총합"
 
-#: templates/dashboard/index.html:105
-#: templates/dashboard/order/detail.html:123
+#: templates/dashboard/index.html:105 templates/dashboard/order/detail.html:123
 #: templates/dashboard/order/list.html:54
 msgctxt "Anonymous user account value"
 msgid "Guest"
@@ -2385,6 +2418,7 @@ msgstr "결제"
 
 #: templates/dashboard/order/detail.html:89
 #: templates/dashboard/order/detail.html:523
+#: templates/order/_order_history.html:5
 msgctxt "Order detail tab"
 msgid "History"
 msgstr "히스토리"
@@ -2950,12 +2984,18 @@ msgctxt "Order total shipping price header"
 msgid "Shipping total"
 msgstr ""
 
-#: templates/dashboard/order/pdf/invoice.html:140
+#: templates/dashboard/order/pdf/invoice.html:139
+#: templates/order/_ordered_items_table.html:131
+msgctxt "Order total tax price header"
+msgid "Tax"
+msgstr ""
+
+#: templates/dashboard/order/pdf/invoice.html:148
 msgctxt "Order voucher header"
 msgid "Voucher"
 msgstr "바우처"
 
-#: templates/dashboard/order/pdf/invoice.html:151
+#: templates/dashboard/order/pdf/invoice.html:159
 msgctxt "Order total price header"
 msgid "Grand total"
 msgstr "총 합계"
@@ -3020,19 +3060,27 @@ msgid "Quantity"
 msgstr "재고"
 
 #: templates/dashboard/product/_stock_table.html:10
+msgid "Min Days"
+msgstr ""
+
+#: templates/dashboard/product/_stock_table.html:11
+msgid "Max Days"
+msgstr ""
+
+#: templates/dashboard/product/_stock_table.html:12
 msgid "Allocated"
 msgstr "할당됨"
 
-#: templates/dashboard/product/_stock_table.html:11
+#: templates/dashboard/product/_stock_table.html:13
 msgid "Cost"
 msgstr "가격"
 
-#: templates/dashboard/product/_stock_table.html:12
+#: templates/dashboard/product/_stock_table.html:14
 #: templates/dashboard/product/detail.html:105
 msgid "Gross margin"
 msgstr "총 수익"
 
-#: templates/dashboard/product/_stock_table.html:33
+#: templates/dashboard/product/_stock_table.html:37
 msgctxt "Dashboard variant details page"
 msgid "No stock records found"
 msgstr "재고 기록을 찾을 수 없습니다"
@@ -3156,11 +3204,11 @@ msgid "Edit"
 msgstr "수정"
 
 #: templates/dashboard/product/form.html:117
-#: templates/dashboard/product/product_attribute/form.html:80
+#: templates/dashboard/product/product_attribute/form.html:83
 #: templates/dashboard/product/product_attribute/values/form.html:82
 #: templates/dashboard/product/product_image/form.html:83
 #: templates/dashboard/product/product_variant/form.html:107
-#: templates/dashboard/product/stock/form.html:102
+#: templates/dashboard/product/stock/form.html:108
 #: templates/dashboard/shipping/country/form.html:84
 #: templates/dashboard/shipping/form.html:81
 #: templates/dashboard/sites/authorization_keys/form.html:75
@@ -3322,8 +3370,8 @@ msgstr "%(value)s 선택 속성 값 삭제"
 #, python-format
 msgctxt "Modal delete attribute text"
 msgid ""
-"Are you sure you want to remove attribute choice value "
-"<strong>%(value)s</strong>?"
+"Are you sure you want to remove attribute choice value <strong>%(value)s</"
+"strong>?"
 msgstr ""
 
 #: templates/dashboard/product/product_attribute/zero_page.html:5
@@ -3334,8 +3382,10 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"    Attributes are used to define custom properties of products and variants, that can be used for filtering purposes in the storefront.<br>\n"
-"    You can add attributes by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"    Attributes are used to define custom properties of products and "
+"variants, that can be used for filtering purposes in the storefront.<br>\n"
+"    You can add attributes by using the <span class=\"btn-fab-presentation"
+"\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
 "  "
 msgstr ""
 
@@ -3477,8 +3527,8 @@ msgstr ""
 #, python-format
 msgctxt "Modal remove product type text"
 msgid ""
-"Are you sure you want to remove product type "
-"<strong>%(product_type)s</strong>?"
+"Are you sure you want to remove product type <strong>%(product_type)s</"
+"strong>?"
 msgstr ""
 
 #: templates/dashboard/product/product_type/modal/confirm_delete.html:28
@@ -3500,8 +3550,10 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"    Product types are templates used to create new products. They allow assigning custom attributes to the products of the same type.<br>\n"
-"    You can add product types by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"    Product types are templates used to create new products. They allow "
+"assigning custom attributes to the products of the same type.<br>\n"
+"    You can add product types by using the <span class=\"btn-fab-presentation"
+"\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
 "  "
 msgstr ""
 
@@ -3593,16 +3645,19 @@ msgstr ""
 msgctxt "Dashboard confirmation modal"
 msgid ""
 "\n"
-"        Are you sure you want to remove variant <strong>%(variant)s</strong> of product %(product)s?\n"
+"        Are you sure you want to remove variant <strong>%(variant)s</strong> "
+"of product %(product)s?\n"
 "      "
 msgstr ""
 
 #: templates/dashboard/product/product_variant/modal/confirm_delete.html:28
 msgctxt "Dashboard confirmation modal"
 msgid ""
-"This is the only variant of this product. If you remove it, the product will"
-" become unavailable."
-msgstr "유일한 옵션입니다. 이를 삭제할 경우, 고객들은 제품 구매가 불가능해질 것입니다."
+"This is the only variant of this product. If you remove it, the product will "
+"become unavailable."
+msgstr ""
+"유일한 옵션입니다. 이를 삭제할 경우, 고객들은 제품 구매가 불가능해질 것입니"
+"다."
 
 #: templates/dashboard/product/product_variant/modal/select_images.html:14
 msgctxt "Dashboard variant images modal"
@@ -3625,16 +3680,26 @@ msgid "Quantity"
 msgstr "재고"
 
 #: templates/dashboard/product/stock/detail.html:59
+msgctxt "Availability min days"
+msgid "Availability min days"
+msgstr ""
+
+#: templates/dashboard/product/stock/detail.html:60
+msgctxt "Availability max days"
+msgid "Availability max days"
+msgstr ""
+
+#: templates/dashboard/product/stock/detail.html:61
 msgctxt "Dashboard stock details view"
 msgid "Allocated"
 msgstr "할당됨"
 
-#: templates/dashboard/product/stock/detail.html:66
+#: templates/dashboard/product/stock/detail.html:68
 msgctxt "Dashboard action"
 msgid "Edit stock"
 msgstr "재고 수정"
 
-#: templates/dashboard/product/stock/detail.html:69
+#: templates/dashboard/product/stock/detail.html:71
 msgctxt "Dashboard action"
 msgid "Remove stock"
 msgstr "재고 삭제"
@@ -3741,8 +3806,7 @@ msgstr "%(location)s 재고 위치 삭제"
 #, python-format
 msgctxt "Modal remove stock location text"
 msgid ""
-"Are you sure you want to remove stock location "
-"<strong>%(location)s</strong>?"
+"Are you sure you want to remove stock location <strong>%(location)s</strong>?"
 msgstr "<strong>%(location)s</strong> 재고 위치를 삭제하실 건가요?"
 
 #: templates/dashboard/product/stock_location/modal/confirm_delete.html:26
@@ -3763,8 +3827,10 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"    Stock locations are the warehouses that you're sending the products from.<br>\n"
-"    You can create stock locations by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"    Stock locations are the warehouses that you're sending the products from."
+"<br>\n"
+"    You can create stock locations by using the <span class=\"btn-fab-"
+"presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
 "  "
 msgstr ""
 
@@ -3776,7 +3842,8 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"      You can create products by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"      You can create products by using the <span class=\"btn-fab-presentation"
+"\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
 "    "
 msgstr ""
 
@@ -3784,7 +3851,8 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"      In order to create products, you have to first <a href=\"%(product_type_url)s\">add a product type </a>.\n"
+"      In order to create products, you have to first <a href="
+"\"%(product_type_url)s\">add a product type </a>.\n"
 "    "
 msgstr ""
 
@@ -3979,7 +4047,8 @@ msgstr ""
 msgctxt "Dashboard confirmation modal"
 msgid ""
 "\n"
-"      Are you sure you want to remove shipping method <strong>%(shipping_method)s</strong>?\n"
+"      Are you sure you want to remove shipping method <strong>"
+"%(shipping_method)s</strong>?\n"
 "    "
 msgstr ""
 
@@ -4003,8 +4072,10 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"    Shipping methods allows defining shipping methods that are available in the shop.<br>\n"
-"    You can add shipping methods by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"    Shipping methods allows defining shipping methods that are available in "
+"the shop.<br>\n"
+"    You can add shipping methods by using the <span class=\"btn-fab-"
+"presentation\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
 "  "
 msgstr ""
 
@@ -4146,8 +4217,7 @@ msgctxt "Staff member details header"
 msgid "Staff member details"
 msgstr "스태프 멤버 상세"
 
-#: templates/dashboard/staff/list.html:9
-#: templates/dashboard/staff/list.html:31
+#: templates/dashboard/staff/list.html:9 templates/dashboard/staff/list.html:31
 msgctxt "Dashboard staff members list"
 msgid "Staff"
 msgstr "스태프"
@@ -4197,7 +4267,9 @@ msgstr ""
 msgid ""
 "\n"
 "    Staff members are users who have access to the dashboard.<br>\n"
-"    You can create staff members by using the <span class=\"btn-fab-presentation\"><svg data-src=\"%(img_path)s\" /></span> button or by using option \"Promote to staff\" in the customer details view.\n"
+"    You can create staff members by using the <span class=\"btn-fab-"
+"presentation\"><svg data-src=\"%(img_path)s\" /></span> button or by using "
+"option \"Promote to staff\" in the customer details view.\n"
 "  "
 msgstr ""
 
@@ -4253,102 +4325,106 @@ msgstr "(옵션)"
 msgid "File"
 msgstr "파일"
 
-#: templates/order/_ordered_items_table.html:15
+#: templates/order/_ordered_items_table.html:17
 msgctxt "Order details address title"
 msgid "Shipping address"
 msgstr "배송 주소"
 
-#: templates/order/_ordered_items_table.html:22
+#: templates/order/_ordered_items_table.html:24
 msgctxt "Order details address title"
 msgid "Billing address"
 msgstr "결제 주소"
 
-#: templates/order/_ordered_items_table.html:33
+#: templates/order/_ordered_items_table.html:35
 msgctxt "Order details column title"
 msgid "Product"
 msgstr "제품"
 
-#: templates/order/_ordered_items_table.html:38
+#: templates/order/_ordered_items_table.html:40
 msgctxt "Order details column title"
 msgid "Quantity"
 msgstr "재고"
 
-#: templates/order/_ordered_items_table.html:43
+#: templates/order/_ordered_items_table.html:45
 msgctxt "Order details column title"
-msgid "Price"
-msgstr "가격"
+msgid "Price per Unit (excl. VAT)"
+msgstr ""
 
-#: templates/order/_ordered_items_table.html:79
+#: templates/order/_ordered_items_table.html:82
 #, python-format
 msgctxt "Order details shipment row text"
 msgid "Shipping (%(shipping_method_name)s)"
 msgstr ""
 
-#: templates/order/_ordered_items_table.html:85
+#: templates/order/_ordered_items_table.html:88
 #, python-format
 msgctxt "Order details shipment row text"
-msgid "Tracking number: %(tracking_number)s"
+msgid ""
+"Tracking URL: <a href=\"%(tracking_number)s\" target=\"_blank\">"
+"%(tracking_number)s</a>"
 msgstr ""
 
-#: templates/order/_ordered_items_table.html:101
+#: templates/order/_ordered_items_table.html:104
 msgctxt "Order details shipment row text"
 msgid "Shipping total"
 msgstr ""
 
-#: templates/order/_ordered_items_table.html:128
+#: templates/order/_ordered_items_table.html:146
 msgctxt "Order details total text"
-msgid "Total"
-msgstr "총합"
+msgid "Total (with VAT)"
+msgstr ""
 
-#: templates/order/checkout_success.html:7
-#: templates/order/checkout_success_anonymous.html:7
+#: templates/order/checkout_success.html:8
+#: templates/order/checkout_success_anonymous.html:8
 msgctxt "Checkout success page title"
 msgid "Thank you"
 msgstr ""
 
-#: templates/order/checkout_success.html:15
-#: templates/order/checkout_success_anonymous.html:15
+#: templates/order/checkout_success.html:16
+#: templates/order/checkout_success_anonymous.html:16
 #, python-format
 msgctxt "Checkout title"
 msgid "Thank you for your <a href=\"%(order_url)s\">order</a>!"
 msgstr "<a href=\"%(order_url)s\">주문</a>해 주셔서 감사합니다!"
 
-#: templates/order/checkout_success.html:19
-#: templates/order/checkout_success_anonymous.html:19
+#: templates/order/checkout_success.html:20
+#: templates/order/checkout_success_anonymous.html:20
 #, python-format
 msgctxt "Checkout text"
 msgid ""
 "We've sent a confirmation email with details to <span>%(email)s</span>.<br> "
 "If any problems or questions contact us."
 msgstr ""
-"<span>%(email)s</span>로 자세한 내용을 담은 확인 메일을 송부 하였습니다.<br> 이에 문제가 있으시면 사이트 "
-"담당자에게 연락 주시기 바랍니다."
+"<span>%(email)s</span>로 자세한 내용을 담은 확인 메일을 송부 하였습니다.<br> "
+"이에 문제가 있으시면 사이트 담당자에게 연락 주시기 바랍니다."
 
-#: templates/order/checkout_success.html:28
-#: templates/order/checkout_success_anonymous.html:57
+#: templates/order/checkout_success.html:29
+#: templates/order/checkout_success_anonymous.html:58
 msgctxt "Checkout secondary action"
 msgid "Continue shopping"
 msgstr "쇼핑 계속"
 
-#: templates/order/checkout_success_anonymous.html:26
+#: templates/order/checkout_success_anonymous.html:27
 msgctxt "Checkout text"
 msgid ""
 "It looks like you already are our customer! <br> Please log in to connect "
 "order with your account."
-msgstr "당신은 이미 가입된 고객입니다!<br>로그인을 통해 당신의 주문을 계정을 통해 구매하세요."
+msgstr ""
+"당신은 이미 가입된 고객입니다!<br>로그인을 통해 당신의 주문을 계정을 통해 구"
+"매하세요."
 
-#: templates/order/checkout_success_anonymous.html:36
+#: templates/order/checkout_success_anonymous.html:37
 msgctxt "Checkout title"
 msgid "Why not to create an account"
 msgstr "계정을 만들어 보시는 건 어떨까요?"
 
-#: templates/order/checkout_success_anonymous.html:37
+#: templates/order/checkout_success_anonymous.html:38
 msgid ""
 "Make your shopping experience even better! Save your shipping and payment "
 "details for faster checkout."
 msgstr "주소 및 결제 정보를 미리 저장하여 빠른 쇼핑을 경험하세요!"
 
-#: templates/order/checkout_success_anonymous.html:46
+#: templates/order/checkout_success_anonymous.html:47
 msgctxt "Checkout primary action"
 msgid "Create an account"
 msgstr "계정 생성"
@@ -4381,12 +4457,12 @@ msgctxt "Order details primary action"
 msgid "Pay for order"
 msgstr "주문을 위한 결제"
 
-#: templates/order/details.html:66
+#: templates/order/details.html:67
 msgctxt "Order notes list"
 msgid "Notes"
 msgstr ""
 
-#: templates/order/details.html:70
+#: templates/order/details.html:72
 #, python-format
 msgid ""
 "\n"
@@ -4394,25 +4470,34 @@ msgid ""
 "                  "
 msgstr ""
 
-#: templates/order/details.html:74
+#: templates/order/details.html:76
 msgctxt "Order note author is staff"
 msgid "staff"
 msgstr ""
 
-#: templates/order/details.html:75
+#: templates/order/details.html:77
 #, python-format
 msgid ""
 "\n"
-"                    %(date)s by <span class=\"text-muted\">%(author)s</span>\n"
+"                    %(date)s by <span class=\"text-muted\">%(author)s</"
+"span>\n"
 "                  "
 msgstr ""
 
-#: templates/order/details.html:79
+#: templates/order/details.html:81
 #, python-format
 msgid ""
 "\n"
 "                    %(date)s by %(author)s\n"
 "                  "
+msgstr ""
+
+#: templates/order/details.html:86
+#, python-format
+msgid ""
+"\n"
+"                  %(date)s by anonymous customer\n"
+"                "
 msgstr ""
 
 #: templates/order/payment.html:10
@@ -4452,8 +4537,9 @@ msgid ""
 "before attempting a new payment. Please be warned that if you try again and "
 "the previous transaction succeeds you might end up being charged twice."
 msgstr ""
-"결제가 완료되지 않음을 확신하지 않으면(예를 들어 결제 전 웹브라우저를 닫은 경우), 새로운 결제를 시도하기 전에 기다리셔야 합니다. "
-"이전 거래를 기다리지 않고 다시 결제를 시도할 경우, 중복 결제가 될 수 있음을 주의하시기 바랍니다."
+"결제가 완료되지 않음을 확신하지 않으면(예를 들어 결제 전 웹브라우저를 닫은 경"
+"우), 새로운 결제를 시도하기 전에 기다리셔야 합니다. 이전 거래를 기다리지 않"
+"고 다시 결제를 시도할 경우, 중복 결제가 될 수 있음을 주의하시기 바랍니다."
 
 #: templates/order/payment.html:69
 msgctxt "Payment pending action"
@@ -4502,43 +4588,363 @@ msgctxt "Payment form (Stripe) secondary action"
 msgid "Change payment method"
 msgstr "결제 방법 변경"
 
+#: templates/product/_filters.html:17
+#, fuzzy
+#| msgctxt "Category page filters"
+#| msgid "Clear filters"
+msgctxt "Product list page filters"
+msgid "Clear filters"
+msgstr "검색필터 초기화"
+
+#: templates/product/_filters.html:45
+#, fuzzy
+#| msgctxt "Category price filter"
+#| msgid "from"
+msgctxt "Product price filter"
+msgid "from"
+msgstr " 로부터"
+
+#: templates/product/_filters.html:47
+#, fuzzy
+#| msgctxt "Category price filter"
+#| msgid "to"
+msgctxt "Product price filter"
+msgid "to"
+msgstr "까지"
+
+#: templates/product/_filters.html:66
+#, fuzzy
+#| msgctxt "Category price filter"
+#| msgid "Update"
+msgctxt "Product price filter"
+msgid "Update"
+msgstr "업데이트"
+
 #: templates/product/_price_range.html:6
 msgctxt "product price range"
 msgid "from"
 msgstr "가격"
 
-#: templates/product/details.html:55
+#: templates/product/details.html:56
 #, python-format
 msgctxt "Product details text"
 msgid ""
 "<strong>Warning!</strong> You are previewing a product that will become "
 "visible on <strong>%(date)s</strong>."
 msgstr ""
-"<strong>주의!</strong> 지금 보고 계신 제품은 <strong>%(date)s</strong> 일 부터 확인 가능합니다."
+"<strong>주의!</strong> 지금 보고 계신 제품은 <strong>%(date)s</strong> 일 부"
+"터 확인 가능합니다."
 
-#: templates/product/details.html:111
+#: templates/product/details.html:117
 msgctxt "Product details link text"
 msgid "Edit in dashboard"
 msgstr "대시보드에서 수정"
 
-#: templates/product/details.html:149
+#: templates/product/details.html:162
 msgctxt "Product details primary action"
 msgid "Add to cart"
 msgstr "카트에 담기"
 
-#: templates/product/details.html:161
+#: templates/product/details.html:174
 msgctxt "Product details text"
 msgid "This product is currently <strong>unavailable</strong>."
 msgstr "이 제품은 현재 구매가 <strong>불가능</strong>합니다."
 
-#: templates/product/details.html:165
+#: templates/product/details.html:178
 msgctxt "Product details title"
 msgid "Description"
 msgstr "설명"
 
+#: templates/product/product_list_base.html:70
+#, fuzzy
+#| msgctxt "Product list sorting form"
+#| msgid "Sort by"
+msgctxt "Product list filters"
+msgid "Sort by"
+msgstr "정렬"
+
 #: templates/search/results.html:32
 msgid "Search:"
 msgstr "검색:"
+
+#: templates/templated_email/html/compiled/confirm_note.html:116
+msgctxt "Note confirmation e-mail text"
+msgid "Hi!"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_note.html:116
+#, python-format
+msgctxt "Note confirmation e-mail text"
+msgid ""
+"A new note has been added to your order. To see details please visit: <a "
+"href=\"%(url)s\">%(url)s</a>"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_note.html:131
+#: templates/templated_email/html/compiled/confirm_order.html:305
+#: templates/templated_email/html/compiled/confirm_payment.html:131
+#: templates/templated_email/html/compiled/confirm_shipping.html:132
+#: templates/templated_email/html/compiled/password_reset.html:134
+#: templates/templated_email/html/compiled/promote_customer.html:132
+#: templates/templated_email/html/compiled/set_password.html:134
+msgctxt "Base e-mail text"
+msgid "This is an automatically generated e-mail, please do not reply."
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_note.html:146
+#: templates/templated_email/html/compiled/confirm_order.html:320
+#: templates/templated_email/html/compiled/confirm_payment.html:146
+#: templates/templated_email/html/compiled/confirm_shipping.html:147
+#: templates/templated_email/html/compiled/password_reset.html:149
+#: templates/templated_email/html/compiled/promote_customer.html:147
+#: templates/templated_email/html/compiled/set_password.html:149
+#, python-format
+msgctxt "Base e-mail footer"
+msgid "Sincerely, %(site_name)s"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:117
+msgctxt "Order confirmation e-mail text"
+msgid "Hi!"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:117
+#, python-format
+msgctxt "Order confirmation e-mail text"
+msgid ""
+"Thank you for your order. Below is the list of ordered products. To see your "
+"payment details please visit: <a href=\"%(url)s\">%(url)s</a>"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:119
+#, python-format
+msgid ""
+"\n"
+"              Order should be available around %(shipping_date)s "
+"(%(max_shipping_date)s at worst).\n"
+"            "
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:149
+msgctxt "Invoice identifier"
+msgid "Invoice"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:157
+msgctxt "Order date"
+msgid "Date"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:165
+msgctxt "Arrival date"
+msgid "Estimated delivery date"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:168
+#, python-format
+msgid "Around %(shipping_date)s"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:187
+#, fuzzy
+#| msgctxt "Order subtotal"
+#| msgid "Subtotal"
+msgctxt "E-mail order lines summary table"
+msgid "Subtotal (net)"
+msgstr "부분 합계"
+
+#: templates/templated_email/html/compiled/confirm_order.html:195
+#, fuzzy
+#| msgctxt "Shipping method form field label"
+#| msgid "Shipping method"
+msgctxt "E-mail order lines summary table"
+msgid "Shipping (net)"
+msgstr "배송 방법"
+
+#: templates/templated_email/html/compiled/confirm_order.html:203
+#, fuzzy
+#| msgctxt "Order subtotal"
+#| msgid "Total"
+msgctxt "E-mail order lines summary table"
+msgid "Total Net"
+msgstr "합계"
+
+#: templates/templated_email/html/compiled/confirm_order.html:212
+#, fuzzy
+#| msgctxt "Dashboard discounts list"
+#| msgid "Discounts"
+msgctxt "E-mail order lines summary table"
+msgid "Discounts"
+msgstr "할인"
+
+#: templates/templated_email/html/compiled/confirm_order.html:221
+msgctxt "E-mail order lines summary table"
+msgid "Tax"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:229
+#, fuzzy
+#| msgctxt "Order totals header"
+#| msgid "Grand total"
+msgctxt "E-mail order lines summary table"
+msgid "Gross Total"
+msgstr "총 합계"
+
+#: templates/templated_email/html/compiled/confirm_order.html:239
+msgctxt "E-mail order line summary header"
+msgid "Reference"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:240
+#, fuzzy
+#| msgctxt "Shipment group table header"
+#| msgid "Item"
+msgctxt "E-mail order line summary header"
+msgid "Item"
+msgstr "상품"
+
+#: templates/templated_email/html/compiled/confirm_order.html:241
+#, fuzzy
+#| msgid "Quantity"
+msgctxt "E-mail order line summary header"
+msgid "Quantity"
+msgstr "재고"
+
+#: templates/templated_email/html/compiled/confirm_order.html:242
+msgctxt "E-mail order line summary header"
+msgid "Per unit (net)"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_order.html:243
+#, fuzzy
+#| msgctxt "Order subtotal"
+#| msgid "Subtotal"
+msgctxt "E-mail order line summary header"
+msgid "Subtotal (net)"
+msgstr "부분 합계"
+
+#: templates/templated_email/html/compiled/confirm_order.html:275
+#, fuzzy
+#| msgctxt "Checkout summary title"
+#| msgid "Billing address"
+msgctxt "Order confirmation e-mail billing address"
+msgid "Billing address"
+msgstr "결제 주소"
+
+#: templates/templated_email/html/compiled/confirm_order.html:276
+#, fuzzy
+#| msgctxt "Checkout shipping address title"
+#| msgid "Shipping address"
+msgctxt "Order confirmation e-mail shipping address"
+msgid "Shipping address"
+msgstr "배송 주소"
+
+#: templates/templated_email/html/compiled/confirm_order.html:288
+#, fuzzy
+#| msgctxt "Empty list of per-country shipping prices"
+#| msgid "No shipping prices"
+msgctxt "Order confirmation e-mail text"
+msgid "No shipping required"
+msgstr "배송비가 없습니다"
+
+#: templates/templated_email/html/compiled/confirm_payment.html:116
+msgctxt "Payment confirmation e-mail text"
+msgid "Hi!"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_payment.html:116
+#, python-format
+msgctxt "Payment confirmation e-mail text"
+msgid ""
+"Thank you for your payment. To see your payment details please visit: <a "
+"href=\"%(url)s\">%(url)s</a>"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_shipping.html:116
+#: templates/templated_email/html/compiled/password_reset.html:116
+msgctxt "Password reset e-mail text"
+msgid "Hi!"
+msgstr ""
+
+#: templates/templated_email/html/compiled/confirm_shipping.html:116
+#, python-format
+msgctxt "Note confirmation e-mail text"
+msgid ""
+"<p>This is an e-mail notification to inform you that your order has been "
+"shipped.</p> <p>Thank you for your order. Tracking URL: %(tracking_url)s</p>"
+msgstr ""
+
+#: templates/templated_email/html/compiled/password_reset.html:116
+#, fuzzy, python-format
+#| msgid ""
+#| "Hello from %(site_name)s!\n"
+#| "\n"
+#| "You're receiving this e-mail because you or someone else has requested a "
+#| "password for your user account at %(domain)s.\n"
+#| "It can be safely ignored if you did not request a password reset. Click "
+#| "the link below to reset your password."
+msgctxt "Password reset e-mail text"
+msgid ""
+"You're receiving this e-mail because you or someone else has requested a "
+"password for your user account at %(domain)s.<br> It can be safely ignored "
+"if you did not request a password reset. Click the link below to reset your "
+"password."
+msgstr ""
+"%(site_name)s 에 오신 것을 환영합니다!\n"
+"\n"
+"당신의 계정으로 %(domain)s 에서 비밀번호를 요청하였으므로, 이 이메일을 송부합"
+"니다.\n"
+"\n"
+"만약 당신이 비밀번호 초기화를 하지 않았다면, 안전하게 이 메시지를 무시하셔도 "
+"좋습니다."
+
+#: templates/templated_email/html/compiled/promote_customer.html:116
+#: templates/templated_email/html/compiled/test_mail.html:80
+msgctxt "Promote customer to staff member confirmation e-mail text"
+msgid "Hi!"
+msgstr ""
+
+#: templates/templated_email/html/compiled/promote_customer.html:116
+#, python-format
+msgctxt "Promote customer to staff member confirmation e-mail text"
+msgid ""
+"You're receiving this e-mail because you have been promoted to staff member "
+"at %(domain)s.<br> To access dashboard please visit: <a href=\"%(url)s\">"
+"%(url)s</a>"
+msgstr ""
+
+#: templates/templated_email/html/compiled/set_password.html:116
+msgctxt "Set password for staff member e-mail text"
+msgid "Hi!"
+msgstr ""
+
+#: templates/templated_email/html/compiled/set_password.html:116
+#, fuzzy, python-format
+#| msgid ""
+#| "Hello from %(site_name)s!\n"
+#| "\n"
+#| "You're receiving this e-mail because you or someone else has requested a "
+#| "password for your user account at %(domain)s.\n"
+#| "It can be safely ignored if you did not request a password reset. Click "
+#| "the link below to reset your password."
+msgctxt "Set password for staff member e-mail text"
+msgid ""
+"You're receiving this e-mail because you have to set password for your staff "
+"member account at %(domain)s.<br> Click the link below to set up your "
+"password."
+msgstr ""
+"%(site_name)s 에 오신 것을 환영합니다!\n"
+"\n"
+"당신의 계정으로 %(domain)s 에서 비밀번호를 요청하였으므로, 이 이메일을 송부합"
+"니다.\n"
+"\n"
+"만약 당신이 비밀번호 초기화를 하지 않았다면, 안전하게 이 메시지를 무시하셔도 "
+"좋습니다."
+
+#: templates/templated_email/html/compiled/test_mail.html:80
+msgctxt "Promote customer to staff member confirmation e-mail text"
+msgid "Yay!"
+msgstr ""
 
 #: templates/userprofile/address_delete.html:6
 msgctxt "Remove address form action"
@@ -4659,26 +5065,20 @@ msgctxt "No addresses text"
 msgid "You will see new addresses here after first successful checkout."
 msgstr "첫번째 주문이 완료되면 주소를 확인할 수 있습니다."
 
-#: saleor/product/models.py:97
-msgid "This product is available within %d to %d days."
-msgstr ""
+#~ msgid ""
+#~ "Thank you for using %(site_name)s!\n"
+#~ "%(domain)s"
+#~ msgstr ""
+#~ "%(site_name)s 를 사용하여 주셔서 감사합니다.\n"
+#~ "%(domain)s"
 
-#: saleor/product/models.py:97
-msgid "This product is available within %d days."
-msgstr ""
+#~ msgid "Password Reset E-mail"
+#~ msgstr "비밀번호 초기화 이메일"
 
-#: templates/dashboard/product/_stock_table.html:10
-msgid "Min Days"
-msgstr ""
+#~ msgctxt "Order details column title"
+#~ msgid "Price"
+#~ msgstr "가격"
 
-#: templates/dashboard/product/_stock_table.html:11
-msgid "Max Days"
-msgstr ""
-
-#: saleor/dashboard/product/forms.py:38
-msgid "Min availability days"
-msgstr ""
-
-#: saleor/dashboard/product/forms.py:39
-msgid "Max availability days"
-msgstr ""
+#~ msgctxt "Order details total text"
+#~ msgid "Total"
+#~ msgstr "총합"

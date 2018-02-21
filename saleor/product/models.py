@@ -93,13 +93,11 @@ class ProductQuerySet(models.QuerySet):
             Q(is_published=True))
 
 
-_BASE_AVAILABILITY_MSG = 'This product is available %s'
-
 AVAILABILITY_MSG_FROM_TO = gettext_lazy(
-    _BASE_AVAILABILITY_MSG % 'within %d to %d days.')
+    'This product is available within %(from)d to %(to)d days.')
 
 AVAILABILITY_MSG_WITHIN = gettext_lazy(
-    _BASE_AVAILABILITY_MSG % 'within %d days.')
+    'This product is available within %(from)d days.')
 
 
 class Product(models.Model, ItemRange):
@@ -219,26 +217,23 @@ class Product(models.Model, ItemRange):
     def _format_availability(self):
         min_days, max_days = self._get_availability_range()
 
-        s = ''
-        within_days = 0
+        is_from = min_days or max_days
+        format_data = {'from': is_from, 'to': max_days}
 
-        if min_days:
-            if max_days:
-                return AVAILABILITY_MSG_FROM_TO % (min_days, max_days)
-            else:
-                within_days = min_days
-        elif max_days:
-            within_days = max_days
-
-        if within_days:
-            s = AVAILABILITY_MSG_WITHIN % within_days
-
-        return s
+        if is_from:
+            if max_days and format_data['from'] != max_days:
+                return AVAILABILITY_MSG_FROM_TO % format_data
+            return AVAILABILITY_MSG_WITHIN % format_data
+        return ''
 
     def get_availability_range(self):
         if self.variants.exists():
             return self._format_availability()
         return ''
+
+    @property
+    def availability_within_days(self):
+        return self._get_availability_range()
 
     @property
     def availability_range(self):

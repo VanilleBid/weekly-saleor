@@ -95,7 +95,7 @@ def get_thumbnail(instance, size, method='crop'):
                 "and it won't be generated automatically" % size_name)
             warnings.warn(msg)
         try:
-            thumbnail = getattr(instance, method)[size]
+            thumbnail = getattr(instance, method, instance.crop)[size]
         except Exception:
             logger.exception(
                 'Thumbnail fetch failed',

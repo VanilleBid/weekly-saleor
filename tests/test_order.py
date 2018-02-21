@@ -7,7 +7,7 @@ from saleor.order import models, OrderStatus
 from saleor.order.forms import OrderNoteForm
 from saleor.order.utils import add_variant_to_delivery_group
 from saleor.userprofile.models import Address
-from tests.utils import get_redirect_location
+from tests.utils import get_redirect_location, assert_decimal
 
 
 def test_total_property():
@@ -42,7 +42,8 @@ def test_total_setter(billing_address: Address, tax_rates_countries: dict):
         expected_tax = Decimal(10 * tax_rate)
 
         assert order.total_net.net == 10
-        assert order.total_tax.net - expected_tax < 0.0001
+        assert_decimal(order.total_tax.net, expected_tax)
+        assert order.tax_rate == int(tax_rate * 100)
 
 
 def test_add_variant_to_delivery_group_adds_line_for_new_variant(
@@ -139,6 +140,48 @@ def test_view_connect_order_with_user_authorized_user(
     assert order.user == customer_user
 
 
+def test_view_order_invoice_non_logged(order, client):
+    url = reverse(
+        'order:invoice', kwargs={'token': order.token})
+    response = client.get(url)
+
+    redirect_location = get_redirect_location(response)
+    assert redirect_location == reverse('account_login')
+
+
+def test_view_order_invoice_authorized(
+        order_with_lines_and_stock, authorized_client, customer_user):
+
+    order = order_with_lines_and_stock
+    order.user = customer_user
+    order.save()
+
+    url = reverse(
+        'order:invoice', kwargs={'token': order.token})
+    response = authorized_client.get(url)
+
+    assert response.status_code == 200
+    assert response['content-type'] == 'application/pdf'
+    name = "invoice-%s" % order.id
+    assert response['Content-Disposition'] == 'filename=%s' % name
+
+
+def test_view_order_invoice_unauthorized(
+        order_with_lines_and_stock,
+        authorized_client, staff_user):
+
+    order = order_with_lines_and_stock
+    order.user = staff_user
+    order.save()
+
+    url = reverse(
+        'order:invoice', kwargs={'token': order.token})
+    response = authorized_client.get(url)
+
+    assert response.status_code == 404
+    assert response['content-type'] != 'application/pdf'
+
+
 def test_view_connect_order_with_user_different_email(
         order, authorized_client):
     url = reverse(
@@ -171,6 +214,7 @@ def test_create_order_history(order_with_lines):
 
 def test_delivery_group_is_shipping_required(delivery_group):
     assert delivery_group.is_shipping_required()
+    assert delivery_group.order.shipping_required
 
 
 def test_delivery_group_is_shipping_required_no_shipping(delivery_group):

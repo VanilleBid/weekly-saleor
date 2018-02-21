@@ -1,0 +1,187 @@
+{% load static %}
+
+<!doctype HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+    @page {
+      margin: 5cm 2cm 5cm 2cm;
+
+      @top-right {
+          content: url({{ protocol}}://{{ domain }}{% static 'images/logo-document.svg' %});
+      }
+
+      @bottom-left {
+          white-space: pre;
+          text-align: left;
+          font-size: 8pt;
+          content: "ecm.online GmbH" "\a"
+                   "Bilker Allee 217" "\a"
+                   "40215 Düsseldorf" "\a"
+                   "USt-IdNr: DE304939027" "\a"
+                   "\a" "\a"
+      }
+
+      @bottom-center {
+          white-space: pre;
+          text-align: left;
+          font-size: 8pt;
+          content: "Geschäftsführung" "\a"
+                   "Marc Bartrina, Daniel Huhn" "\a"
+                   "Amtsgericht Düsseldorf HRB 76874" "\a"
+                   "\a\a"
+                   "Seite " counter(page)
+                   " von " counter(pages)
+      }
+
+      @bottom-right {
+          white-space: pre;
+          text-align: left;
+          font-size: 8pt;
+          content: "IBAN:DE89430510400000302794" "\a"
+                   "BIC: WELADED1HTG" "\a"
+                   "Bank: Sparkasse Hattingen" "\a"
+                   "\a" "\a" "\a"
+
+      }
+    }
+
+    html {
+        font-size: 10pt;
+        font-family: "Arial";
+    }
+
+    .section {
+        margin-top: 1cm;
+    }
+
+    /**
+     * Address table
+     */
+     .adressTable tr:nth-child(1) td {
+         border-bottom: 1px solid black;
+     }
+
+     .small {
+         font-size: 8pt;
+     }
+
+    /**
+     * Info table
+     */
+    .infoTable {
+        margin-top: 3cm;
+        width: 100%;
+    }
+
+    /**
+     * Invoice table
+     */
+    .invoiceTable {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .invoiceTable td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    .invoiceTable thead {
+        background: lightgray;
+    }
+
+    .invoiceTable .padrow {
+        height: 10px;
+    }
+
+    .invoiceTable .tfoot td {
+        border: none;
+        padding: 2px;
+    }
+
+    .nowrap {
+        white-space: nowrap;
+    }
+    </style>
+  </head>
+
+      <body>
+        <div>
+            <table class="adressTable">
+                <tr>
+                    <td class="small">{{from.name}}, {{from.street}}, {{from.postcode}} {{from.city}}</td>
+                </tr>
+                <tr><td>{{to.name}}</td></tr>
+                <tr><td>{{to.street}}</td></tr>
+                <tr><td>{{to.postcode}} {{to.city}}</td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <table class="infoTable">
+                <tr>
+                    <td><b>Rechnung c</b></td>
+                    <td>Kundennummer: b</td>
+                </tr>
+                <tr>
+                    <td class="small">Das Rechnungsdatum entspricht dem Leistungsdatum.</td>
+                    <td>Rechnungsdatum: a</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <table class="invoiceTable">
+                <thead>
+                    <tr>
+                        <td>Pos</td>
+                        <td>Beschreibung</td>
+                        <td>Anzahl</td>
+                        <td>Einzelpreis</td>
+                        <td>Steuersatz</td>
+                        <td>Netto</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{pos_number}}</td>
+                        <td>{{{text}}}</td>
+                        <td>{{amount}}</td>
+                        <td class="nowrap">a</td>
+                        <td class="nowrap">a</td>
+                        <td class="nowrap">a</td>
+                    </tr>
+                    <tr class="tfoot">
+                        <td class="padrow"></td>
+                    </tr>
+                    <tr class="tfoot">
+                        <td class="noborder"></td>
+                        <td class="noborder"></td>
+                        <td colspan="3"> Nettogesamt</td>
+                        <td class="nowrap" colspan="2">{a</td>
+                    </tr>
+                    <tr class="tfoot">
+                        <td class="noborder"></td>
+                        <td class="noborder"></td>
+                        <td colspan="3"> Umsatzsteuer 19%</td>
+                        <td class="nowrap" colspan="2">a</td>
+                    </tr>
+                    <tr class="tfoot">
+                        <td class="noborder"></td>
+                        <td class="noborder"></td>
+                        <td colspan="3"> Rechnungsbetrag</td>
+                        <td class="nowrap" colspan="2">a</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <p>Vielen Dank für Ihren Auftrag.</p>
+            <p>Bitte begleichen Sie den offenen Betrag bis zum {{invoice.pay_until_date}}.</p>
+        </div>
+
+    </body>
+</html>

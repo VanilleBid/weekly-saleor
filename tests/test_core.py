@@ -164,8 +164,14 @@ def test_manifest(client, site_settings):
 
 
 def test_get_tax_country_code():
-    assert get_tax_country_code('AT', Price(Decimal(10.0))).gross == Decimal(12)
-    assert get_tax_country_code('AT', Decimal(10.0)).gross == Decimal(12)
+    price, rate = get_tax_country_code('AT', Price(Decimal(10.0)))
+
+    assert price.gross == Decimal(12)
+    assert rate == 0.20
+
+    price, rate = get_tax_country_code('AT', Decimal(10.0))
+    assert price.gross == Decimal(12)
+    assert rate == 0.20
 
 
 def test_get_tax_price(order_with_lines: Order, billing_address):
@@ -183,44 +189,57 @@ def test_get_tax_price(order_with_lines: Order, billing_address):
     request_factory = RequestFactory()
     order_total = order.get_total()
 
-    croatia_taxed_price = order_total.gross * Decimal(1.25)
-    poland_taxed_price = order_total.gross * Decimal(1.23)
+    croatia_tax_rate = 0.25
+    poland_tax_rate = 0.23
+    default_tax_rate = 0.20
 
-    croatia_taxed_price_10usd = Decimal(10.0) * Decimal(1.25)
-    default_taxed_price_10usd = Decimal(10.0) * Decimal(1.20)
+    croatia_taxed_price = order_total.gross * Decimal(1 + croatia_tax_rate)
+    poland_taxed_price = order_total.gross * Decimal(1 + poland_tax_rate)
+
+    croatia_taxed_price_10usd = Decimal(10.0) * Decimal(1 + croatia_tax_rate)
+    default_taxed_price_10usd = Decimal(10.0) * Decimal(1 + default_tax_rate)
 
     requests = (
         (request_factory.post('/test_HR', {'country': 'HR'}),
          croatia_taxed_price,
+         croatia_tax_rate,
          croatia_taxed_price_10usd),
 
         (request_factory.post('/test_default_missing', {}),
          poland_taxed_price,
+         poland_tax_rate,
          default_taxed_price_10usd),
 
         (request_factory.post('/test_default_None'),
          poland_taxed_price,
+         poland_tax_rate,
          default_taxed_price_10usd)
     )
 
-    for rq, expected_price, expected_price_10usd in requests:
-        assert_decimal(get_tax_price(rq, checkout=order).gross, expected_price)
-        assert_decimal(get_tax_price(rq, total=10).gross, expected_price_10usd)
+    for rq, expected_price, expected_rate, expected_price_10usd in requests:
+        price, rate = get_tax_price(rq, checkout=order)
+        assert rate == expected_rate
+        assert_decimal(price.gross, expected_price)
+
+        price, rate = get_tax_price(rq, total=10)
+        expected_rate = (float(expected_price_10usd) - 10) / 10.0
+        assert_decimal(rate, expected_rate)
+        assert_decimal(price.gross, expected_price_10usd)
 
     shipping_address.country = Country('HR')
 
-    assert_decimal(
-        get_tax_price(None, checkout=order, get_first_shipping_addr=True).gross,
-        croatia_taxed_price)
+    price, rate = get_tax_price(None, checkout=order, get_first_shipping_addr=True)
+    assert rate == 0.25
+    assert_decimal(price.gross, croatia_taxed_price)
 
-    assert_decimal(
-        get_tax_price(None, checkout=order, get_first_shipping_addr=False).gross,
-        poland_taxed_price)
+    price, rate = get_tax_price(None, checkout=order, get_first_shipping_addr=False)
+    assert rate == 0.23
+    assert_decimal(price.gross, poland_taxed_price)
 
     order.shipping_address = None
-    assert_decimal(
-        get_tax_price(None, checkout=order, get_first_shipping_addr=True).gross,
-        poland_taxed_price)
+    price, rate = get_tax_price(None, checkout=order, get_first_shipping_addr=True)
+    assert rate == 0.23
+    assert_decimal(price.gross, poland_taxed_price)
 
 
 def test_get_robots_txt(client):

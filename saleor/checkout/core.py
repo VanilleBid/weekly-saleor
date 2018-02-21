@@ -328,8 +328,18 @@ class Checkout:
             order_data['discount_name'] = discount.name
 
         order = Order.objects.create(**order_data)
+        min_days = []
+        max_days = []
 
         for line in self.cart.partition():
+            for cart_line in line:
+                product = cart_line.variant.product
+                min_, max_ = product.availability_within_days
+                if min_:
+                    min_days.append(min_)
+                if max_:
+                    max_days.append(max_)
+
             shipping_required = line.is_shipping_required()
             shipping_method_name = (
                 smart_text(self.shipping_method) if shipping_required
@@ -344,6 +354,9 @@ class Checkout:
 
         if self.note is not None and self.note:
             order.notes.create(user=order.user, content=self.note)
+
+        order.create_delivery_dates(min_days, max_days)
+        order.save()
 
         return order
 
