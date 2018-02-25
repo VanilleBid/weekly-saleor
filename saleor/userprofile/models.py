@@ -7,6 +7,9 @@ from django.utils.translation import pgettext_lazy
 from django_countries.fields import Country, CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 
+from django_webhooking.utils import register_model, Model as WebhookModel
+from django_webhooking.Embed import Embed
+
 from .validators import validate_possible_number
 
 
@@ -86,7 +89,8 @@ class UserManager(BaseUserManager):
             email, password, is_staff=True, is_superuser=True, **extra_fields)
 
 
-class User(PermissionsMixin, AbstractBaseUser):
+@register_model
+class User(PermissionsMixin, AbstractBaseUser, WebhookModel):
     email = models.EmailField(unique=True)
     addresses = models.ManyToManyField(Address, blank=True)
     is_staff = models.BooleanField(default=False)
@@ -125,3 +129,9 @@ class User(PermissionsMixin, AbstractBaseUser):
 
     def get_short_name(self):
         return self.email
+
+    def webhook_embed(self, created: bool):
+        if created:
+            embed = Embed(title='An account was created')
+            embed.set_author(name=self.get_full_name())
+            return embed

@@ -189,6 +189,7 @@ INSTALLED_APPS = [
     # External apps that need to go before django's
     'storages',
     'invoice_generator.apps.InvoiceGeneratorConfig',
+    'django_webhooking.apps.DjangoWebhooksConfig',
 
     # Django modules
     'django.contrib.contenttypes',
@@ -475,3 +476,19 @@ INVOICE_VENDOR = models.Vendor(
     additional_text=env_get_list('INVOICE_ADDITIONAL_TEXT', tuple()))
 
 SIREN_CODE = os.environ.get('SIREN_CODE', 'SR_00')
+
+WEBHOOK_HANDLERS = (
+    (
+        # Webhook Handler,  args,     events to push to it
+        'DiscordWebhook',
+        (os.environ.get('WEBHOOK_ORDER_DISCORD_URL'),),
+        ('saleor.order.models.Order',
+         'saleor.order.models.OrderNote',)
+    ),
+    (
+        # Webhook Handler,  args,     events to push to it
+        'DiscordWebhook',
+        (os.environ.get('WEBHOOK_USER_DISCORD_URL'),),
+        ('saleor.userprofile.models.User',)
+    ),
+)

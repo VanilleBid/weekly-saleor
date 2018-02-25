@@ -17,3 +17,14 @@ else:
         'default': dj_database_url.config(
             default='postgres://saleor:saleor@localhost:5432/saleor',
             conn_max_age=600)}
+
+WEBHOOK_HANDLERS = (
+    (
+        # Webhook Handler,  args,     events to push to it
+        'DummyWebhook',
+        ('WEBHOOK_KEY',),
+        ('saleor.order.models.Order',
+         'saleor.order.models.OrderNote',
+         'saleor.userprofile.models.User')
+    ),
+)

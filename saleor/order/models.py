@@ -18,6 +18,9 @@ from payments.models import BasePayment
 from prices import FixedDiscount, Price
 from satchless.item import ItemLine, ItemSet
 
+from django_webhooking.utils import register_model, Model as WebhookModel
+from django_webhooking.Embed import Embed
+
 from ..core.utils.billing import get_tax_price, float_rate_to_percentage
 from ..core.utils import build_absolute_uri
 from ..discount.models import Voucher
@@ -40,7 +43,8 @@ class OrderQuerySet(models.QuerySet):
         return self.filter(~Q(groups__status=GroupStatus.NEW))
 
 
-class Order(models.Model, ItemSet):
+@register_model
+class Order(models.Model, ItemSet, WebhookModel):
     created = models.DateTimeField(
         default=now, editable=False)
     last_status_change = models.DateTimeField(
@@ -256,6 +260,12 @@ class Order(models.Model, ItemSet):
     def can_cancel(self):
         return self.status == OrderStatus.OPEN
 
+    def webhook_embed(self, created: bool):
+        if created:
+            embed = Embed(title='An order was done')
+            embed.set_author(name=self.get_user_current_email())
+            return embed
+
 
 class DeliveryGroup(models.Model, ItemSet):
     """Represents a single shipment.
@@ -420,7 +430,8 @@ class OrderHistoryEntry(models.Model):
         ordering = ('date', )
 
 
-class OrderNote(models.Model):
+@register_model
+class OrderNote(models.Model, WebhookModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, blank=True, null=True,
         on_delete=models.SET_NULL)
@@ -432,3 +443,10 @@ class OrderNote(models.Model):
 
     class Meta:
         ordering = ('date', )
+
+    def webhook_embed(self, created: bool):
+        if created and self.user:
+            embed = Embed(
+                title='A note was added', description=self.content[:500])
+            embed.set_author(name=self.user.get_full_name())
+            return embed
