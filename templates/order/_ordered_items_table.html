@@ -1,10 +1,11 @@
 {% load i18n %}
 {% load i18n_address_tags %}
-{% load gross from prices_i18n %}
+{% load prices_i18n %}
 {% load discount_amount_for from prices %}
 {% load product_first_image from product_images %}
 {% load discount_as_negative from voucher %}
 {% load placeholder %}
+{% load prices_utils %}
 
 
 {% if order.user == user %}
@@ -41,7 +42,7 @@
     </div>
     <div class="col-md-3 text-right">
       <small>
-        {% trans "Price" context "Order details column title" %}
+        {% trans "Price per Unit (excl. VAT)" context "Order details column title" %}
       </small>
     </div>
   </div>
@@ -53,8 +54,8 @@
       <div class="row">
         <div class="col-md-6 col-9">
           <a class="link--clean" href="{% if item_line.product %}{{ item_line.product.get_absolute_url }}{% endif %}">
-            <img data-src="{% product_first_image item_line.product size="60x60" method="crop" %}"
-                 data-srcset="{% product_first_image item_line.product size="60x60" method="crop" %} 1x, {% product_first_image item_line.product size="120x120" method="crop" %} 2x"
+            <img data-src="{% product_first_image item_line.product size="60x60" method="fit" %}"
+                 data-srcset="{% product_first_image item_line.product size="60x60" method="fit" %} 1x, {% product_first_image item_line.product size="120x120" method="fit" %} 2x"
                  class="float-left lazyload lazypreload"
                  src="{% placeholder size=60 %}">
             <span class="order-details__product__description">{{ item_line.product_name }}</span>
@@ -66,7 +67,7 @@
               <p class="float-right">x {{ item_line.quantity }}</p>
             </div>
             <div class="col-md-6 col-12">
-              <p class="float-right">{% gross item_line.get_total html=True %}</p>
+              <p class="float-right">{% format_price item_line.unit_price_net html=True %}</p>
             </div>
           </div>
         </div>
@@ -104,26 +105,11 @@
         </p>
       </div>
       <div class="col-4">
-        <p class="float-right">{% gross order.shipping_price html=True %}</p>
+        <p class="float-right">{% net order.shipping_price html=True %}</p>
       </div>
     </div>
   </div>
 {% endif %}
-
-  <div class="table__row">
-    <div class="row">
-      <div class="col-8 order-details__table-footer">
-        <p>
-          {% trans "Tax" context "Order total tax price header" %}
-        </p>
-      </div>
-      <div class="col-4">
-        <p class="float-right">
-          {% gross order.total_tax html=True %}
-        </p>
-      </div>
-    </div>
-  </div>
 
 {% if order.discount_amount %}
 <div class="table__row">
@@ -138,11 +124,26 @@
 </div>
 {% endif %}
 
+  <div class="table__row">
+    <div class="row">
+      <div class="col-8 order-details__table-footer">
+        <p>
+          {% trans "Tax" context "Order total tax price header" %}
+        </p>
+      </div>
+      <div class="col-4">
+        <p class="float-right">
+          {% gross order.total_tax html=True %} ({{ order.tax_rate }}%)
+        </p>
+      </div>
+    </div>
+  </div>
+
 <div class="order-details__total">
   <div class="row">
     <div class="col-8 order-details__table-footer">
       <div class="total">
-        <h3>{% trans "Total" context "Order details total text" %}</h3>
+        <h3>{% trans "Total (with VAT)" context "Order details total text" %}</h3>
       </div>
     </div>
     <div class="col-4">

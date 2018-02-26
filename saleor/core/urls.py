@@ -14,6 +14,8 @@ urlpatterns = [
         name='impersonate-stop'),
     url(r'^404', views.handle_404, name='handle-404'),
     url(r'^manifest\.json$', views.manifest, name='manifest'),
+    url(r'^pages/privacy/$', views.privacy_policy, name='privacy-policy'),
+    url(r'^pages/contract/$', views.selling_contract, name='selling-contract')
 ]
 
 if settings.DEBUG:

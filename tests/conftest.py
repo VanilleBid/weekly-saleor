@@ -325,6 +325,24 @@ def product_list(product_type, default_category):
 
 
 @pytest.fixture
+def variant_list(product_list):
+    res = []
+    product_type = product_list[0].product_type
+
+    variant_attr = product_type.variant_attributes.first()
+    variant_attr_value = variant_attr.values.first()
+    variant_attributes = {
+        smart_text(variant_attr.pk): smart_text(variant_attr_value.pk)}
+
+    for i, product in enumerate(product_list):
+        variant = ProductVariant.objects.create(
+            product=product, sku='sku-%d' % i, attributes=variant_attributes)
+        res.append(variant)
+
+    return res
+
+
+@pytest.fixture
 def order_list(admin_user, billing_address):
     data = {
         'billing_address': billing_address, 'user': admin_user,
@@ -383,6 +401,15 @@ def product_with_images(product_type, default_category):
 @pytest.fixture
 def anonymous_checkout():
     return Checkout((), AnonymousUser(), 'tracking_code')
+
+
+@pytest.fixture
+def checkout(request_cart, customer_user, billing_address, shipping_method):
+    res = Checkout(request_cart, customer_user, 'tracking_code')
+    customer_user.default_shipping_address = billing_address
+    customer_user.default_billing_address = billing_address
+    customer_user.save()
+    return res
 
 
 @pytest.fixture

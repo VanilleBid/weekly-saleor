@@ -1,15 +1,40 @@
 import ast
 import os.path
 import platform
+from datetime import timedelta
 
 import dj_database_url
 import dj_email_url
 from django.contrib.messages import constants as messages
 import django_cache_url
+from invoice_generator import models
 
 
 def get_list(text):
     return [item.strip() for item in text.split(',')]
+
+
+def env_get_list(key, default=None):
+    res = []
+    line = ''
+
+    if key not in os.environ:
+        return default
+
+    text = os.environ[key]
+
+    def _append():
+        res.append(line)
+
+    prev_char = None
+    for c in text:
+        if c == ';' and prev_char != '\\':
+            _append()
+            line = ''
+        else:
+            line += c
+    _append()
+    return res
 
 
 def env_get_or_get(key, default_obj: dict, default_obj_key=None):
@@ -58,6 +83,9 @@ DATABASES = {
 DEFAULT_TAX_RATE_COUNTRY = 'FR'
 FALLBACK_TAX_RATE = 0.20
 
+MAX_DELIVERY_DAYS = 21
+MIN_DELIVERY_DAYS = 14
+
 TIME_ZONE = 'Europe/Paris'
 LANGUAGE_CODE = 'fr'
 LOCALE_PATHS = [os.path.join(PROJECT_ROOT, 'locale')]
@@ -92,6 +120,8 @@ ORDER_FROM_EMAIL = os.getenv('ORDER_FROM_EMAIL', DEFAULT_FROM_EMAIL)
 
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
+
+REAL_STATIC_ROOT = os.path.join(PROJECT_ROOT, 'saleor', 'static')
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
@@ -137,7 +167,7 @@ TEMPLATES = [{
         'string_if_invalid': '<< MISSING VARIABLE "%s" >>' if DEBUG else ''}}]
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = "Secret"  # FIXME
+SECRET_KEY = os.environ.get('SECRET_KEY', 'secret')
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -158,6 +188,8 @@ MIDDLEWARE = [
 INSTALLED_APPS = [
     # External apps that need to go before django's
     'storages',
+    'invoice_generator.apps.InvoiceGeneratorConfig',
+    'django_webhooking.apps.DjangoWebhooksConfig',
 
     # Django modules
     'django.contrib.contenttypes',
@@ -319,9 +351,12 @@ AWS_QUERYSTRING_AUTH = ast.literal_eval(
     os.environ.get('AWS_QUERYSTRING_AUTH', 'False'))
 
 if AWS_STORAGE_BUCKET_NAME:
+    if 'AWS_STATIC_CUSTOM_DOMAIN' in os.environ:
+        AWS_S3_CUSTOM_DOMAIN = os.environ['AWS_STATIC_CUSTOM_DOMAIN']
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 if AWS_MEDIA_BUCKET_NAME:
+    AWS_MEDIA_CUSTOM_DOMAIN = os.environ.get('AWS_MEDIA_CUSTOM_DOMAIN')
     DEFAULT_FILE_STORAGE = 'saleor.core.storages.S3MediaStorage'
     THUMBNAIL_DEFAULT_STORAGE = DEFAULT_FILE_STORAGE
 
@@ -426,3 +461,37 @@ IMPERSONATE = {
     'CUSTOM_USER_QUERYSET': 'saleor.userprofile.impersonate.get_impersonatable_users',  # noqa
     'USE_HTTP_REFERER': True,
     'CUSTOM_ALLOW': 'saleor.userprofile.impersonate.can_impersonate'}
+
+# Invoice data about the vendor
+INVOICE_VENDOR_ADDRESS = models.Address(
+    name=os.environ.get('INVOICE_VENDOR_NAME', 'Mirumee Software'),
+    street=os.environ.get('INVOICE_VENDOR_STREET', 'Tęczowa 7'),
+    postcode=os.environ.get('INVOICE_VENDOR_POSTCODE', '53-601'),
+    city=os.environ.get('INVOICE_VENDOR_CITY', 'Wrocław'))
+
+INVOICE_EXECUTIVE = models.Executive(
+    os.environ.get('INVOICE_EXECUTIVE_NAME', 'John Doe'),
+    os.environ.get('INVOICE_EXECUTIVE_TEXT', '\\a'))
+
+INVOICE_VENDOR = models.Vendor(
+    INVOICE_EXECUTIVE, address=INVOICE_VENDOR_ADDRESS,
+    vat_number=os.environ.get('INVOICE_VAT_NUMBER', 'PL00000000000'),
+    additional_text=env_get_list('INVOICE_ADDITIONAL_TEXT', tuple()))
+
+SIREN_CODE = os.environ.get('SIREN_CODE', 'SR_00')
+
+WEBHOOK_HANDLERS = (
+    (
+        # Webhook Handler,  args,     events to push to it
+        'DiscordWebhook',
+        (os.environ.get('WEBHOOK_ORDER_DISCORD_URL'),),
+        ('saleor.order.models.Order',
+         'saleor.order.models.OrderNote',)
+    ),
+    (
+        # Webhook Handler,  args,     events to push to it
+        'DiscordWebhook',
+        (os.environ.get('WEBHOOK_USER_DISCORD_URL'),),
+        ('saleor.userprofile.models.User',)
+    ),
+)

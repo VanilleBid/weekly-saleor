@@ -22,10 +22,11 @@ def get_thumbs(path):
         ref = ''
 
         for pos, char in enumerate(f_upper):
-            if char in '., ':
+            if char in '.,_ ':
                 break
             ref += char
 
+        ref = ref.strip('-')
         res.setdefault(ref, []).append(f)
 
     return res

@@ -1,65 +1,119 @@
 <mj-section css-class="no-display">
   <mj-column>
     <mj-text>
-      {% load gross from prices_i18n %}
+      {% load prices_i18n %}
     </mj-text>
   </mj-column>
 </mj-section>
+
 <mj-section>
   <mj-column>
     <mj-table>
-      <tfoot>
-        <tr>
-          <td colspan="3" style="text-align: right;">
-            {% trans "Subtotal" context "E-mail order lines summary table" %}
-          </td>
-          <td style="text-align: right;">
-            {% gross order.get_subtotal_without_voucher html=True %}
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" style="text-align: right;">
-            {% trans "Shipping" context "E-mail order lines summary table" %}
-          </td>
-          <td style="text-align: right;">
-            {% gross order.shipping_price html=True %}
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" style="text-align: right;">
-            {% trans "VAT" context "E-mail order lines summary table" %}
-          </td>
-          <td style="text-align: right;">
-            {% gross order.total_tax html=True %}
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" style="text-align: right;">
-            <strong>{% trans "Total" context "E-mail order lines summary table" %}</strong>
-          </td>
-          <td style="text-align: right;">
-            <strong>{% gross order.get_total html=True %}</strong>
-          </td>
-        </tr>
-      </tfoot>
+      <tr>
+        <td colspan="4" style="text-align: right;">
+          {% trans "Invoice" context "Invoice identifier" %}
+        </td>
+        <td style="text-align: right;">
+          #{{ order.id }}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4" style="text-align: right;">
+          {% trans "Date" context "Order date" %}
+        </td>
+        <td style="text-align: right;">
+          {{ order.created|date:"DATETIME_FORMAT" }}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4" style="text-align: right;">
+          {% trans "Estimated delivery date" context "Arrival date" %}
+        </td>
+        <td style="text-align: right;">
+          {% blocktrans with shipping_date=order.shipping_date %}Around {{ shipping_date }}{% endblocktrans %}
+        </td>
+      </tr>
+    </mj-table>
+  </mj-column>
+</mj-section>
+
+<mj-section>
+  <mj-column>
+    <mj-table>
+      {% with total=order.get_total %}
+        <tfoot>
+          <tr>
+            <td colspan="4" style="text-align: right;">
+              {% trans "Subtotal (net)" context "E-mail order lines summary table" %}
+            </td>
+            <td style="text-align: right;">
+              {% net order.get_subtotal_without_voucher html=True %}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" style="text-align: right;">
+              {% trans "Shipping (net)" context "E-mail order lines summary table" %}
+            </td>
+            <td style="text-align: right;">
+              {% net order.shipping_price html=True %}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" style="text-align: right;">
+              <strong>{% trans "Total Net" context "E-mail order lines summary table" %}</strong>
+            </td>
+            <td style="text-align: right;">
+              <strong>{% net total html=True %}</strong>
+            </td>
+          </tr>
+          {% if order.discount_amount %}
+          <tr class="bold">
+            <td colspan="4" style="text-align: right;">
+              {% trans "Discounts" context "E-mail order lines summary table" %}
+            </td>
+            <td style="text-align: right;">
+              {% net order.discount_amount html=True %}
+            </td>
+          </tr>
+          {% endif %}
+          <tr>
+            <td colspan="4" style="text-align: right;">
+              {% trans "Tax" context "E-mail order lines summary table" %}
+            </td>
+            <td style="text-align: right;">
+              {% gross order.total_tax html=True %} ({{ order.tax_rate }}%)
+            </td>
+          </tr>
+          <tr class="bold">
+            <td colspan="4" style="text-align: right;">
+              {% trans "Gross Total" context "E-mail order lines summary table" %}
+            </td>
+            <td style="text-align: right;">
+              {% gross total html=True %}
+            </td>
+          </tr>
+        </tfoot>
+      {% endwith %}
       <thead class="table-header-row">
         <tr>
+          <th>{% trans "Reference" context "E-mail order line summary header" %}</th>
           <th>{% trans "Item" context "E-mail order line summary header" %}</th>
           <th>{% trans "Quantity" context "E-mail order line summary header" %}</th>
-          <th>{% trans "Per unit" context "E-mail order line summary header" %}</th>
-          <th>{% trans "Subtotal" context "E-mail order line summary header" %}</th>
+          <th>{% trans "Per unit (net)" context "E-mail order line summary header" %}</th>
+          <th>{% trans "Subtotal (net)" context "E-mail order line summary header" %}</th>
         </tr>
       </thead>
       <tbody>
         {% for group in order.groups.all %}
           {% for line in group.lines.all %}
             <tr class="table-item-row">
+              <td>#{{ line.product.id }}</td>
               <td>{{ line.product_name }}</td>
-              <td style="text-align: right;">{{ line.quantity }}</td>
+              <td style="text-align: right;">x{{ line.quantity }}</td>
               <td style="text-align: right;">
-                {% gross line.get_price_per_item html=True %}
+                {% net line.get_price_per_item html=True %}
               </td>
-              <td style="text-align: right;">{% gross line.get_total %}</td>
+              <td style="text-align: right;">{% net line.get_total %}</td>
             </tr>
           {% endfor %}
         {% endfor %}

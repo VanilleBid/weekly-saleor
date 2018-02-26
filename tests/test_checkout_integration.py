@@ -40,9 +40,14 @@ def test_checkout_flow(request_cart_with_item, client, shipping_method):
 
     # Summary page asks for Billing address, default is the same as shipping
     address_data = {'address': 'shipping_address'}
-    summary_response = client.post(
-        shipping_method_response.request['PATH_INFO'], data=address_data,
-        follow=True)
+    request_url = shipping_method_response.request['PATH_INFO']
+    summary_response = client.post(request_url, data=address_data, follow=True)
+
+    assert summary_response.request['PATH_INFO'] == request_url
+
+    address_data['contract'] = 'on'
+    summary_response = client.post(request_url, data=address_data, follow=True)
+    assert 'order' in summary_response.context
 
     # After summary step, order is created and it waits for payment
     order = summary_response.context['order']
@@ -94,9 +99,17 @@ def test_checkout_flow_authenticated_user(
 
     # Summary page asks for Billing address, default is the same as shipping
     payment_method_data = {'address': 'shipping_address'}
+    request_url = shipping_method_response.request['PATH_INFO']
+
     payment_method_page = authorized_client.post(
-        shipping_method_response.request['PATH_INFO'],
-        data=payment_method_data, follow=True)
+        request_url, data=payment_method_data, follow=True)
+
+    assert payment_method_page.request['PATH_INFO'] == request_url
+
+    payment_method_data['contract'] = 'on'
+    payment_method_page = authorized_client.post(
+        request_url, data=payment_method_data, follow=True)
+    assert 'order' in payment_method_page.context
 
     # After summary step, order is created and it waits for payment
     order = payment_method_page.context['order']
@@ -193,7 +206,7 @@ def test_email_is_saved_in_order(
         follow=True)
 
     # Summary page asks for Billing address, default is the same as shipping
-    payment_method_data = {'address': 'shipping_address'}
+    payment_method_data = {'address': 'shipping_address', 'contract': 'on'}
     payment_method_page = authorized_client.post(
         shipping_method_response.request['PATH_INFO'],
         data=payment_method_data, follow=True)
@@ -247,7 +260,7 @@ def test_voucher_invalid(
     assert voucher_response.context['checkout'].voucher_code == voucher.code
     voucher.used = 3
     voucher.save()
-    address_data = {'address': 'shipping_address'}
+    address_data = {'address': 'shipping_address', 'contract': 'on'}
     assert url == reverse('checkout:summary')
     summary_response = client.post(url, data=address_data, follow=True)
     assert summary_response.context['checkout'].voucher_code is None
@@ -331,7 +344,7 @@ def test_language_is_saved_in_order(
         follow=True, HTTP_ACCEPT_LANGUAGE=user_language)
 
     # Summary page asks for Billing address, default is the same as shipping
-    payment_method_data = {'address': 'shipping_address'}
+    payment_method_data = {'address': 'shipping_address', 'contract': 'on'}
     payment_method_page = authorized_client.post(
         shipping_method_response.request['PATH_INFO'],
         data=payment_method_data, follow=True,

@@ -24,3 +24,17 @@ def filter_products_by_attribute(queryset, attribute_id, value):
 
 def assert_decimal(a, b, diff=0.0001):
     assert abs(a - b) < diff
+
+
+class SetValue(object):
+    def __init__(self, o, attr, value, default=None):
+        self.args = (o, attr, value)
+        self.old_args = (o, attr, getattr(o, attr, default))
+
+    def __enter__(self):
+        setattr(*self.args)
+        return self
+
+    def __exit__(self, *args):
+        setattr(*self.old_args)
+        return self

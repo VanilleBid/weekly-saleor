@@ -60,8 +60,11 @@ def get_taxed_total(request, cart):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
+    price, rate = get_tax_price(request, total=cart.get_total())
+
     resp = {
-        'gross': float(get_tax_price(request, total=cart.get_total()).gross)
+        'gross': float(price.gross),
+        'rate': rate
     }
     return JsonResponse(resp)
 

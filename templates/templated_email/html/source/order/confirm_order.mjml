@@ -23,6 +23,13 @@
               Thank you for your order. Below is the list of ordered products. To see your payment details please visit: <a href="{{ url }}">{{ url }}</a>
             {% endblocktrans %}
           </mj-text>
+          {% if order.shipping_required %}
+          <mj-text>
+            {% blocktrans with shipping_date=order.shipping_date|date max_shipping_date=order.max_shipping_date|date %}
+              Order should be available around {{ shipping_date }} ({{ max_shipping_date }} at worst).
+            {% endblocktrans %}
+          </mj-text>
+          {% endif %}
         </mj-column>
       </mj-section>
       <mj-include path="./partials/_order_lines" />
