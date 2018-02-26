@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load mptt_tags %}
 {% load staticfiles %}
+{% load get_thumbnail from product_images %}
 
 {% block title %}
   {% if category.pk %}
@@ -101,7 +102,7 @@
               </div>
             </div>
             <div class="row">
-              <img src="{{ form.image.value.thumbnail.400x400 }}" />
+              <img src="{% get_thumbnail form.image.value size="400x400" %}" />
             </div>
             <div class="row">
               {{ form.image|materializecss }}

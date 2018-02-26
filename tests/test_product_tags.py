@@ -4,9 +4,10 @@ from unittest.mock import Mock
 from PIL import Image, PyAccess
 from PIL.JpegImagePlugin import JpegImageFile
 from django.contrib.staticfiles.templatetags.staticfiles import static
+from versatileimagefield.versatileimagefield import FitImage
 
 from saleor.product.templatetags.product_images import (
-    choose_placeholder, get_thumbnail, product_first_image, ThumbnailImage)
+    choose_placeholder, get_thumbnail, product_first_image)
 
 
 def test_get_fill_crop_thumbnail():
@@ -17,7 +18,7 @@ def test_get_fill_crop_thumbnail():
 
     image.save(imagefile, format=image_format)
 
-    instance = ThumbnailImage(None, None, None)
+    instance = FitImage(None, None, None)
     cropped_file = instance.process_image(
         image, image_format, {'format': image_format}, *image_size)
 

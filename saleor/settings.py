@@ -167,7 +167,7 @@ TEMPLATES = [{
         'string_if_invalid': '<< MISSING VARIABLE "%s" >>' if DEBUG else ''}}]
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = "Secret"  # FIXME
+SECRET_KEY = os.environ.get('SECRET_KEY', 'secret')
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -351,9 +351,12 @@ AWS_QUERYSTRING_AUTH = ast.literal_eval(
     os.environ.get('AWS_QUERYSTRING_AUTH', 'False'))
 
 if AWS_STORAGE_BUCKET_NAME:
+    if 'AWS_STATIC_CUSTOM_DOMAIN' in os.environ:
+        AWS_S3_CUSTOM_DOMAIN = os.environ['AWS_STATIC_CUSTOM_DOMAIN']
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 if AWS_MEDIA_BUCKET_NAME:
+    AWS_MEDIA_CUSTOM_DOMAIN = os.environ.get('AWS_MEDIA_CUSTOM_DOMAIN')
     DEFAULT_FILE_STORAGE = 'saleor.core.storages.S3MediaStorage'
     THUMBNAIL_DEFAULT_STORAGE = DEFAULT_FILE_STORAGE
 

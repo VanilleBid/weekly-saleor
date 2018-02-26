@@ -1,5 +1,6 @@
 # pylint: disable=W0401, W0614
 from saleor.settings import *  # noqa
+import dj_database_url
 
 SECRET_KEY = 'NOTREALLY'
 

@@ -34,10 +34,7 @@ class Category(MPTTModel):
     objects = models.Manager()
     tree = TreeManager()
 
-    image = VersatileImageField(
-        upload_to='categories',
-        placeholder_image=OnDiscPlaceholderImage('.placeholder.jpg'),
-        blank=True)
+    image = VersatileImageField(upload_to='categories', blank=True)
 
     class Meta:
         app_label = 'product'
