@@ -5,7 +5,8 @@ from sys import version_info
 
 
 if not version_info > (3, 3):
-    raise Exception('This project requires a Python version greater or equal than 3.4.')
+    raise Exception(
+        'This project requires a Python version greater or equal than 3.4.')
 
 
 HERE = os.path.dirname(__file__)

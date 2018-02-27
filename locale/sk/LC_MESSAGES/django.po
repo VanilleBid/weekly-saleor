@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-21 04:26+0100\n"
+"POT-Creation-Date: 2018-02-26 12:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Stanislav Pavlovic <stanislav.pavlovic@gmail.com>, 2017\n"
 "Language-Team: Slovak (https://www.transifex.com/mirumee/teams/34782/sk/)\n"
@@ -126,6 +126,11 @@ msgctxt "Billing form field label"
 msgid "Email"
 msgstr "Email"
 
+#: saleor/checkout/forms.py:126
+msgctxt "Contract accept checkbox"
+msgid "I read and I accept the selling contract"
+msgstr ""
+
 #: saleor/checkout/views/discount.py:62
 msgctxt "Checkout warning"
 msgid "This voucher has expired. Please review your checkout."
@@ -150,7 +155,7 @@ msgstr[0] "Našiel sa %(counter)d zhodný záznam"
 msgstr[1] "Našli sa %(counter)d zhodné záznamy"
 msgstr[2] "Našlo sa %(counter)d zhodných záznamov"
 
-#: saleor/core/views.py:36
+#: saleor/core/views.py:44
 msgctxt "Impersonation message"
 msgid "You are now logged as {}"
 msgstr "Ste prihlásený ako {}"
@@ -326,17 +331,17 @@ msgctxt "Order note"
 msgid "Add note to order"
 msgstr "Pridajte poznámku k objednávke"
 
-#: saleor/order/models.py:91
+#: saleor/order/models.py:95
 msgctxt "Permission description"
 msgid "Can view orders"
 msgstr "Môže prehliadať objednávky"
 
-#: saleor/order/models.py:93
+#: saleor/order/models.py:97
 msgctxt "Permission description"
 msgid "Can edit orders"
 msgstr "Môže upravovať objednávky"
 
-#: saleor/order/models.py:278
+#: saleor/order/models.py:288
 #, python-format
 msgctxt "Shipment group str"
 msgid "#%s"
@@ -455,52 +460,52 @@ msgctxt "Variant choice field label"
 msgid "%(variant_label)s - %(price)s"
 msgstr "%(variant_label)s - %(price)s"
 
-#: saleor/product/models.py:46
+#: saleor/product/models.py:43
 msgctxt "Permission description"
 msgid "Can view categories"
 msgstr "Môže prehliadať kategórie"
 
-#: saleor/product/models.py:48
+#: saleor/product/models.py:45
 msgctxt "Permission description"
 msgid "Can edit categories"
 msgstr "Môže upravovať kategórie"
 
-#: saleor/product/models.py:97
+#: saleor/product/models.py:94
 #, python-format
 msgid "This product is available within %(from)d to %(to)d days."
 msgstr ""
 
-#: saleor/product/models.py:100
+#: saleor/product/models.py:97
 #, python-format
 msgid "This product is available within %(from)d days."
 msgstr ""
 
-#: saleor/product/models.py:124
+#: saleor/product/models.py:121
 msgctxt "Permission description"
 msgid "Can view products"
 msgstr "Môže prehliadať produkty"
 
-#: saleor/product/models.py:126
+#: saleor/product/models.py:123
 msgctxt "Permission description"
 msgid "Can edit products"
 msgstr "Môže upravovať produkty"
 
-#: saleor/product/models.py:129
+#: saleor/product/models.py:126
 msgctxt "Permission description"
 msgid "Can view product properties"
 msgstr "Môže prehliadať vlastnosti produktov"
 
-#: saleor/product/models.py:132
+#: saleor/product/models.py:129
 msgctxt "Permission description"
 msgid "Can edit product properties"
 msgstr "Môže upravovať vlastnosti produktov"
 
-#: saleor/product/models.py:348
+#: saleor/product/models.py:345
 msgctxt "Permission description"
 msgid "Can view stock location"
 msgstr "Môže prehliadať naskladnenie"
 
-#: saleor/product/models.py:351
+#: saleor/product/models.py:348
 msgctxt "Permission description"
 msgid "Can edit stock location"
 msgstr "Môže upravovať naskladnenie"
@@ -713,37 +718,37 @@ msgctxt "Address form"
 msgid "This value is invalid for selected country"
 msgstr "Táto hodnota je pre vybranú krajinu neplatná"
 
-#: saleor/userprofile/models.py:109
+#: saleor/userprofile/models.py:113
 msgctxt "Permission description"
 msgid "Can view users"
 msgstr "Môže prehliadať používateľov"
 
-#: saleor/userprofile/models.py:111
+#: saleor/userprofile/models.py:115
 msgctxt "Permission description"
 msgid "Can edit users"
 msgstr "Môže upravovať používateľov"
 
-#: saleor/userprofile/models.py:113
+#: saleor/userprofile/models.py:117
 msgctxt "Permission description"
 msgid "Can view groups"
 msgstr "Môže prehliadať skupiny"
 
-#: saleor/userprofile/models.py:115
+#: saleor/userprofile/models.py:119
 msgctxt "Permission description"
 msgid "Can edit groups"
 msgstr "Môže upravovať skupiny"
 
-#: saleor/userprofile/models.py:117
+#: saleor/userprofile/models.py:121
 msgctxt "Permission description"
 msgid "Can view staff"
 msgstr "Môže prehliadať zamestnancov"
 
-#: saleor/userprofile/models.py:119
+#: saleor/userprofile/models.py:123
 msgctxt "Permission description"
 msgid "Can edit staff"
 msgstr "Môže editovať zamestnancov"
 
-#: saleor/userprofile/models.py:121
+#: saleor/userprofile/models.py:125
 msgctxt "Permission description"
 msgid "Can impersonate users"
 msgstr "Môže sa prihlasovať za užívateľov"
@@ -1072,6 +1077,16 @@ msgctxt "Main navigation item"
 msgid "Style guide"
 msgstr "Sprievodca štýlom"
 
+#: templates/base.html:265
+msgctxt "Main navigation item"
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/base.html:268
+msgctxt "Main navigation item"
+msgid "Selling Contract"
+msgstr ""
+
 #: templates/cart/_subtotal_table.html:9 templates/cart_dropdown.html:36
 #: templates/dashboard/order/detail.html:394
 msgctxt "Order subtotal"
@@ -1152,68 +1167,69 @@ msgctxt "Cart dropdown primary action"
 msgid "Checkout"
 msgstr "Dokončiť objednávku"
 
-#: templates/category/index.html:52
+#: templates/category/index.html:53
 msgctxt "Category breadcrumbs home"
 msgid "Home"
 msgstr "Domov"
 
-#: templates/category/index.html:71 templates/product/product_list_base.html:47
+#: templates/category/index.html:72 templates/product/product_list_base.html:47
 msgid "Sort by: <b>name</b>"
 msgstr ""
 
-#: templates/category/index.html:75 templates/product/product_list_base.html:51
+#: templates/category/index.html:76 templates/product/product_list_base.html:51
 msgid "Sort by: <b>price</b>"
 msgstr ""
 
-#: templates/category/index.html:94
+#: templates/category/index.html:95
 msgctxt "Category page filters"
 msgid "Sort by"
 msgstr "Zoradiť podľa"
 
-#: templates/category/index.html:99 templates/product/product_list_base.html:76
+#: templates/category/index.html:100
+#: templates/product/product_list_base.html:76
 msgctxt "sort by option"
 msgid "ascending"
 msgstr ""
 
-#: templates/category/index.html:105
+#: templates/category/index.html:106
 #: templates/product/product_list_base.html:82
 msgctxt "sort by option"
 msgid "descending"
 msgstr ""
 
-#: templates/category/index.html:134 templates/product/_filters.html:14
+#: templates/category/index.html:135 templates/product/_filters.html:14
 msgctxt "Filter heading title"
 msgid "Filters"
 msgstr ""
 
-#: templates/category/index.html:137
+#: templates/category/index.html:138
 msgctxt "Category page filters"
 msgid "Clear filters"
 msgstr ""
 
-#: templates/category/index.html:146 templates/category/index.html:192
+#: templates/category/index.html:147 templates/category/index.html:193
 msgctxt "Category price filter"
 msgid "Update"
 msgstr ""
 
-#: templates/category/index.html:171
+#: templates/category/index.html:172
 msgctxt "Category price filter"
 msgid "from"
 msgstr ""
 
-#: templates/category/index.html:173
+#: templates/category/index.html:174
 msgctxt "Category price filter"
 msgid "to"
 msgstr ""
 
-#: templates/category/index.html:217
+#: templates/category/index.html:218
 #: templates/product/product_list_base.html:124
 #: templates/search/results.html:34
 msgctxt "Search without results text"
 msgid "Sorry, no matches found for your request."
 msgstr "Je nám ľúto, žiadna zhoda nebola nájdená."
 
-#: templates/category/index.html:218
+#: templates/category/index.html:219
 #: templates/product/product_list_base.html:125
 #: templates/search/results.html:35
 msgctxt "Search without results text"
@@ -1360,12 +1376,20 @@ msgctxt "Checkout summary title"
 msgid "Billing address"
 msgstr "Fakturačná adresa"
 
-#: templates/checkout/summary.html:10
+#: templates/checkout/summary.html:13
+msgid "Selling Contract Acceptance"
+msgstr ""
+
+#: templates/checkout/summary.html:16
+msgid "Our selling contract"
+msgstr ""
+
+#: templates/checkout/summary.html:21
 msgctxt "Checkout summary note title"
 msgid "Add a note to your order"
 msgstr ""
 
-#: templates/checkout/summary.html:14
+#: templates/checkout/summary.html:25
 msgctxt "Checkout summary primary action"
 msgid "Order &amp Pay"
 msgstr "Objednať a zaplatiť"
@@ -1442,8 +1466,8 @@ msgstr "Produkty"
 #: templates/dashboard/base.html:114
 #: templates/dashboard/category/detail.html:33
 #: templates/dashboard/category/detail.html:39
-#: templates/dashboard/category/form.html:13
-#: templates/dashboard/category/form.html:32
+#: templates/dashboard/category/form.html:14
+#: templates/dashboard/category/form.html:33
 #: templates/dashboard/category/list.html:34
 msgctxt "Dashboard categories list"
 msgid "Categories"
@@ -1558,8 +1582,8 @@ msgstr "Verzia:"
 
 #: templates/dashboard/base_modal.html:23
 #: templates/dashboard/base_modal_confirm_delete.html:22
-#: templates/dashboard/category/form.html:113
-#: templates/dashboard/category/form.html:117
+#: templates/dashboard/category/form.html:114
+#: templates/dashboard/category/form.html:118
 #: templates/dashboard/customer/form.html:60
 #: templates/dashboard/customer/form.html:67
 #: templates/dashboard/discount/sale/form.html:96
@@ -1690,33 +1714,33 @@ msgctxt "Empty list of categories"
 msgid "No categories"
 msgstr ""
 
-#: templates/dashboard/category/form.html:9
+#: templates/dashboard/category/form.html:10
 msgctxt "Category form page title"
 msgid "Edit category"
 msgstr ""
 
-#: templates/dashboard/category/form.html:11
+#: templates/dashboard/category/form.html:12
 msgctxt "Category detail page title"
 msgid "Add new category"
 msgstr "Pridať novú kategóriu"
 
-#: templates/dashboard/category/form.html:24
+#: templates/dashboard/category/form.html:25
 msgctxt "Category form page title"
 msgid "Add new category"
 msgstr ""
 
-#: templates/dashboard/category/form.html:55
+#: templates/dashboard/category/form.html:56
 msgctxt "Category form page title"
 msgid "Edit"
 msgstr ""
 
-#: templates/dashboard/category/form.html:61
-#: templates/dashboard/category/form.html:77
+#: templates/dashboard/category/form.html:62
+#: templates/dashboard/category/form.html:78
 msgctxt "Category detail breadcrumbs"
 msgid "Add new category"
 msgstr "Pridať novú kategóriu"
 
-#: templates/dashboard/category/form.html:122
+#: templates/dashboard/category/form.html:123
 #: templates/dashboard/customer/form.html:63
 #: templates/dashboard/discount/sale/form.html:99
 #: templates/dashboard/discount/voucher/form.html:129
@@ -1731,7 +1755,7 @@ msgctxt "Dashboard update action"
 msgid "Update"
 msgstr "Aktualizovať"
 
-#: templates/dashboard/category/form.html:126
+#: templates/dashboard/category/form.html:127
 #: templates/dashboard/discount/sale/form.html:106
 #: templates/dashboard/discount/voucher/form.html:136
 #: templates/dashboard/product/form.html:124

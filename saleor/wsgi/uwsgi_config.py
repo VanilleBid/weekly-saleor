@@ -58,9 +58,7 @@ def main(host=None, listener_guid=None, listener_uid=None, **overrides):
         'master': True,
         'module': 'saleor.wsgi:application',
         'static-map': '/static=/app/static',
-        'thunder-lock': True,
-
-        'virtualenv': '/data/py3venv'
+        'thunder-lock': True
     }
 
     UWSGI_CONFIG.update(overrides)
@@ -76,5 +74,5 @@ def main(host=None, listener_guid=None, listener_uid=None, **overrides):
 
 if __name__ == '__main__':
     HOST = os.environ.get('HOST', '/tmp/uwsgi.sock')
-    output = main(host=HOST)
+    output = main(HOST, 'www-data', 'www-data')
     sys.stdout.write(serialize(output))
