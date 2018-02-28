@@ -59,6 +59,13 @@ def test_category_detail(admin_client, default_category):
     response = admin_client.post(url, follow=True)
     assert response.status_code == 200
 
+    expected_url = '{}?category={}'.format(
+        reverse('dashboard:product-list'), default_category.pk)
+
+    assert 'href="%s">' % expected_url in response.content.decode('utf-8')
+    response = admin_client.get(expected_url)
+    assert response.status_code == 200
+
 
 def test_category_delete(admin_client, default_category):
     assert len(Category.objects.all()) == 1
