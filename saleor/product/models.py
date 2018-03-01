@@ -8,6 +8,7 @@ from django.db import models
 from django.db.models import F, Max, Q
 from django.urls import reverse
 from django.utils.encoding import smart_text
+from django.utils.functional import cached_property
 from django.utils.text import slugify
 from django.utils.translation import pgettext_lazy, gettext_lazy
 from django_prices.models import Price, PriceField

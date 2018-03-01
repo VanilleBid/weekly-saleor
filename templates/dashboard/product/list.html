@@ -60,6 +60,7 @@
                 <label for="select-all-items"></label>
               </th>
               <th></th>
+              <th>{% trans "Variants" %}</th>
               {% trans "Name" context "Products list table header" as label %}
               {% sorting_header 'name' label is_wide=True %}
 
@@ -78,6 +79,13 @@
                 <img src="{% product_first_image product size="60x60" method="crop" %}"
                     srcset="{% product_first_image product size="60x60" method="crop" %} 1x, {% product_first_image product size="120x120" method="crop" %} 2x"
                     alt="">
+              </td>
+              <td>
+                <ul>
+                {% for variant in product.variants.all %}
+                    <li>{{ variant.sku }}</li>
+                {% endfor %}
+                </ul>
               </td>
               <td>
                 {{ product.name }}
