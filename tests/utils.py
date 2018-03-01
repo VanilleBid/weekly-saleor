@@ -26,6 +26,15 @@ def assert_decimal(a, b, diff=0.0001):
     assert abs(a - b) < diff
 
 
+def requires_login(client):
+    def _handler(fn):
+        def _call(_user, *args, **kwargs):
+            client.login(username=_user.email, password='password')
+            return fn(_user, *args, **kwargs)
+        return _call
+    return _handler
+
+
 class SetValue(object):
     def __init__(self, o, attr, value, default=None):
         self.args = (o, attr, value)

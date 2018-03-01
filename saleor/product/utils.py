@@ -15,16 +15,21 @@ from ..core.utils.filters import get_now_sorted_by
 from .forms import ProductForm
 
 
-def products_visible_to_user(user):
+def products_visible_to_user(user, staff_view_all=False):
     # pylint: disable=cyclic-import
     from .models import Product
-    if user.is_authenticated and user.is_active and user.is_staff:
+
+    if (staff_view_all
+            and user.is_authenticated
+            and user.is_staff
+            and user.is_active):
         return Product.objects.all()
+
     return Product.objects.available_products()
 
 
-def products_with_details(user):
-    products = products_visible_to_user(user)
+def products_with_details(user, staff_view_all=False):
+    products = products_visible_to_user(user, staff_view_all)
     products = products.prefetch_related(
         'category', 'images', 'variants__stock',
         'variants__variant_images__image', 'attributes__values',
