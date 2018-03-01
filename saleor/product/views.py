@@ -113,11 +113,14 @@ def category_index(request, path, category_id):
     if actual_path != path:
         return redirect('product:category', permanent=True, path=actual_path,
                         category_id=category_id)
-    products = products_with_details(user=request.user).filter(
-        category__id=category.id).order_by('name')
-    product_filter = ProductCategoryFilter(
-        request.GET, queryset=products, category=category)
-    ctx = get_product_list_context(request, product_filter)
+    ctx = {}
+
+    if category.is_leaf_node():
+        products = products_with_details(user=request.user).filter(
+            category__id=category.id).order_by('name')
+        product_filter = ProductCategoryFilter(
+            request.GET, queryset=products, category=category)
+        ctx = get_product_list_context(request, product_filter)
     ctx.update({'object': category})
     return TemplateResponse(request, 'category/index.html', ctx)
 

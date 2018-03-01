@@ -7,7 +7,7 @@ from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.encoding import smart_text
 
-from saleor.product.models import Product, ProductVariant, Stock, StockLocation
+from saleor.product.models import Product, ProductVariant, Stock, StockLocation, Category
 from tests.utils import filter_products_by_attribute
 
 from saleor.cart import CartStatus, utils
@@ -453,6 +453,36 @@ def test_variant_availability_status(unavailable_product):
     stock.save()
     status = get_variant_availability_status(variant)
     assert status == VariantAvailabilityStatus.AVAILABLE
+
+
+def test_product_leaf_category(
+        authorized_client, product_in_stock, default_category: Category):
+
+    root_category = Category.objects.create(name='root', slug='root')
+    default_category.parent = root_category
+    default_category.save()
+
+    def _get_products(_category):
+        _url = reverse(
+            'product:category',
+            kwargs={
+                'path': _category.get_full_path(),
+                'category_id': _category.pk
+            })
+        _resp = authorized_client.get(_url)
+
+        assert _resp.status_code == 200
+        return _resp
+
+    # non-leaf category (no products must be returned)
+    response = _get_products(root_category)
+    assert 'filter_set' not in response.context
+
+    # leaf category (products must be returned)
+    products = models.Product.objects.all().filter(
+        category__name=default_category).order_by('-price')
+    response = _get_products(default_category)
+    assert list(products) == list(response.context['filter_set'].qs)
 
 
 def test_product_filter_before_filtering(
