@@ -96,7 +96,7 @@ def test_signup_form_user_exists(customer_user):
     data = {'email': customer_user.email, 'password': 'password'}
     form = SignupForm(data)
     assert not form.is_valid()
-    error_message = 'User with this Email already exists.'
+    error_message = form.fields['email'].error_messages['unique']
     assert form.errors['email'] == [error_message]
 
 
