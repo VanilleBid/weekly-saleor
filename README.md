@@ -1,6 +1,12 @@
 [![Saleor](http://getsaleor.com/mr-saleor-readme.png)](http://getsaleor.com)
 
 
+![](https://i2.wp.com/patricealbertus.ch/wp-content/uploads/sites/5/2014/08/browserstack-logo-600x315.png?fit=600%2C315&ssl=1)
+
+A big thanks to browserstack.com for their emulation tools for the front end. Which allows us to test on iPhones without having to have any apple products.
+We are also planning on implementing automatic tests thanks to theirs tools as soon as possible. Stay tuned.
+
+
 Saleor
 ======
 
