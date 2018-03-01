@@ -495,3 +495,5 @@ WEBHOOK_HANDLERS = (
         ('saleor.userprofile.models.User',)
     ),
 )
+
+CSRF_FAILURE_VIEW = 'saleor.core.views.csrf_failure'

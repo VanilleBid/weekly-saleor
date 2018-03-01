@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Session expired." %}
+{% endblock %}
+
+{% block stylesheet %}
+  <style>
+    .footer { margin-top: 0 }
+    .maincontent , #csrf {
+      display: flex;
+      align-items: center;
+    }
+    #csrf { flex-direction: column; padding: 1.5rem 0 }
+    #csrf ul:first-child { font-weight: bold; }
+    #csrf ul { margin-top: 1.5rem; }
+  </style>
+{% endblock %}
+
+{% block content %}
+
+  <div id="csrf">
+    <h2>{% trans "Sorry, your session expired or something is wrong. Please try again." %}</h2>
+    <p>{% trans "If this error persists, please check if cookies are enabled and if HTTP referers are enabled." %}</p>
+
+    <div class="small">
+      <ul>
+        <li>
+          {% blocktrans %}
+          This website requires a CSRF cookie when submitting forms.
+          This cookie is required for security reasons,
+          to ensure that your browser is not being hijacked by third parties.
+          {% endblocktrans %}
+        </li>
+
+        <li>
+          {% blocktrans %}
+          If you have configured your browser to disable cookies,
+          please re-enable them, at least for this site, or for 'same-origin' requests.
+          {% endblocktrans %}
+        </li>
+      </ul>
+
+      <ul>
+        <li>
+          {% blocktrans %}
+          You may also be seeing this message because this site requires a 'Referer header' to be sent by your Web browser,
+          but none may have been sent. This header is required for security reasons,
+          to ensure that your browser is not being hijacked by third parties.
+          {% endblocktrans %}
+        </li>
+
+        <li>
+          {% blocktrans %}
+          If you have configured your browser to disable 'Referer' headers, please re-enable them, at least for this site,
+          or for HTTPS connections, or for 'same-origin' requests.
+          {% endblocktrans %}
+        </li>
+      </ul>
+    </div>
+  </div>
+{% endblock %}

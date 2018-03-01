@@ -3,7 +3,7 @@ from unittest.mock import Mock
 import pytest
 from decimal import Decimal
 from django.shortcuts import reverse
-from django.test import RequestFactory
+from django.test import RequestFactory, Client
 from prices import Price
 
 from saleor import settings
@@ -257,3 +257,10 @@ def test_get_selling_contract(client):
     response = client.get(reverse('selling-contract'))
     assert response.status_code == 200
     assert b'Selling Contract' in response.content
+
+
+def test_csrf_view():
+    url = reverse('account_signup')
+    client = Client(enforce_csrf_checks=True)
+    response = client.post(url)
+    assert response.status_code == 403
