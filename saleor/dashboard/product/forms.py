@@ -282,6 +282,11 @@ class ProductImageForm(forms.ModelForm):
         if self.instance.image:
             self.fields['image'].widget = ImagePreviewWidget()
 
+    def save(self, commit=True):
+        instance = super(ProductImageForm, self).save(commit)
+        self.instance.create_product_thumbnails.delay(instance)
+        return instance
+
 
 class VariantImagesSelectForm(forms.Form):
     images = forms.ModelMultipleChoiceField(
@@ -380,6 +385,11 @@ class UploadImageForm(forms.ModelForm):
         product = kwargs.pop('product')
         super().__init__(*args, **kwargs)
         self.instance.product = product
+
+    def save(self, commit=True):
+        instance = super(UploadImageForm, self).save(commit)
+        self.instance.create_product_thumbnails.delay(instance)
+        return instance
 
 
 class ProductBulkUpdate(forms.Form):

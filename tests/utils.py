@@ -1,7 +1,20 @@
 from urllib.parse import urlparse
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import Q
 from django.utils.encoding import smart_text
+from PIL import Image
+from io import BytesIO
+
+
+def create_image():
+    img_data = BytesIO()
+    image = Image.new('RGB', size=(1, 1), color=(255, 0, 0, 0))
+    image.save(img_data, format='JPEG')
+    image_name = 'product2'
+    image = SimpleUploadedFile(
+        image_name + '.jpg', img_data.getvalue(), 'image/png')
+    return image, image_name
 
 
 def get_url_path(url):

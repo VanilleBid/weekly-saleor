@@ -1,6 +1,7 @@
 import datetime
 from decimal import Decimal
 
+from celery import shared_task
 from django.conf import settings
 from django.contrib.postgres.fields import HStoreField
 from django.core.validators import MinValueValidator, RegexValidator
@@ -8,7 +9,6 @@ from django.db import models
 from django.db.models import F, Max, Q
 from django.urls import reverse
 from django.utils.encoding import smart_text
-from django.utils.functional import cached_property
 from django.utils.text import slugify
 from django.utils.translation import pgettext_lazy, gettext_lazy
 from django_prices.models import Price, PriceField
@@ -18,8 +18,8 @@ from prices import PriceRange
 from satchless.item import InsufficientStock, Item, ItemRange
 from text_unidecode import unidecode
 from versatileimagefield.fields import PPOIField, VersatileImageField
-from versatileimagefield.placeholder import OnDiscPlaceholderImage
 
+from ..core.utils.warmer import ProductWarmer, CategoryWarmer
 from ..discount.utils import calculate_discounted_price
 from .utils import get_attributes_display_map
 
@@ -47,6 +47,10 @@ class Category(MPTTModel):
 
     def __str__(self):
         return self.name
+
+    @shared_task
+    def create_category_thumbnails(self):
+        CategoryWarmer(items=[self])()
 
     def get_absolute_url(self, ancestors=None):
         return reverse('product:category',
@@ -428,6 +432,10 @@ class ProductImage(models.Model):
     class Meta:
         ordering = ('order', )
         app_label = 'product'
+
+    @shared_task
+    def create_product_thumbnails(self):
+        ProductWarmer(items=[self])()
 
     def get_ordering_queryset(self):
         return self.product.images.all()

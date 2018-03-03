@@ -359,17 +359,19 @@ if AWS_MEDIA_BUCKET_NAME:
     AWS_MEDIA_CUSTOM_DOMAIN = os.environ.get('AWS_MEDIA_CUSTOM_DOMAIN')
     DEFAULT_FILE_STORAGE = 'saleor.core.storages.S3MediaStorage'
     THUMBNAIL_DEFAULT_STORAGE = DEFAULT_FILE_STORAGE
+else:
+    THUMBNAIL_DEFAULT_STORAGE = None
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
     'defaults': [
-        ('product_gallery', 'crop__540x540'),
-        ('product_gallery_2x', 'crop__1080x1080'),
-        ('product_small', 'crop__60x60'),
-        ('product_small_2x', 'crop__120x120'),
-        ('product_list', 'crop__255x255'),
-        ('product_list_2x', 'crop__510x510')]}
+        ('product_gallery', 'fit__540x540'),
+        ('product_gallery_2x', 'fit__1080x1080'),
+        ('product_small', 'fit__60x60'),
+        ('product_small_2x', 'fit__120x120'),
+        ('product_list', 'fit__255x255'),
+        ('product_list_2x', 'fit__510x510')]}
 
 VERSATILEIMAGEFIELD_SETTINGS = {
     # Images should be pre-generated on Production environment
