@@ -2,13 +2,13 @@
 # Copyright (C) 2017 Mirumee Software
 # This file is distributed under the same license as the Saleor package.
 # Mirumee Software <hello@mirumee.com>, 2017.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-26 12:51+0100\n"
+"POT-Creation-Date: 2018-02-21 01:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: NyаnKiyoshi <hello@vanille.bid>, 2018\n"
 "Language-Team: French (https://www.transifex.com/none-550/teams/83741/fr/)\n"
@@ -125,11 +125,6 @@ msgctxt "Billing form field label"
 msgid "Email"
 msgstr "Courriel"
 
-#: saleor/checkout/forms.py:126
-msgctxt "Contract accept checkbox"
-msgid "I read and I accept the selling contract"
-msgstr "J'ai lu et j'accept les conditions générales de vente"
-
 #: saleor/checkout/views/discount.py:62
 msgctxt "Checkout warning"
 msgid "This voucher has expired. Please review your checkout."
@@ -153,7 +148,7 @@ msgid_plural "Found %(counter)d matching records"
 msgstr[0] "%(counter)d entrée trouvée"
 msgstr[1] "%(counter)d entrées trouvées"
 
-#: saleor/core/views.py:44
+#: saleor/core/views.py:36
 msgctxt "Impersonation message"
 msgid "You are now logged as {}"
 msgstr "Vous êtes désormais connecté en tant que {}"
@@ -332,17 +327,17 @@ msgctxt "Order note"
 msgid "Add note to order"
 msgstr "Ajouter une note à la commande"
 
-#: saleor/order/models.py:95
+#: saleor/order/models.py:91
 msgctxt "Permission description"
 msgid "Can view orders"
 msgstr "Peut voir les commandes"
 
-#: saleor/order/models.py:97
+#: saleor/order/models.py:93
 msgctxt "Permission description"
 msgid "Can edit orders"
 msgstr "Peut modifier les commandes"
 
-#: saleor/order/models.py:288
+#: saleor/order/models.py:278
 #, python-format
 msgctxt "Shipment group str"
 msgid "#%s"
@@ -464,52 +459,52 @@ msgctxt "Variant choice field label"
 msgid "%(variant_label)s - %(price)s"
 msgstr "%(variant_label)s - %(price)s"
 
-#: saleor/product/models.py:43
+#: saleor/product/models.py:46
 msgctxt "Permission description"
 msgid "Can view categories"
 msgstr "Peut voir les catégories"
 
-#: saleor/product/models.py:45
+#: saleor/product/models.py:48
 msgctxt "Permission description"
 msgid "Can edit categories"
 msgstr "Peut modifier les catégories"
 
-#: saleor/product/models.py:94
+#: saleor/product/models.py:97
 #, python-format
 msgid "This product is available within %(from)d to %(to)d days."
 msgstr "Ce produit est disponible sous %(from)d à %(to)d jours."
 
-#: saleor/product/models.py:97
+#: saleor/product/models.py:100
 #, python-format
 msgid "This product is available within %(from)d days."
 msgstr "Ce produit est disponible sous %(from)d jours."
 
-#: saleor/product/models.py:121
+#: saleor/product/models.py:124
 msgctxt "Permission description"
 msgid "Can view products"
 msgstr "Peut voir les produits"
 
-#: saleor/product/models.py:123
+#: saleor/product/models.py:126
 msgctxt "Permission description"
 msgid "Can edit products"
 msgstr "Peut modifier les produits"
 
-#: saleor/product/models.py:126
+#: saleor/product/models.py:129
 msgctxt "Permission description"
 msgid "Can view product properties"
 msgstr "Peut voir les propriétés des produits"
 
-#: saleor/product/models.py:129
+#: saleor/product/models.py:132
 msgctxt "Permission description"
 msgid "Can edit product properties"
 msgstr "Peut modifier les propriétés des produits"
 
-#: saleor/product/models.py:345
+#: saleor/product/models.py:352
 msgctxt "Permission description"
 msgid "Can view stock location"
 msgstr "Peut voir les localisations des stocks"
 
-#: saleor/product/models.py:348
+#: saleor/product/models.py:355
 msgctxt "Permission description"
 msgid "Can edit stock location"
 msgstr "Peut modifier les localisations des stocks"
@@ -531,11 +526,11 @@ msgstr "Mot de passe"
 
 #: saleor/registration/views.py:25
 msgid "You have been successfully logged out."
-msgstr "Vous vous êtes bien déconnecté."
+msgstr "Vous avez bien été déconnecté."
 
 #: saleor/registration/views.py:39
 msgid "User has been created"
-msgstr "L'utilisateur à été crée"
+msgstr "L'utilisateur a été crée"
 
 #: saleor/search/forms.py:9
 msgctxt "Search form label"
@@ -722,37 +717,37 @@ msgctxt "Address form"
 msgid "This value is invalid for selected country"
 msgstr "Cette valeur est incorrecte pour le pays choisi"
 
-#: saleor/userprofile/models.py:113
+#: saleor/userprofile/models.py:109
 msgctxt "Permission description"
 msgid "Can view users"
 msgstr "Peut voir les utilisateurs"
 
-#: saleor/userprofile/models.py:115
+#: saleor/userprofile/models.py:111
 msgctxt "Permission description"
 msgid "Can edit users"
 msgstr "Peut modifier les utilisateurs"
 
-#: saleor/userprofile/models.py:117
+#: saleor/userprofile/models.py:113
 msgctxt "Permission description"
 msgid "Can view groups"
 msgstr "Peut voir les groupes"
 
-#: saleor/userprofile/models.py:119
+#: saleor/userprofile/models.py:115
 msgctxt "Permission description"
 msgid "Can edit groups"
 msgstr "Peut modifier les groupes"
 
-#: saleor/userprofile/models.py:121
+#: saleor/userprofile/models.py:117
 msgctxt "Permission description"
 msgid "Can view staff"
 msgstr "Peut voir l'équipe"
 
-#: saleor/userprofile/models.py:123
+#: saleor/userprofile/models.py:119
 msgctxt "Permission description"
 msgid "Can edit staff"
 msgstr "Peut modifier l'équipe"
 
-#: saleor/userprofile/models.py:125
+#: saleor/userprofile/models.py:121
 msgctxt "Permission description"
 msgid "Can impersonate users"
 msgstr "Peut se faire passer pour certain clients"
@@ -780,17 +775,17 @@ msgstr "Le numéro de téléphone que vous avez entré est invalide."
 #: saleor/userprofile/views.py:34
 msgctxt "Storefront message"
 msgid "Password successfully changed."
-msgstr "Mot de passe bien mis à jour"
+msgstr "Votre mot de passe a bien été mis à jour"
 
 #: saleor/userprofile/views.py:47
 msgctxt "Storefront message"
 msgid "Address successfully updated."
-msgstr "Adresse bien mise à jour"
+msgstr "Votre courriel a bien été mis à jour"
 
 #: saleor/userprofile/views.py:62
 msgctxt "Storefront message"
 msgid "Address successfully removed"
-msgstr "L'adresse a été supprimée"
+msgstr "L'adresse a bien été supprimée"
 
 #: templates/404.html:6
 msgctxt "Eror page not found"
@@ -1084,16 +1079,6 @@ msgctxt "Main navigation item"
 msgid "Style guide"
 msgstr "Guide stylistique"
 
-#: templates/base.html:265
-msgctxt "Main navigation item"
-msgid "Privacy Policy"
-msgstr "Vie Privée"
-
-#: templates/base.html:268
-msgctxt "Main navigation item"
-msgid "Selling Contract"
-msgstr "Contract de Vente"
-
 #: templates/cart/_subtotal_table.html:9 templates/cart_dropdown.html:36
 #: templates/dashboard/order/detail.html:394
 msgctxt "Order subtotal"
@@ -1174,71 +1159,71 @@ msgctxt "Cart dropdown primary action"
 msgid "Checkout"
 msgstr "Paiement"
 
-#: templates/category/index.html:53
+#: templates/category/index.html:52
 msgctxt "Category breadcrumbs home"
 msgid "Home"
 msgstr "Accueil"
 
-#: templates/category/index.html:72
+#: templates/category/index.html:71
 #: templates/product/product_list_base.html:47
 msgid "Sort by: <b>name</b>"
 msgstr "Trier par : <b>nom</b>"
 
-#: templates/category/index.html:76
+#: templates/category/index.html:75
 #: templates/product/product_list_base.html:51
 msgid "Sort by: <b>price</b>"
 msgstr "Trier par : <b>prix</b>"
 
-#: templates/category/index.html:95
+#: templates/category/index.html:94
 msgctxt "Category page filters"
 msgid "Sort by"
 msgstr "Trier par"
 
-#: templates/category/index.html:100
+#: templates/category/index.html:99
 #: templates/product/product_list_base.html:76
 msgctxt "sort by option"
 msgid "ascending"
 msgstr "ascendant"
 
-#: templates/category/index.html:106
+#: templates/category/index.html:105
 #: templates/product/product_list_base.html:82
 msgctxt "sort by option"
 msgid "descending"
 msgstr "descendant"
 
-#: templates/category/index.html:135 templates/product/_filters.html:14
+#: templates/category/index.html:134 templates/product/_filters.html:14
 msgctxt "Filter heading title"
 msgid "Filters"
 msgstr "Filtres"
 
-#: templates/category/index.html:138
+#: templates/category/index.html:137
 msgctxt "Category page filters"
 msgid "Clear filters"
 msgstr "Effacer les filtres"
 
-#: templates/category/index.html:147 templates/category/index.html:193
+#: templates/category/index.html:146 templates/category/index.html:192
 msgctxt "Category price filter"
 msgid "Update"
 msgstr "Appliquer"
 
-#: templates/category/index.html:172
+#: templates/category/index.html:171
 msgctxt "Category price filter"
 msgid "from"
 msgstr "de"
 
-#: templates/category/index.html:174
+#: templates/category/index.html:173
 msgctxt "Category price filter"
 msgid "to"
 msgstr "à"
 
-#: templates/category/index.html:218
+#: templates/category/index.html:217
 #: templates/product/product_list_base.html:124
 #: templates/search/results.html:34
 msgctxt "Search without results text"
 msgid "Sorry, no matches found for your request."
 msgstr "Desolé, nous n'avons pas trouvé"
 
-#: templates/category/index.html:219
+#: templates/category/index.html:218
 #: templates/product/product_list_base.html:125
 #: templates/search/results.html:35
 msgctxt "Search without results text"
@@ -1379,20 +1364,12 @@ msgctxt "Checkout summary title"
 msgid "Billing address"
 msgstr "Adresse de facturation"
 
-#: templates/checkout/summary.html:13
-msgid "Selling Contract Acceptance"
-msgstr "Contrat de vente"
-
-#: templates/checkout/summary.html:16
-msgid "Our selling contract"
-msgstr "Notre contrat de vente"
-
-#: templates/checkout/summary.html:21
+#: templates/checkout/summary.html:10
 msgctxt "Checkout summary note title"
 msgid "Add a note to your order"
 msgstr "Ajouter une note à votre commande"
 
-#: templates/checkout/summary.html:25
+#: templates/checkout/summary.html:14
 msgctxt "Checkout summary primary action"
 msgid "Order &amp Pay"
 msgstr "Commander & Payer"
@@ -1466,8 +1443,8 @@ msgstr "Produits"
 #: templates/dashboard/base.html:114
 #: templates/dashboard/category/detail.html:33
 #: templates/dashboard/category/detail.html:39
-#: templates/dashboard/category/form.html:14
-#: templates/dashboard/category/form.html:33
+#: templates/dashboard/category/form.html:13
+#: templates/dashboard/category/form.html:32
 #: templates/dashboard/category/list.html:34
 msgctxt "Dashboard categories list"
 msgid "Categories"
@@ -1585,8 +1562,8 @@ msgstr "Sortie :"
 
 #: templates/dashboard/base_modal.html:23
 #: templates/dashboard/base_modal_confirm_delete.html:22
-#: templates/dashboard/category/form.html:114
-#: templates/dashboard/category/form.html:118
+#: templates/dashboard/category/form.html:113
+#: templates/dashboard/category/form.html:117
 #: templates/dashboard/customer/form.html:60
 #: templates/dashboard/customer/form.html:67
 #: templates/dashboard/discount/sale/form.html:96
@@ -1717,33 +1694,33 @@ msgctxt "Empty list of categories"
 msgid "No categories"
 msgstr "Aucune catégorie"
 
-#: templates/dashboard/category/form.html:10
+#: templates/dashboard/category/form.html:9
 msgctxt "Category form page title"
 msgid "Edit category"
 msgstr "Modifier la catégorie"
 
-#: templates/dashboard/category/form.html:12
+#: templates/dashboard/category/form.html:11
 msgctxt "Category detail page title"
 msgid "Add new category"
 msgstr "Ajouter une nouvelle catégorie"
 
-#: templates/dashboard/category/form.html:25
+#: templates/dashboard/category/form.html:24
 msgctxt "Category form page title"
 msgid "Add new category"
 msgstr "Ajouter une nouvelle catégorie"
 
-#: templates/dashboard/category/form.html:56
+#: templates/dashboard/category/form.html:55
 msgctxt "Category form page title"
 msgid "Edit"
 msgstr "Modifier"
 
-#: templates/dashboard/category/form.html:62
-#: templates/dashboard/category/form.html:78
+#: templates/dashboard/category/form.html:61
+#: templates/dashboard/category/form.html:77
 msgctxt "Category detail breadcrumbs"
 msgid "Add new category"
 msgstr "Ajouter une nouvelle catégorie"
 
-#: templates/dashboard/category/form.html:123
+#: templates/dashboard/category/form.html:122
 #: templates/dashboard/customer/form.html:63
 #: templates/dashboard/discount/sale/form.html:99
 #: templates/dashboard/discount/voucher/form.html:129
@@ -1758,7 +1735,7 @@ msgctxt "Dashboard update action"
 msgid "Update"
 msgstr "Mise à jour"
 
-#: templates/dashboard/category/form.html:127
+#: templates/dashboard/category/form.html:126
 #: templates/dashboard/discount/sale/form.html:106
 #: templates/dashboard/discount/voucher/form.html:136
 #: templates/dashboard/product/form.html:124
@@ -4545,27 +4522,22 @@ msgctxt "Order detail text"
 msgid "Order %(order)s: %(order_status)s"
 msgstr "Commande %(order)s: %(order_status)s"
 
-#: templates/order/details.html:59
-msgctxt "Order details primary action"
-msgid "Pay for order"
-msgstr "Payer pour la commande"
-
-#: templates/order/details.html:65
+#: templates/order/details.html:56
 msgctxt "Order details link text"
 msgid "Payment details"
 msgstr "Détails de paiement"
 
-#: templates/order/details.html:70
-msgctxt "Order details link text"
-msgid "Invoice"
-msgstr "Facture"
+#: templates/order/details.html:60
+msgctxt "Order details primary action"
+msgid "Pay for order"
+msgstr "Payer pour la commande"
 
-#: templates/order/details.html:76
+#: templates/order/details.html:67
 msgctxt "Order notes list"
 msgid "Notes"
 msgstr "Notes"
 
-#: templates/order/details.html:81
+#: templates/order/details.html:72
 #, python-format
 msgid ""
 "\n"
@@ -4575,12 +4547,12 @@ msgstr ""
 "\n"
 "                    %(date)s par vous"
 
-#: templates/order/details.html:85
+#: templates/order/details.html:76
 msgctxt "Order note author is staff"
 msgid "staff"
 msgstr "équipe"
 
-#: templates/order/details.html:86
+#: templates/order/details.html:77
 #, python-format
 msgid ""
 "\n"
@@ -4590,7 +4562,7 @@ msgstr ""
 "\n"
 "%(date)s par <span class=\"text-muted\">%(author)s</span>"
 
-#: templates/order/details.html:90
+#: templates/order/details.html:81
 #, python-format
 msgid ""
 "\n"
@@ -4601,7 +4573,7 @@ msgstr ""
 "                    %(date)s par %(author)s\n"
 "                  "
 
-#: templates/order/details.html:95
+#: templates/order/details.html:86
 #, python-format
 msgid ""
 "\n"
@@ -4656,23 +4628,23 @@ msgstr ""
 "avant de procéder à une nouvelle tentative de paiement. Vous pourriez être "
 "débité deux fois si la précédante tentative aboutit."
 
-#: templates/order/payment.html:70
+#: templates/order/payment.html:69
 msgctxt "Payment pending action"
 msgid "I understand, allow me to pay again"
 msgstr "Je comprends, laissez moi payer à nouveau"
 
-#: templates/order/payment.html:76
+#: templates/order/payment.html:74
 #, python-format
 msgctxt "Payment details title"
 msgid "Pay for order %(order)s"
 msgstr "Payer pour la commande %(order)s"
 
-#: templates/order/payment.html:85
+#: templates/order/payment.html:83
 msgctxt "Payment details primary action"
 msgid "Proceed to payment"
 msgstr "Procéder au paiement"
 
-#: templates/order/payment.html:90
+#: templates/order/payment.html:88
 msgctxt "Payment details text"
 msgid "You've authorized transaction. Order is in processing"
 msgstr ""
@@ -5001,7 +4973,7 @@ msgid ""
 "password."
 msgstr ""
 "Vous recevez ce mail car vous avez à créer un mot de passe pour votre compte"
-" de membre de l'équipe de chez %(domain)s.<br> Pour accéder créer votre mot "
+" de membre de l'équipe de chez %(domain)s.<br> Pour créer votre mot "
 "de passe, cliquez le lien ci-dessous."
 
 #: templates/templated_email/html/compiled/test_mail.html:80
