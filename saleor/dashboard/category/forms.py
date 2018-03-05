@@ -29,4 +29,9 @@ class CategoryForm(forms.ModelForm):
         if self.parent_pk:
             self.instance.parent = get_object_or_404(
                 Category, pk=self.parent_pk)
-        return super().save(commit=commit)
+
+        instance = super().save(commit=commit)
+        if 'image' in self.changed_data:
+            self.instance.create_category_thumbnails.delay(instance)
+
+        return instance

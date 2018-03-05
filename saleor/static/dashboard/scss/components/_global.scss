@@ -46,6 +46,14 @@ h6 {
   padding: 5px 0;
 }
 
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.full-width {
+  width: 100%;
+}
+
 .label {
   @extend .grey-text;
   font-size: 12px;

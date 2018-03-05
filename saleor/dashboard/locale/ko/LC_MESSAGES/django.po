@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-26 12:51+0100\n"
+"POT-Creation-Date: 2018-03-05 11:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Jihan Chung <jihanchung20@gmail.com>, 2017\n"
 "Language-Team: Korean (https://www.transifex.com/mirumee/teams/34782/ko/)\n"
@@ -49,7 +49,7 @@ msgstr[0] ""
 #: saleor/dashboard/collection/forms.py:22
 #: saleor/dashboard/discount/forms.py:68 saleor/dashboard/group/forms.py:13
 #: saleor/dashboard/product/forms.py:68 saleor/dashboard/product/forms.py:121
-#: saleor/dashboard/product/forms.py:326 saleor/dashboard/product/forms.py:336
+#: saleor/dashboard/product/forms.py:331 saleor/dashboard/product/forms.py:341
 #: saleor/dashboard/shipping/forms.py:14 saleor/dashboard/sites/forms.py:40
 msgctxt "Item name"
 msgid "Name"
@@ -1008,27 +1008,27 @@ msgctxt "Product variant name"
 msgid "Name"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:276 saleor/dashboard/product/forms.py:377
+#: saleor/dashboard/product/forms.py:276 saleor/dashboard/product/forms.py:382
 msgctxt "Product image"
 msgid "Image"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:312
+#: saleor/dashboard/product/forms.py:317
 msgctxt "Product display name"
 msgid "Display name"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:314
+#: saleor/dashboard/product/forms.py:319
 msgctxt "Product internal name"
 msgid "Internal name"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:316
+#: saleor/dashboard/product/forms.py:321
 msgctxt "Is filter hidden"
 msgid "Is filter hidden"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:338
+#: saleor/dashboard/product/forms.py:343
 msgctxt "Color"
 msgid "Color"
 msgstr ""

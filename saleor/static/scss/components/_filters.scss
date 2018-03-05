@@ -135,7 +135,7 @@
   }
   &__wrapper {
     @include media-breakpoint-down(sm) {
-      padding-top: 8px;
+      padding-top: 0.2rem;
     }
   }
 }
@@ -240,4 +240,10 @@
 .load-more {
   clear: both;
   text-align: center;
+}
+
+@include media-breakpoint-up(md) {
+  .d-md-hidden {
+    visibility: hidden;
+  }
 }

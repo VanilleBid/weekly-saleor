@@ -3,7 +3,7 @@ from unittest.mock import Mock
 import pytest
 from decimal import Decimal
 from django.shortcuts import reverse
-from django.test import RequestFactory
+from django.test import RequestFactory, Client
 from prices import Price
 
 from saleor import settings
@@ -12,12 +12,13 @@ from saleor.core.utils import (
     Country, create_superuser, get_country_by_ip, get_currency_for_country,
     random_data)
 from saleor.core.utils.billing import get_tax_country_code, get_tax_price
+from saleor.core.utils.warmer import CategoryWarmer, ProductWarmer, PRODUCT_IMAGE_SETS, CATEGORY_IMAGE_SETS
 from saleor.discount.models import Sale, Voucher
 from saleor.order.models import Order
-from saleor.product.models import Product
+from saleor.product.models import Product, Category, ProductImage
 from saleor.shipping.models import ShippingMethod
 from saleor.userprofile.models import Address, User
-from tests.utils import assert_decimal
+from tests.utils import assert_decimal, create_image
 
 type_schema = {
     'Vegetable': {
@@ -257,3 +258,30 @@ def test_get_selling_contract(client):
     response = client.get(reverse('selling-contract'))
     assert response.status_code == 200
     assert b'Selling Contract' in response.content
+
+
+def test_csrf_view():
+    url = reverse('account_signup')
+    client = Client(enforce_csrf_checks=True)
+    response = client.post(url)
+    assert response.status_code == 403
+
+
+def test_warmer(product_in_stock, product_type):
+    Category.objects.create(name='b', slug='b')
+    category = Category.objects.create(name='c', slug='c', image=create_image()[0])
+    product = Product.objects.create(name='b', price=Decimal('1.00'), product_type=product_type, category=category)
+
+    product_warmer = ProductWarmer.all()
+    category_warmer = CategoryWarmer.all()
+
+    assert category_warmer._wrapper.query_set.count() == 3
+    assert product_warmer._wrapper.query_set.count() == 0
+
+    assert category_warmer() == 1 * len(CATEGORY_IMAGE_SETS)
+    assert product_warmer() == 0
+
+    for i in range(1, 3):
+        ProductImage.objects.create(product=product, image=create_image()[0])
+        assert ProductWarmer.all()._wrapper.query_set.count() == i
+        assert ProductWarmer.all()() == len(PRODUCT_IMAGE_SETS)

@@ -22,7 +22,7 @@
   <meta property="og:url" content="{{ product_url }}">
   <link rel="canonical" href="{{ product_url }}">
 
-  {% product_first_image product size="510x510" as product_image %}
+  {% product_first_image product method="fit" size="510x510" as product_image %}
   {% if product_image %}
     <meta property="og:image" content="{{ product_image }}" />
     <meta property="og:image:width" content="510">

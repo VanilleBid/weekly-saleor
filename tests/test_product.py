@@ -7,8 +7,8 @@ from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.encoding import smart_text
 
-from saleor.product.models import Product, ProductVariant, Stock, StockLocation
-from tests.utils import filter_products_by_attribute
+from saleor.product.models import Product, ProductVariant, Stock, StockLocation, Category
+from tests.utils import filter_products_by_attribute, requires_login
 
 from saleor.cart import CartStatus, utils
 from saleor.cart.models import Cart
@@ -453,6 +453,74 @@ def test_variant_availability_status(unavailable_product):
     stock.save()
     status = get_variant_availability_status(variant)
     assert status == VariantAvailabilityStatus.AVAILABLE
+
+
+def test_product_list_visibility(
+        staff_user, customer_user, client, variant_list, default_category):
+    """
+    Test if a authorized user (staff) has the same visibility
+    as a non authorized.
+
+    Which means, a staff and a standard access user can't see non published
+    products.
+    """
+
+    @requires_login(client)
+    def _list_category(_user):
+        _url = reverse(
+            'product:category',
+            kwargs={'path': default_category.slug,
+                    'category_id': default_category.pk})
+        _resp = client.get(_url)
+        assert _resp.status_code == 200
+        return list(_resp.context['filter_set'].qs)
+
+    @requires_login(client)
+    def _get_product(_user, _product, _expected_code):
+        _url = _product.get_absolute_url()
+        _resp = client.get(_url)
+
+        assert _resp.status_code == _expected_code
+        return _resp
+
+    # check listing (published: 2, non published: 1)
+    assert len(_list_category(customer_user)) == 2
+    assert len(_list_category(staff_user)) == 2
+
+    # try to get a non published product (404 for clients, 200 for staff)
+    unpublished = models.Product.objects.filter(is_published=False).first()
+    _get_product(customer_user, unpublished, 404)
+    _get_product(staff_user, unpublished, 200)
+
+
+def test_product_leaf_category(
+        authorized_client, product_in_stock, default_category: Category):
+
+    root_category = Category.objects.create(name='root', slug='root')
+    default_category.parent = root_category
+    default_category.save()
+
+    def _get_products(_category):
+        _url = reverse(
+            'product:category',
+            kwargs={
+                'path': _category.get_full_path(),
+                'category_id': _category.pk
+            })
+        _resp = authorized_client.get(_url)
+
+        assert _resp.status_code == 200
+        return _resp
+
+    # non-leaf category (no products must be returned)
+    response = _get_products(root_category)
+    assert 'filter_set' not in response.context
+
+    # leaf category (products must be returned)
+    products = models.Product.objects.all().filter(
+        category__name=default_category).order_by('-price')
+    response = _get_products(default_category)
+    assert list(products) == list(response.context['filter_set'].qs)
 
 
 def test_product_filter_before_filtering(

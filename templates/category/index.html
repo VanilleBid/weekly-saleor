@@ -57,10 +57,12 @@
             <li><a href='{{ object.get_absolute_url }}'>{{ object.name }}</a></li>
           </ul>
         </div>
+
+        {% if object.is_leaf_node %}
         <div class="col-md-5 filters-menu__wrapper">
           <div class="row">
-            <div class="col-6 col-md-2 col-lg-6 filters-menu">
-              <span class="filters-menu__label d-md-none">Filters</span>
+            <div class="col-6 col-md-2 col-lg-6 d-md-hidden filters-menu btn secondary">
+              <span class="filters-menu__label">Filters</span>
             </div>
             <div class="col-6 col-md-10 col-lg-6">
               <div class="sort-by">
@@ -118,9 +120,10 @@
             </div>
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
-    {% if object.get_children|length_is:0 %}
+    {% if object.is_leaf_node %}
     <div class="row">
       <div class="col-md-4 col-lg-3">
         <div class="product-filters">

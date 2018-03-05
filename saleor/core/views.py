@@ -58,3 +58,10 @@ def manifest(request):
         'short_name': site.name}
     return TemplateResponse(
         request, 'manifest.json', ctx, content_type='application/json')
+
+
+def csrf_failure(request, reason=""):
+    """
+    View used when request fails CSRF protection.
+    """
+    return TemplateResponse(request, '403_csrf.html', status=403)

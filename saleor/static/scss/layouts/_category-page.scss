@@ -17,19 +17,9 @@
     border-bottom: solid 1px $gray;
     padding: $global-padding 0;
     @include media-breakpoint-down(sm) {
-      width: 100%;
-      position: fixed;
-      background: $white;
-      z-index: 3;
-      top: 5.7rem;
-      left: 0;
-      padding-top: $global-padding;
+      .row {
+        margin: 0;
+      }
     }
-  }
-}
-
-@include media-breakpoint-down(sm) {
-  #category-page {
-    margin-top: 10rem;
   }
 }

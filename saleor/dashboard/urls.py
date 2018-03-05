@@ -13,6 +13,7 @@ from .search.urls import urlpatterns as search_urls
 from .shipping.urls import urlpatterns as shipping_urls
 from .sites.urls import urlpatterns as site_urls
 from .staff.urls import urlpatterns as staff_urls
+from .storage.urls import urlpatterns as storage_urls
 
 urlpatterns = [
     url(r'^$', core_views.index, name='index'),
@@ -28,5 +29,6 @@ urlpatterns = [
     url(r'^shipping/', include(shipping_urls)),
     url(r'^style-guide/', core_views.styleguide, name='styleguide'),
     url(r'^search/', include(search_urls)),
+    url(r'^storage/', include(storage_urls)),
     url(r'^test-mail/', send_test_mail)
 ]

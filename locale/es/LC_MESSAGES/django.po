@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-26 12:51+0100\n"
+"POT-Creation-Date: 2018-03-05 11:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Mario Álvarez <ahoy@m4grio.me>, 2017\n"
 "Language-Team: Spanish (https://www.transifex.com/mirumee/teams/34782/es/)\n"
@@ -17,6 +17,44 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: saleor/account/forms.py:60 saleor/registration/forms.py:13
+msgctxt "Form field"
+msgid "Email"
+msgstr "Email"
+
+#: saleor/account/forms.py:79 saleor/registration/forms.py:37
+msgctxt "Email"
+msgid "Email"
+msgstr ""
+
+#: saleor/account/forms.py:81 saleor/registration/forms.py:39
+msgctxt "Password"
+msgid "Password"
+msgstr ""
+
+#: saleor/account/views.py:29 saleor/registration/views.py:25
+msgid "You have been successfully logged out."
+msgstr "Has terminado sesión exitosamente. "
+
+#: saleor/account/views.py:43 saleor/registration/views.py:39
+msgid "User has been created"
+msgstr "El usuario ha sido creado."
+
+#: saleor/account/views.py:93 saleor/userprofile/views.py:34
+msgctxt "Storefront message"
+msgid "Password successfully changed."
+msgstr "Se cambió el password exitosamente"
+
+#: saleor/account/views.py:106 saleor/userprofile/views.py:47
+msgctxt "Storefront message"
+msgid "Address successfully updated."
+msgstr "Se cambió la dirección exitosamente"
+
+#: saleor/account/views.py:121 saleor/userprofile/views.py:62
+msgctxt "Storefront message"
+msgid "Address successfully removed"
+msgstr "La dirección se ha borrado exitosamente"
 
 #: saleor/cart/__init__.py:20
 msgctxt "cart status"
@@ -457,78 +495,60 @@ msgctxt "Variant choice field label"
 msgid "%(variant_label)s - %(price)s"
 msgstr "%(variant_label)s - %(price)s"
 
-#: saleor/product/models.py:43
+#: saleor/product/models.py:44
 msgctxt "Permission description"
 msgid "Can view categories"
 msgstr "Puede ver categorias"
 
-#: saleor/product/models.py:45
+#: saleor/product/models.py:46
 msgctxt "Permission description"
 msgid "Can edit categories"
 msgstr "Puede editar categorias"
 
-#: saleor/product/models.py:94
+#: saleor/product/models.py:99
 #, python-format
 msgid "This product is available within %(from)d to %(to)d days."
 msgstr ""
 
-#: saleor/product/models.py:97
+#: saleor/product/models.py:102
 #, python-format
 msgid "This product is available within %(from)d days."
 msgstr ""
 
-#: saleor/product/models.py:121
+#: saleor/product/models.py:126
 msgctxt "Permission description"
 msgid "Can view products"
 msgstr "Puede ver productos"
 
-#: saleor/product/models.py:123
+#: saleor/product/models.py:128
 msgctxt "Permission description"
 msgid "Can edit products"
 msgstr "Puede editar productos"
 
-#: saleor/product/models.py:126
+#: saleor/product/models.py:131
 msgctxt "Permission description"
 msgid "Can view product properties"
 msgstr "Puede ver las propiedades de los productos"
 
-#: saleor/product/models.py:129
+#: saleor/product/models.py:134
 msgctxt "Permission description"
 msgid "Can edit product properties"
 msgstr "Puede editar las propiedades de los productos"
 
-#: saleor/product/models.py:345
+#: saleor/product/models.py:350
 msgctxt "Permission description"
 msgid "Can view stock location"
 msgstr "Puede ver la ubicación del stock"
 
-#: saleor/product/models.py:348
+#: saleor/product/models.py:353
 msgctxt "Permission description"
 msgid "Can edit stock location"
 msgstr "Puede editar la ubicación del stock"
 
-#: saleor/registration/forms.py:13
-msgctxt "Form field"
-msgid "Email"
-msgstr "Email"
-
-#: saleor/registration/forms.py:32
-msgctxt "Email"
-msgid "Email"
+#: saleor/registration/forms.py:30
+msgctxt "Registration error"
+msgid "This email has already been registered."
 msgstr ""
-
-#: saleor/registration/forms.py:34
-msgctxt "Password"
-msgid "Password"
-msgstr ""
-
-#: saleor/registration/views.py:25
-msgid "You have been successfully logged out."
-msgstr "Has terminado sesión exitosamente. "
-
-#: saleor/registration/views.py:39
-msgid "User has been created"
-msgstr "El usuario ha sido creado."
 
 #: saleor/search/forms.py:9
 msgctxt "Search form label"
@@ -770,20 +790,59 @@ msgstr ""
 msgid "The phone number entered is not valid."
 msgstr "El número introducido no es válido"
 
-#: saleor/userprofile/views.py:34
-msgctxt "Storefront message"
-msgid "Password successfully changed."
-msgstr "Se cambió el password exitosamente"
+#: templates/403_csrf.html:5
+msgid "Session expired."
+msgstr ""
 
-#: saleor/userprofile/views.py:47
-msgctxt "Storefront message"
-msgid "Address successfully updated."
-msgstr "Se cambió la dirección exitosamente"
+#: templates/403_csrf.html:24
+msgid "Sorry, your session expired or something is wrong. Please try again."
+msgstr ""
 
-#: saleor/userprofile/views.py:62
-msgctxt "Storefront message"
-msgid "Address successfully removed"
-msgstr "La dirección se ha borrado exitosamente"
+#: templates/403_csrf.html:25
+msgid ""
+"If this error persists, please check if cookies are enabled and if HTTP "
+"referers are enabled."
+msgstr ""
+
+#: templates/403_csrf.html:30
+msgid ""
+"\n"
+"          This website requires a CSRF cookie when submitting forms.\n"
+"          This cookie is required for security reasons,\n"
+"          to ensure that your browser is not being hijacked by third "
+"parties.\n"
+"          "
+msgstr ""
+
+#: templates/403_csrf.html:38
+msgid ""
+"\n"
+"          If you have configured your browser to disable cookies,\n"
+"          please re-enable them, at least for this site, or for 'same-"
+"origin' requests.\n"
+"          "
+msgstr ""
+
+#: templates/403_csrf.html:47
+msgid ""
+"\n"
+"          You may also be seeing this message because this site requires a "
+"'Referer header' to be sent by your Web browser,\n"
+"          but none may have been sent. This header is required for security "
+"reasons,\n"
+"          to ensure that your browser is not being hijacked by third "
+"parties.\n"
+"          "
+msgstr ""
+
+#: templates/403_csrf.html:55
+msgid ""
+"\n"
+"          If you have configured your browser to disable 'Referer' headers, "
+"please re-enable them, at least for this site,\n"
+"          or for HTTPS connections, or for 'same-origin' requests.\n"
+"          "
+msgstr ""
 
 #: templates/404.html:6
 msgctxt "Eror page not found"
@@ -1171,64 +1230,64 @@ msgctxt "Category breadcrumbs home"
 msgid "Home"
 msgstr "Inicio"
 
-#: templates/category/index.html:72 templates/product/product_list_base.html:47
+#: templates/category/index.html:74 templates/product/product_list_base.html:47
 msgid "Sort by: <b>name</b>"
 msgstr "Ordenar por: <b>nombre</b>"
 
-#: templates/category/index.html:76 templates/product/product_list_base.html:51
+#: templates/category/index.html:78 templates/product/product_list_base.html:51
 msgid "Sort by: <b>price</b>"
 msgstr "Ordenar por: <b>precio</b>"
 
-#: templates/category/index.html:95
+#: templates/category/index.html:97
 msgctxt "Category page filters"
 msgid "Sort by"
 msgstr "Ordenar por"
 
-#: templates/category/index.html:100
+#: templates/category/index.html:102
 #: templates/product/product_list_base.html:76
 msgctxt "sort by option"
 msgid "ascending"
 msgstr "ascendente"
 
-#: templates/category/index.html:106
+#: templates/category/index.html:108
 #: templates/product/product_list_base.html:82
 msgctxt "sort by option"
 msgid "descending"
 msgstr "descendente"
 
-#: templates/category/index.html:135 templates/product/_filters.html:14
+#: templates/category/index.html:138 templates/product/_filters.html:14
 msgctxt "Filter heading title"
 msgid "Filters"
 msgstr "Filtros"
 
-#: templates/category/index.html:138
+#: templates/category/index.html:141
 msgctxt "Category page filters"
 msgid "Clear filters"
 msgstr "Limpiar filtros"
 
-#: templates/category/index.html:147 templates/category/index.html:193
+#: templates/category/index.html:150 templates/category/index.html:196
 msgctxt "Category price filter"
 msgid "Update"
 msgstr "Actualizar"
 
-#: templates/category/index.html:172
+#: templates/category/index.html:175
 msgctxt "Category price filter"
 msgid "from"
 msgstr "desde"
 
-#: templates/category/index.html:174
+#: templates/category/index.html:177
 msgctxt "Category price filter"
 msgid "to"
 msgstr "hasta"
 
-#: templates/category/index.html:218
+#: templates/category/index.html:221
 #: templates/product/product_list_base.html:124
 #: templates/search/results.html:34
 msgctxt "Search without results text"
 msgid "Sorry, no matches found for your request."
 msgstr "Perdón, no hay resultados para su pedido"
 
-#: templates/category/index.html:219
+#: templates/category/index.html:222
 #: templates/product/product_list_base.html:125
 #: templates/search/results.html:35
 msgctxt "Search without results text"
@@ -1663,52 +1722,60 @@ msgctxt "Category field"
 msgid "Description"
 msgstr "Descripción"
 
-#: templates/dashboard/category/detail.html:95
+#: templates/dashboard/category/detail.html:94
+#, fuzzy
+#| msgctxt "Permission description"
+#| msgid "Can view products"
+msgctxt "Category detail view action"
+msgid "View products"
+msgstr "Puede ver productos"
+
+#: templates/dashboard/category/detail.html:98
 msgctxt "Category detail view action"
 msgid "Edit category"
 msgstr "Editar categoría"
 
-#: templates/dashboard/category/detail.html:98
+#: templates/dashboard/category/detail.html:101
 msgctxt "Category detail view action"
 msgid "Remove category"
 msgstr "Eliminar categoría"
 
-#: templates/dashboard/category/detail.html:106
+#: templates/dashboard/category/detail.html:109
 msgctxt "Title of the subcategories list"
 msgid "Subcategories"
 msgstr "Subcategorías"
 
-#: templates/dashboard/category/detail.html:111
-#: templates/dashboard/product/detail.html:94
+#: templates/dashboard/category/detail.html:114
+#: templates/dashboard/product/detail.html:102
 #: templates/dashboard/product/product_attribute/detail.html:66
 #: templates/dashboard/shipping/detail.html:78
 #: templates/dashboard/sites/detail.html:82
 msgid "Add"
 msgstr "Agregar"
 
-#: templates/dashboard/category/detail.html:118
+#: templates/dashboard/category/detail.html:121
 #: templates/dashboard/category/list.html:51
 msgctxt "Category list table header name"
 msgid "Name"
 msgstr "Nombre"
 
-#: templates/dashboard/category/detail.html:121
+#: templates/dashboard/category/detail.html:124
 #: templates/dashboard/category/list.html:54
 msgctxt "Category list table header description"
 msgid "Description"
 msgstr "Descripción"
 
-#: templates/dashboard/category/detail.html:145
+#: templates/dashboard/category/detail.html:148
 msgctxt "Category edit action"
 msgid "Edit"
 msgstr "Editar"
 
-#: templates/dashboard/category/detail.html:148
+#: templates/dashboard/category/detail.html:151
 msgctxt "Category list action link"
 msgid "Remove"
 msgstr "Eliminar"
 
-#: templates/dashboard/category/detail.html:155
+#: templates/dashboard/category/detail.html:158
 msgctxt "Empty list of categories"
 msgid "No categories"
 msgstr "No hay categorias"
@@ -3139,7 +3206,7 @@ msgid "Cost"
 msgstr "Costo"
 
 #: templates/dashboard/product/_stock_table.html:14
-#: templates/dashboard/product/detail.html:105
+#: templates/dashboard/product/detail.html:113
 msgid "Gross margin"
 msgstr "Margen bruto"
 
@@ -3155,94 +3222,101 @@ msgctxt "Product form breadcrumbs"
 msgid "Products"
 msgstr "Productos"
 
-#: templates/dashboard/product/detail.html:42
+#: templates/dashboard/product/detail.html:39
+#: templates/dashboard/product/list.html:63
+#, fuzzy
+#| msgid "Variant"
+msgid "Variants"
+msgstr "Variante"
+
+#: templates/dashboard/product/detail.html:50
 msgctxt "Product field"
 msgid "Sale price"
 msgstr "Precio de venta"
 
-#: templates/dashboard/product/detail.html:52
+#: templates/dashboard/product/detail.html:60
 msgctxt "Product field"
 msgid "Purchase cost"
 msgstr "Costo de compra"
 
-#: templates/dashboard/product/detail.html:62
+#: templates/dashboard/product/detail.html:70
 msgctxt "Product field"
 msgid "Gross margin"
 msgstr "Margen bruto"
 
-#: templates/dashboard/product/detail.html:76
+#: templates/dashboard/product/detail.html:84
 msgctxt "Product action"
 msgid "Edit product"
 msgstr "Editar producto"
 
-#: templates/dashboard/product/detail.html:79
+#: templates/dashboard/product/detail.html:87
 msgctxt "Product action"
 msgid "Remove product"
 msgstr "Borrar producto"
 
-#: templates/dashboard/product/detail.html:83
+#: templates/dashboard/product/detail.html:91
 msgctxt "Product action"
 msgid "View on site"
 msgstr "Ver en el sitio"
 
-#: templates/dashboard/product/detail.html:90
+#: templates/dashboard/product/detail.html:98
 msgid "Variant"
 msgstr "Variante"
 
-#: templates/dashboard/product/detail.html:101
+#: templates/dashboard/product/detail.html:109
 msgid "SKU"
 msgstr "SKU"
 
-#: templates/dashboard/product/detail.html:102
+#: templates/dashboard/product/detail.html:110
 msgid "Name"
 msgstr "Nombre"
 
-#: templates/dashboard/product/detail.html:103
+#: templates/dashboard/product/detail.html:111
 msgid "Status"
 msgstr "Estado"
 
-#: templates/dashboard/product/detail.html:104
+#: templates/dashboard/product/detail.html:112
 msgid "Price"
 msgstr "Precio"
 
-#: templates/dashboard/product/detail.html:129
+#: templates/dashboard/product/detail.html:137
 msgid "Edit"
 msgstr "Editar"
 
-#: templates/dashboard/product/detail.html:134
+#: templates/dashboard/product/detail.html:142
 msgctxt "Dashboard product details page"
 msgid "No variants found"
 msgstr "No se encontraron variantes"
 
-#: templates/dashboard/product/detail.html:145
+#: templates/dashboard/product/detail.html:153
 #: templates/dashboard/product/product_variant/detail.html:104
 msgctxt "Dashboard variant details view"
 msgid "Stock"
 msgstr "Stock"
 
-#: templates/dashboard/product/detail.html:149
+#: templates/dashboard/product/detail.html:157
 #: templates/dashboard/product/product_variant/detail.html:109
 msgctxt "Dashboard action"
 msgid "Add"
 msgstr "Agregar"
 
-#: templates/dashboard/product/detail.html:172
+#: templates/dashboard/product/detail.html:180
 msgctxt "Product field"
 msgid "Published"
 msgstr "Publicado"
 
-#: templates/dashboard/product/detail.html:174
+#: templates/dashboard/product/detail.html:182
 msgctxt "Product field"
 msgid "Draft"
 msgstr "Boceto"
 
-#: templates/dashboard/product/detail.html:195
+#: templates/dashboard/product/detail.html:203
 #: templates/dashboard/product/product_image/list.html:7
 #: templates/dashboard/product/product_image/list.html:41
 msgid "Images"
 msgstr "Imágenes"
 
-#: templates/dashboard/product/detail.html:206
+#: templates/dashboard/product/detail.html:214
 msgid "Edit images"
 msgstr "Editar imágenes"
 
@@ -3285,17 +3359,17 @@ msgctxt "Product list add button text"
 msgid "Add product"
 msgstr "Agregar producto"
 
-#: templates/dashboard/product/list.html:63
+#: templates/dashboard/product/list.html:64
 msgctxt "Products list table header"
 msgid "Name"
 msgstr "Nombre"
 
-#: templates/dashboard/product/list.html:66
+#: templates/dashboard/product/list.html:67
 msgctxt "Products list table header"
 msgid "Price"
 msgstr "Precio"
 
-#: templates/dashboard/product/list.html:103
+#: templates/dashboard/product/list.html:111
 msgctxt "Empty product list message"
 msgid "No products found."
 msgstr "No se encontraron productos."
@@ -4383,6 +4457,51 @@ msgstr ""
 "presentation\"><svg data-src=\"%(img_path)s\" /></span> o usando la opción "
 "\"Promover a miembro del personal\" en la sección de ver detalles del "
 "cliente."
+
+#: templates/dashboard/storage/_bucket_files_table.html:12
+msgid "Path"
+msgstr ""
+
+#: templates/dashboard/storage/_bucket_files_table.html:13
+msgid "ID"
+msgstr ""
+
+#: templates/dashboard/storage/base.html:9
+msgid "Bucket information"
+msgstr ""
+
+#: templates/dashboard/storage/base.html:16
+msgid "Storage"
+msgstr ""
+
+#: templates/dashboard/storage/base.html:21
+#, python-format
+msgid "%(bucket_name)s bucket"
+msgstr ""
+
+#: templates/dashboard/storage/base.html:30
+msgid "Missing Files"
+msgstr ""
+
+#: templates/dashboard/storage/base.html:30
+#, fuzzy
+#| msgid "No sales found."
+msgid "No missing files found."
+msgstr "No se encontraron descuentos."
+
+#: templates/dashboard/storage/base.html:34
+msgid "Files to be removed"
+msgstr ""
+
+#: templates/dashboard/storage/base.html:34
+#, fuzzy
+#| msgid "No customers found."
+msgid "No files to remove found."
+msgstr "No se encontraron clientes."
+
+#: templates/dashboard/storage/base.html:44
+msgid "sync"
+msgstr ""
 
 #: templates/home.html:12
 msgctxt "Homepage title"

@@ -1,16 +1,14 @@
-from io import BytesIO
 import json
 
-from unittest.mock import Mock, MagicMock
+from unittest.mock import Mock, MagicMock, call
 
-from PIL import Image
 from django.conf import settings
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.forms import HiddenInput
 from django.urls import reverse
 from django.utils.encoding import smart_text
 import pytest
 
+from saleor.core.utils import warmer
 from saleor.dashboard.product import ProductBulkAction
 from saleor.dashboard.product.forms import (
     ProductBulkUpdate, ProductTypeForm, ProductForm)
@@ -19,18 +17,10 @@ from saleor.product.models import (
     Collection, AttributeChoiceValue, Product, ProductAttribute, ProductImage,
     ProductType, ProductVariant, Stock, StockLocation)
 
+from ..utils import create_image
+
 HTTP_STATUS_OK = 200
 HTTP_REDIRECTION = 302
-
-
-def create_image():
-    img_data = BytesIO()
-    image = Image.new('RGB', size=(1, 1), color=(255, 0, 0, 0))
-    image.save(img_data, format='JPEG')
-    image_name = 'product2'
-    image = SimpleUploadedFile(
-        image_name + '.jpg', img_data.getvalue(), 'image/png')
-    return image, image_name
 
 
 @pytest.mark.integration
@@ -486,6 +476,32 @@ def test_view_product_image_add(admin_client, product_with_image):
     assert len(images) == 2
     assert image_name in images[1].image.name
     assert images[1].alt == 'description'
+
+
+def test_view_product_ajax_image_add_invalid_form(admin_client, unavailable_product):
+    url = reverse('dashboard:product-images-upload', kwargs=dict(product_pk=unavailable_product.pk))
+    data = {'image_0': None}
+    response = admin_client.post(url, data)
+    assert response.status_code == 400
+
+    data = json.loads(response.content.decode('utf-8'))  # type: dict
+    assert sorted(list(data.keys())) == ['error']
+
+
+def test_view_product_ajax_image_add(admin_client, unavailable_product):
+    warmer.create_if_not_exists = Mock(wraps=warmer.create_if_not_exists)
+    url = reverse(
+        'dashboard:product-images-upload',
+        kwargs=dict(product_pk=unavailable_product.pk))
+    data = {'image_0': create_image()[0]}
+    response = admin_client.post(url, data)
+    assert response.status_code == 200
+
+    image = ProductImage.objects.first()
+    expected_calls = [
+        call(image.image, meth, size) for meth, size in warmer.PRODUCT_IMAGE_SETS
+    ]
+    warmer.create_if_not_exists.assert_has_calls(expected_calls, True)
 
 
 def test_view_product_image_edit_same_image_add_description(
