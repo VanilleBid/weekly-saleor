@@ -1,3 +1,4 @@
+import logging
 import ast
 import os.path
 import platform
@@ -8,6 +9,9 @@ import dj_email_url
 from django.contrib.messages import constants as messages
 import django_cache_url
 from invoice_generator import models
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_list(text):
@@ -499,3 +503,7 @@ WEBHOOK_HANDLERS = (
 )
 
 CSRF_FAILURE_VIEW = 'saleor.core.views.csrf_failure'
+
+if os.environ.get('ENVIRONMENT') == "PROD":
+    logger.info("Running in production environment settings")
+    from settings_production import *
