@@ -13,6 +13,7 @@ from .utils.schema import get_webpage_schema
 
 def home(request):
     products = products_for_homepage()[:8]
+    featured_products = products.exists()
     products = products_with_availability(
         products, discounts=request.discounts, local_currency=request.currency)
     webpage_schema = get_webpage_schema(request)
@@ -20,20 +21,13 @@ def home(request):
         request, 'home.html', {
             'parent': None,
             'products': products,
+            'featured_products': featured_products,
             'webpage_schema': json.dumps(webpage_schema)})
 
 
 @staff_member_required
 def styleguide(request):
     return TemplateResponse(request, 'styleguide.html')
-
-
-def privacy_policy(request):
-    return TemplateResponse(request, 'privacy_policy.html')
-
-
-def selling_contract(request):
-    return TemplateResponse(request, 'selling_contract.html')
 
 
 def impersonate(request, uid):

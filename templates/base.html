@@ -4,7 +4,7 @@
 {% load render_bundle from webpack_loader %}
 {% load placeholder %}
 
-<html lang="{{ LANGUAGE_CODE }}" class="no-js" data-shipping-options-url="{% url 'cart:shipping-options' %}" data-taxed-url="{% url 'cart:taxed-info' %}" data-cart-summary-url="{% url 'cart:cart-summary' %}">
+<html lang="{{ LANGUAGE_CODE }}" class="no-js" data-shipping-options-url="{% url 'cart:shipping-options' %}" data-taxed-url="{% url 'checkout:taxed-info' %}" data-cart-summary-url="{% url 'cart:cart-summary' %}">
 <head>
   <title>{% block title %}{{ site.name }}{% endblock %}</title>
   {% block meta %}
@@ -245,26 +245,26 @@
           </ul>
         </div>
         <div class="col-md-3 col-sm-12">
-          <a target="_blank" rel="noopener" class="social-footer" href="https://www.facebook.com/mirumeelabs/">
+          <a target="_blank" rel="noopener" class="social-footer" href="https://www.facebook.com/{{ social_links.facebook }}">
             <svg data-src="{% static "images/facebook-logo.svg" %}" width="45px" height="45px"/>
           </a>
-          <a target="_blank" rel="noopener" class="social-footer" href="https://twitter.com/getsaleor">
+          <a target="_blank" rel="noopener" class="social-footer" href="https://twitter.com/{{ social_links.twitter }}">
             <svg data-src="{% static "images/twitter-logo.svg" %}" width="45px" height="45px"/>
           </a>
-          <a target="_blank" rel="noopener" class="social-footer" href="https://plus.google.com/+Mirumee">
+          <a target="_blank" rel="noopener" class="social-footer" href="https://plus.google.com/{{ social_links.google }}">
             <svg data-src="{% static "images/google-logo.svg" %}" width="45px" height="45px"/>
           </a>
-          <a target="_blank" rel="noopener" class="social-footer" href="https://www.instagram.com/explore/tags/mirumee/">
+          <a target="_blank" rel="noopener" class="social-footer" href="https://www.instagram.com/{{ social_links.instagram }}">
             <svg data-src="{% static "images/instagram-logo.svg" %}" width="45px" height="45px"/>
           </a>
         </div>
       </div>
 
       <div class="row policies">
-        <a rel="nofollow" href="{% url "privacy-policy" %}">
+        <a rel="nofollow" href="{% url 'page:details' slug='privacy' %}">
           {% trans "Privacy Policy" context "Main navigation item" %}
         </a>&mdash;
-        <a rel="nofollow" href="{% url "selling-contract" %}">
+        <a rel="nofollow" href="{% url 'page:details' slug='sell-contract' %}">
           {% trans "Selling Contract" context "Main navigation item" %}
         </a>
       </div>
@@ -274,10 +274,10 @@
 <div id="cookie_prompter">
     <p>
         Ce site internet utilise des cookies pour améliorer l'expérience des utilisateurs.
-        En utilisant notre site, vous acceptez notre politique des cookies. <a href="/policy.html">En savoir plus</a>
+        En utilisant notre site, vous acceptez notre politique des cookies.
+        <a href="{% url 'page:details' slug='privacy' %}">En savoir plus</a>
     </p>
     <button class="btn primary">J'accepte</button>
-</div>
 </div>
 {% block footer_scripts %}
   <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>

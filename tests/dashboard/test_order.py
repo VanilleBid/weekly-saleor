@@ -262,9 +262,8 @@ def test_view_split_order_line_with_invalid_data(
 def test_ordered_item_change_quantity(transactional_db, order_with_lines):
     assert list(order_with_lines.history.all()) == []
     lines = order_with_lines.groups.all()[0].lines.all()
-    change_order_line_quantity(lines[0], 0)
-    change_order_line_quantity(lines[1], 0)
-    change_order_line_quantity(lines[2], 0)
+    for line in lines:
+        change_order_line_quantity(line, 0)
     history = list(order_with_lines.history.all())
     assert len(history) == 1
     assert history[0].content == 'Order cancelled. No items in order'

@@ -58,7 +58,8 @@ def _generate_pdf_items(order, order_data):
 
 def _generate_pdf_invoice(order_data, billing_address, items):
     invoice = models.Invoice(
-        order_data, settings.INVOICE_VENDOR, billing_address, items)
+        order_data, settings.INVOICE_VENDOR, billing_address, items,
+        additional_text=settings.INVOICE_ADDITIONAL_TEXT)
 
     return invoice
 

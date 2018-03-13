@@ -1,4 +1,4 @@
-import 'lazysizes';
+import './lazysizes';
 import SVGInjector from 'svg-injector-2';
 
 export const getAjaxError = (response) => {

@@ -1,9 +1,29 @@
 from django.conf.urls import url
-from django.http import HttpResponse
+from django.template.response import TemplateResponse
 from impersonate.views import stop_impersonate
 
-from saleor import settings
 from . import views
+
+
+def static_page(
+        endpoint, name=None, prefix=None,
+        template_extension=None, content_type=None):
+
+    name = name or endpoint.strip('/')
+    template = r'%s%s' % (
+        name.replace('-', '_'),
+        template_extension is None and '.html' or template_extension)
+
+    def _view(request):
+        return TemplateResponse(
+            request, template, content_type=content_type)
+
+    return url(
+        r'^%s%s$' % (
+            prefix is None and 'pages/' or prefix, endpoint
+        ), _view, name=name
+    )
+
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
@@ -14,13 +34,7 @@ urlpatterns = [
         name='impersonate-stop'),
     url(r'^404', views.handle_404, name='handle-404'),
     url(r'^manifest\.json$', views.manifest, name='manifest'),
-    url(r'^pages/privacy/$', views.privacy_policy, name='privacy-policy'),
-    url(r'^pages/contract/$', views.selling_contract, name='selling-contract')
+    static_page(
+        'robots.txt',
+        prefix='', template_extension='', content_type='text/plain'),
 ]
-
-if settings.DEBUG:
-    ROBOTS_TXT = b'User-agent: *\nDisallow: /'
-
-    def robots(request):
-        return HttpResponse(ROBOTS_TXT, content_type='text/plain')
-    urlpatterns.append(url(r'^robots\.txt$', robots, name='robots'))

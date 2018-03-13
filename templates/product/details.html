@@ -2,7 +2,7 @@
 
 {% load bootstrap_field from bootstrap4 %}
 {% load i18n %}
-{% load gross from prices_i18n %}
+{% load net from prices_i18n %}
 {% load markdown from markdown %}
 {% load price_range from price_ranges %}
 {% load staticfiles %}
@@ -68,6 +68,7 @@
             <div class="carousel-inner" role="listbox">
               {% for image in images %}
                 <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                  <div class="overlay"></div>
                   <img class="d-block img-fluid lazyload lazypreload"
                        data-src="{% get_thumbnail image.image method="fit" size="540x540" %}"
                        data-srcset="{% get_thumbnail image.image method="fit" size="540x540" %} 1x, {% get_thumbnail image.image method="fit" size="1080x1080" %} 2x"
@@ -84,7 +85,7 @@
                 <svg data-src="{% static "images/gallery-arrow.svg" %}" />
               </a>
             {% endif %}
-          <hr/>
+            <hr/>
             <ol class="carousel-indicators d-none d-md-block">
               {% for image in images %}
                 {% if images|length > 1 %}
@@ -126,23 +127,26 @@
           {% endif %}
         {% endwith %}
 
-        {% if show_variant_picker %}
-          <div id="variant-price-component"></div>
-        {% else %}
-          <h2 class="product__info__price">
-            <span>{% price_range availability.price_range %}</span>
-            {% if availability.discount %}
-              <small class="product__info__price__undiscounted">{% gross availability.price_range_undiscounted.min_price html=True %}</small>
-            {% endif %}
-            {% if availability.price_range_local_currency %}
-              <br>
-              <small class="text-info">
-                &asymp;
-                {% gross availability.price_range_local_currency.min_price html=True %}
-              </small>
-            {% endif %}
-          </h2>
-        {% endif %}
+        <div class="price-container">
+          {% if show_variant_picker %}
+              <div id="variant-price-component"></div>
+          {% else %}
+            <h2 class="product__info__price">
+              <span>{% price_range availability.price_range %}</span>
+              {% if availability.discount %}
+                <small class="product__info__price__undiscounted">{% net availability.price_range_undiscounted.min_price html=True %}</small>
+              {% endif %}
+              {% if availability.price_range_local_currency %}
+                <br>
+                <small class="text-info">
+                  &asymp;
+                  {% net availability.price_range_local_currency.min_price html=True %}
+                </small>
+              {% endif %}
+            </h2>
+          {% endif %}
+        <span class="price small">{% trans "W/O VAT" context "Product details Net price" %}</span>
+        </div>
       {% endif %}
       {% if is_visible and product.is_in_stock %}
         {% block orderform %}

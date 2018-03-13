@@ -10,6 +10,13 @@ import django_cache_url
 from invoice_generator import models
 
 
+def get_bool(name, default=False):
+    if name in os.environ:
+        value = os.environ[name]
+        return ast.literal_eval(value)
+    return default
+
+
 def get_list(text):
     return [item.strip() for item in text.split(',')]
 
@@ -51,7 +58,7 @@ if platform.python_implementation() == "PyPy":
     psycopg2cffi.compat.register()
 
 
-DEBUG = ast.literal_eval(os.environ.get('DEBUG', 'True'))
+DEBUG = get_bool('DEBUG', True)
 
 SITE_ID = 1
 
@@ -112,8 +119,10 @@ EMAIL_BACKEND = env_get_or_get('EMAIL_BACKEND', email_config)
 EMAIL_USE_TLS = env_get_or_get('EMAIL_USE_TLS', email_config)
 EMAIL_USE_SSL = env_get_or_get('EMAIL_USE_SSL', email_config)
 
-ENABLE_SSL = ast.literal_eval(
-    os.environ.get('ENABLE_SSL', 'False'))
+ENABLE_SSL = get_bool('ENABLE_SSL', False)
+
+if ENABLE_SSL:
+    SECURE_SSL_REDIRECT = True
 
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 ORDER_FROM_EMAIL = os.getenv('ORDER_FROM_EMAIL', DEFAULT_FROM_EMAIL)
@@ -171,6 +180,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'secret')
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -216,6 +226,7 @@ INSTALLED_APPS = [
     'saleor.search',
     'saleor.site',
     'saleor.data_feeds',
+    'saleor.page',
 
     # External apps
     'versatileimagefield',
@@ -301,23 +312,39 @@ PAYMENT_HOST = get_host
 PAYMENT_MODEL = 'order.Payment'
 
 PAYMENT_VARIANTS = {
-    'default': ('payments.dummy.DummyProvider', {}),
-    'paypal': ('payments.paypal.PaypalProvider', {
+}
+
+CHECKOUT_PAYMENT_CHOICES = [
+]
+
+
+if 'PAYPAL_CLIENT_ID' in os.environ:
+    PAYMENT_VARIANTS['paypal'] = ('payments.paypal.PaypalProvider', {
         'client_id': os.environ.get('PAYPAL_CLIENT_ID'),
         'secret': os.environ.get('PAYPAL_SECRET'),
-        'endpoint': os.environ.get(
-            'PAYPAL_ENDPOINT', 'https://api.sandbox.paypal.com'),
-        'capture': False})
-}
+        'endpoint': os.environ.get('PAYPAL_ENDPOINT', 'https://api.sandbox.paypal.com'),
+        'capture': get_bool('PAYPAL_CAPTURE')
+    })
+    CHECKOUT_PAYMENT_CHOICES.append(('paypal', 'Paypal'))
+
+
+if 'STRIPE_PUBLIC_KEY' in os.environ:
+    PAYMENT_VARIANTS['stripe'] = ('payments.stripe.StripeProvider', {
+        'public_key': os.environ.get('STRIPE_PUBLIC_KEY'),
+        'secret_key': os.environ.get('STRIPE_SECRET_KEY'),
+        'image': os.environ.get('STORE_IMAGE', ''),
+        'name': os.environ.get('STORE_NAME', ''),
+    })
+    CHECKOUT_PAYMENT_CHOICES.append(('stripe', 'Stripe'))
+
+
+if not CHECKOUT_PAYMENT_CHOICES or 'DUMMY_PROVIDER' in os.environ:
+    PAYMENT_VARIANTS['default'] = ('payments.dummy.DummyProvider', {})
+    CHECKOUT_PAYMENT_CHOICES.append(('default', 'Dummy provider'))
 
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-
-CHECKOUT_PAYMENT_CHOICES = [
-    ('default', 'Dummy provider'),
-    ('paypal', 'Paypal')
-]
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'}
@@ -347,8 +374,7 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 AWS_MEDIA_BUCKET_NAME = os.environ.get('AWS_MEDIA_BUCKET_NAME')
-AWS_QUERYSTRING_AUTH = ast.literal_eval(
-    os.environ.get('AWS_QUERYSTRING_AUTH', 'False'))
+AWS_QUERYSTRING_AUTH = get_bool('AWS_QUERYSTRING_AUTH', False)
 
 if AWS_STORAGE_BUCKET_NAME:
     if 'AWS_STATIC_CUSTOM_DOMAIN' in os.environ:
@@ -375,8 +401,7 @@ VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
 
 VERSATILEIMAGEFIELD_SETTINGS = {
     # Images should be pre-generated on Production environment
-    'create_images_on_demand': ast.literal_eval(
-        os.environ.get('CREATE_IMAGES_ON_DEMAND', 'True')),
+    'create_images_on_demand': get_bool('CREATE_IMAGES_ON_DEMAND', True)
 }
 
 PLACEHOLDER_IMAGES = {
@@ -471,14 +496,18 @@ INVOICE_VENDOR_ADDRESS = models.Address(
     postcode=os.environ.get('INVOICE_VENDOR_POSTCODE', '53-601'),
     city=os.environ.get('INVOICE_VENDOR_CITY', 'Wrocław'))
 
-INVOICE_EXECUTIVE = models.Executive(
+INVOICE_EXECUTIVE = (
     os.environ.get('INVOICE_EXECUTIVE_NAME', 'John Doe'),
-    os.environ.get('INVOICE_EXECUTIVE_TEXT', '\\a'))
+    *env_get_list('INVOICE_EXECUTIVE_TEXT', tuple())
+)
 
 INVOICE_VENDOR = models.Vendor(
-    INVOICE_EXECUTIVE, address=INVOICE_VENDOR_ADDRESS,
+    executive_data=INVOICE_EXECUTIVE,
+    address=INVOICE_VENDOR_ADDRESS,
     vat_number=os.environ.get('INVOICE_VAT_NUMBER', 'PL00000000000'),
-    additional_text=env_get_list('INVOICE_ADDITIONAL_TEXT', tuple()))
+    additional_text=env_get_list('INVOICE_VENDOR_ADDITIONAL_TEXT', tuple()))
+
+INVOICE_ADDITIONAL_TEXT = env_get_list('INVOICE_ADDITIONAL_TEXT', tuple())
 
 SIREN_CODE = os.environ.get('SIREN_CODE', 'SR_00')
 
@@ -499,3 +528,32 @@ WEBHOOK_HANDLERS = (
 )
 
 CSRF_FAILURE_VIEW = 'saleor.core.views.csrf_failure'
+
+# Rich-text editor
+ALLOWED_TAGS = [
+    'a',
+    'b',
+    'blockquote',
+    'br',
+    'em',
+    'h2',
+    'h3',
+    'i',
+    'img',
+    'li',
+    'ol',
+    'p',
+    'strong',
+    'ul']
+ALLOWED_ATTRIBUTES = {
+    '*': ['align', 'style'],
+    'a': ['href', 'title'],
+    'img': ['src']}
+ALLOWED_STYLES = ['text-align']
+
+SOCIAL_LINKS_FACEBOOK = os.environ.get('SOCIAL_LINKS_FACEBOOK', 'mirumeelabs')
+SOCIAL_LINKS_TWITTER = os.environ.get('SOCIAL_LINKS_TWITTER', 'getsaleor')
+SOCIAL_LINKS_GOOGLE = os.environ.get('SOCIAL_LINKS_GOOGLE', '+Mirumee')
+SOCIAL_LINKS_INSTAGRAM = os.environ.get('SOCIAL_LINKS_INSTAGRAM', 'explore/tags/mirumee/')
+
+EMAIL_FOOTER_TEXT = os.environ.get('EMAIL_FOOTER_TEXT', '')

@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from urllib.parse import urlparse
 
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -48,15 +49,11 @@ def requires_login(client):
     return _handler
 
 
-class SetValue(object):
-    def __init__(self, o, attr, value, default=None):
-        self.args = (o, attr, value)
-        self.old_args = (o, attr, getattr(o, attr, default))
+@contextmanager
+def set_value(o, attr, value, default=None):
+    values = (value, getattr(o, attr, default))
 
-    def __enter__(self):
-        setattr(*self.args)
-        return self
-
-    def __exit__(self, *args):
-        setattr(*self.old_args)
-        return self
+    for i, val in enumerate(values):
+        setattr(o, attr, val)
+        if not i:
+            yield

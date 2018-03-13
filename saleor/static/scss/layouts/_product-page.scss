@@ -1,9 +1,19 @@
+.price.small {
+  color: lighten($skull-gray, 30);
+}
 .product {
   a {
     color: $darken-gray;
     text-decoration: underline;
   }
   &__info {
+    .price-container {
+      display: flex;
+      align-items: baseline;
+      >:first-child:after {
+        content: '\00a0';
+      }
+    }
     @include media-breakpoint-down(sm) {
       h1 {
         font-size: 2rem;
@@ -71,7 +81,10 @@
     }
     .carousel-item {
       flex-flow: column;
-      img {
+      .overlay {
+        position: absolute;
+      }
+      img, .overlay {
         width: 100%;
         height: 100%;
       }

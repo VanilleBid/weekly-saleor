@@ -6,8 +6,6 @@ from django.shortcuts import reverse
 from django.test import RequestFactory, Client
 from prices import Price
 
-from saleor import settings
-from saleor.core.urls import ROBOTS_TXT
 from saleor.core.utils import (
     Country, create_superuser, get_country_by_ip, get_currency_for_country,
     random_data)
@@ -244,20 +242,11 @@ def test_get_tax_price(order_with_lines: Order, billing_address):
 
 
 def test_get_robots_txt(client):
-    if settings.DEBUG:
-        assert client.get('/robots.txt').content == ROBOTS_TXT
-
-
-def test_get_privacy_policy(client):
-    response = client.get(reverse('privacy-policy'))
+    response = client.get('/robots.txt')
+    robots_txt = b'User-agent: *\nDisallow: /'
     assert response.status_code == 200
-    assert b'Privacy Policy' in response.content
-
-
-def test_get_selling_contract(client):
-    response = client.get(reverse('selling-contract'))
-    assert response.status_code == 200
-    assert b'Selling Contract' in response.content
+    assert response.get('Content-Type').startswith('text/plain')
+    assert client.get('/robots.txt').content.strip() == robots_txt
 
 
 def test_csrf_view():
@@ -285,3 +274,23 @@ def test_warmer(product_in_stock, product_type):
         ProductImage.objects.create(product=product, image=create_image()[0])
         assert ProductWarmer.all()._wrapper.query_set.count() == i
         assert ProductWarmer.all()() == len(PRODUCT_IMAGE_SETS)
+
+
+def test_home_view_featured_products(client: Client, product_in_stock: Product):
+    url = reverse('home')
+    expected_html = b'<div class="home__featured">'
+
+    product_in_stock.is_featured = False
+    product_in_stock.save()
+
+    def _get():
+        _response = client.get(url)
+        assert _response.status_code == 200
+        return _response.content
+
+    assert expected_html not in _get()
+
+    product_in_stock.is_featured = True
+    product_in_stock.save()
+
+    assert expected_html in _get()

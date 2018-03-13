@@ -16,3 +16,11 @@
     </mj-text>
   </mj-column>
 </mj-section>
+
+<mj-section>
+  <mj-column>
+    <mj-text align="center" color="#999" line-height="1.4" font-size=".7rem">
+        {{ footer_text }}
+    </mj-text>
+  </mj-column>
+</mj-section>

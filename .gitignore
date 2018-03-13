@@ -12,6 +12,7 @@
 !.travis*
 !.tx
 *.css
+!/saleor/static/invoice/*
 *.log
 *.pot
 *.pyc
@@ -28,3 +29,4 @@ dist/
 /saleor/static/assets/
 webpack-bundle.json
 /templates/templated_email/html/compiled/
+.aws.sh

@@ -15,14 +15,14 @@ from ..core.utils import to_local_currency
 from .models import Cart
 
 COOKIE_NAME = 'cart'
+A_YEAR_SECONDS = 365 * 24 * 3600
 
 
 def set_cart_cookie(simple_cart, response):
     """Update respons with a cart token cookie."""
     # FIXME: document why session is not used
-    ten_years = timedelta(days=(365 * 10))
     response.set_signed_cookie(
-        COOKIE_NAME, simple_cart.token, max_age=int(ten_years.total_seconds()))
+        COOKIE_NAME, simple_cart.token, max_age=A_YEAR_SECONDS)
 
 
 def contains_unavailable_variants(cart):

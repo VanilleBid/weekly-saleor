@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-05 11:14+0100\n"
+"POT-Creation-Date: 2018-03-12 04:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Leonardo Paci <leonardo.paci@netfarm.it>, 2017\n"
 "Language-Team: Italian (https://www.transifex.com/mirumee/teams/34782/it/)\n"
@@ -49,15 +49,15 @@ msgstr[1] ""
 #: saleor/dashboard/category/forms.py:21
 #: saleor/dashboard/collection/forms.py:22
 #: saleor/dashboard/discount/forms.py:68 saleor/dashboard/group/forms.py:13
-#: saleor/dashboard/product/forms.py:68 saleor/dashboard/product/forms.py:121
-#: saleor/dashboard/product/forms.py:331 saleor/dashboard/product/forms.py:341
+#: saleor/dashboard/product/forms.py:92 saleor/dashboard/product/forms.py:145
+#: saleor/dashboard/product/forms.py:355 saleor/dashboard/product/forms.py:365
 #: saleor/dashboard/shipping/forms.py:14 saleor/dashboard/sites/forms.py:40
 msgctxt "Item name"
 msgid "Name"
 msgstr ""
 
-#: saleor/dashboard/category/forms.py:24 saleor/dashboard/product/forms.py:122
-#: saleor/dashboard/product/forms.py:278 saleor/dashboard/shipping/forms.py:16
+#: saleor/dashboard/category/forms.py:24 saleor/dashboard/product/forms.py:146
+#: saleor/dashboard/product/forms.py:302 saleor/dashboard/shipping/forms.py:16
 #: saleor/dashboard/sites/forms.py:27
 msgctxt "Description"
 msgid "Description"
@@ -406,7 +406,7 @@ msgctxt "Product"
 msgid "Product"
 msgstr ""
 
-#: saleor/dashboard/discount/forms.py:207 saleor/dashboard/product/forms.py:123
+#: saleor/dashboard/discount/forms.py:207 saleor/dashboard/product/forms.py:147
 msgctxt "Category"
 msgid "Category"
 msgstr ""
@@ -607,7 +607,7 @@ msgctxt "Move lines form label"
 msgid "Target shipment"
 msgstr "Spedizione obiettivo"
 
-#: saleor/dashboard/order/forms.py:171 saleor/dashboard/product/forms.py:34
+#: saleor/dashboard/order/forms.py:171 saleor/dashboard/product/forms.py:58
 msgctxt "Integer number"
 msgid "Quantity"
 msgstr ""
@@ -774,6 +774,68 @@ msgctxt "Dashboard message"
 msgid "Stock location changed for %s"
 msgstr "Magazzino cambiato in %s"
 
+#: saleor/dashboard/page/filters.py:8
+msgctxt "Page list sorting option"
+msgid "title"
+msgstr ""
+
+#: saleor/dashboard/page/filters.py:9
+msgctxt "Page list sorting option"
+msgid "url"
+msgstr ""
+
+#: saleor/dashboard/page/filters.py:14
+msgctxt "Page list title filter label"
+msgid "Title"
+msgstr ""
+
+#: saleor/dashboard/page/filters.py:17
+msgctxt "Page list url filter label"
+msgid "URL"
+msgstr ""
+
+#: saleor/dashboard/page/filters.py:20
+#, fuzzy
+#| msgctxt "Collection list sorting filter label"
+#| msgid "Sort by"
+msgctxt "Page list sorting filter label"
+msgid "Sort by"
+msgstr "Ordina per"
+
+#: saleor/dashboard/page/filters.py:32
+#, python-format
+msgctxt "Number of matching records in the dashboard page list"
+msgid "Found %(counter)d matching page"
+msgid_plural "Found %(counter)d matching pages"
+msgstr[0] ""
+msgstr[1] ""
+
+#: saleor/dashboard/page/forms.py:17
+#, fuzzy
+#| msgctxt "product bulk action"
+#| msgid "Publish"
+msgctxt "Visibility status indicator"
+msgid "Publish"
+msgstr "Pubblicato"
+
+#: saleor/dashboard/page/forms.py:21
+msgctxt "Form field help text"
+msgid "Slug is being used to create page URL"
+msgstr ""
+
+#: saleor/dashboard/page/views.py:47
+msgctxt "Dashboard message"
+msgid "Saved page"
+msgstr ""
+
+#: saleor/dashboard/page/views.py:62
+#, fuzzy, python-format
+#| msgctxt "Dashboard message"
+#| msgid "Removed image %s"
+msgctxt "Dashboard message"
+msgid "Removed page %s"
+msgstr "Rimossa immagine %s"
+
 #: saleor/dashboard/product/__init__.py:11
 msgctxt "product bulk action"
 msgid "Publish"
@@ -918,130 +980,135 @@ msgctxt "Stock location list filter label"
 msgid "Name"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:22
+#: saleor/dashboard/product/forms.py:29
+msgctxt "Help text in rich-text editor field"
+msgid "Select text to enable text-formatting tools."
+msgstr ""
+
+#: saleor/dashboard/product/forms.py:46
 msgctxt "Product type form label"
 msgid "Product type"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:32
+#: saleor/dashboard/product/forms.py:56
 msgctxt "Stock location"
 msgid "Location"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:36
+#: saleor/dashboard/product/forms.py:60
 msgctxt "Currency amount"
 msgid "Cost price"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:37
+#: saleor/dashboard/product/forms.py:61
 msgid "Min availability days"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:38
+#: saleor/dashboard/product/forms.py:62
 msgid "Max availability days"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:53
+#: saleor/dashboard/product/forms.py:77
 msgctxt "stock form error"
 msgid "Stock item for this location and variant already exists"
 msgstr "Stock per questa variante già definita in questa posizione"
 
-#: saleor/dashboard/product/forms.py:71
+#: saleor/dashboard/product/forms.py:95
 msgctxt "Enable variants"
 msgid "Enable variants"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:74
+#: saleor/dashboard/product/forms.py:98
 msgctxt "Product type attributes"
 msgid "Attributes specific to each variant"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:77
+#: saleor/dashboard/product/forms.py:101
 msgctxt "Product type attributes"
 msgid "Attributes common to all variants"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:80
+#: saleor/dashboard/product/forms.py:104
 msgctxt "Shipping toggle"
 msgid "Require shipping"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:90
+#: saleor/dashboard/product/forms.py:114
 msgctxt "Product type form error"
 msgid "Product variants are disabled."
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:95
+#: saleor/dashboard/product/forms.py:119
 msgctxt "Product type form error"
 msgid "A single attribute can't belong to both a product and its variant."
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:109
+#: saleor/dashboard/product/forms.py:133
 msgctxt "Product type form error"
 msgid "Some products of this type have more than one variant."
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:124 saleor/dashboard/shipping/forms.py:29
+#: saleor/dashboard/product/forms.py:148 saleor/dashboard/shipping/forms.py:29
 msgctxt "Currency amount"
 msgid "Price"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:126
+#: saleor/dashboard/product/forms.py:150
 msgctxt "Availability date"
 msgid "Availability date"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:128
+#: saleor/dashboard/product/forms.py:152
 msgctxt "Product published toggle"
 msgid "Published"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:130
+#: saleor/dashboard/product/forms.py:154
 msgctxt "Featured product toggle"
 msgid "Feature this product on homepage"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:132
+#: saleor/dashboard/product/forms.py:156
 msgctxt "Add to collection select"
 msgid "Collections"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:188
+#: saleor/dashboard/product/forms.py:212
 msgctxt "SKU"
 msgid "SKU"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:190
+#: saleor/dashboard/product/forms.py:214
 msgctxt "Override price"
 msgid "Override price"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:191
+#: saleor/dashboard/product/forms.py:215
 msgctxt "Product variant name"
 msgid "Name"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:276 saleor/dashboard/product/forms.py:382
+#: saleor/dashboard/product/forms.py:300 saleor/dashboard/product/forms.py:406
 msgctxt "Product image"
 msgid "Image"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:317
+#: saleor/dashboard/product/forms.py:341
 msgctxt "Product display name"
 msgid "Display name"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:319
+#: saleor/dashboard/product/forms.py:343
 msgctxt "Product internal name"
 msgid "Internal name"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:321
+#: saleor/dashboard/product/forms.py:345
 msgctxt "Is filter hidden"
 msgid "Is filter hidden"
 msgstr ""
 
-#: saleor/dashboard/product/forms.py:343
+#: saleor/dashboard/product/forms.py:367
 msgctxt "Color"
 msgid "Color"
 msgstr ""

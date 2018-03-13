@@ -2,8 +2,8 @@ from django import forms
 from django.contrib.auth import forms as django_forms
 from django.urls import reverse
 from django.utils.translation import pgettext, pgettext_lazy
-from templated_email import send_templated_mail
 
+from ..core.emails import send_templated_mail
 from ..core.utils import build_absolute_uri
 from ..userprofile.models import User
 

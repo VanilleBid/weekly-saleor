@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-05 11:14+0100\n"
+"POT-Creation-Date: 2018-03-12 04:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -189,7 +189,7 @@ msgid_plural "Found %(counter)d matching records"
 msgstr[0] ""
 msgstr[1] ""
 
-#: saleor/core/views.py:44
+#: saleor/core/views.py:38
 msgctxt "Impersonation message"
 msgid "You are now logged as {}"
 msgstr ""
@@ -413,6 +413,16 @@ msgstr ""
 #: saleor/order/views.py:204
 msgctxt "storefront message"
 msgid "The order is now assigned to your account"
+msgstr ""
+
+#: saleor/page/models.py:33
+msgctxt "Permission description"
+msgid "Can view pages"
+msgstr ""
+
+#: saleor/page/models.py:35
+msgctxt "Permission description"
+msgid "Can edit pages"
 msgstr ""
 
 #: saleor/product/__init__.py:16
@@ -845,7 +855,7 @@ msgid "Page not found"
 msgstr ""
 
 #. Translators: Layout may break if character length is different than four.
-#: templates/_items.html:27 templates/category/_items.html:28
+#: templates/_items.html:27 templates/category/_items.html:29
 #: templates/product/_items.html:29
 msgctxt "Sale (discount) label for item in product list"
 msgid "Sale"
@@ -897,7 +907,8 @@ msgstr ""
 
 #: templates/account/password_change.html:7 templates/cart/index.html:11
 #: templates/order/details.html:18 templates/order/payment.html:20
-#: templates/product/details.html:39 templates/userprofile/address_edit.html:16
+#: templates/page/details.html:11 templates/product/details.html:39
+#: templates/userprofile/address_edit.html:16
 #: templates/userprofile/details.html:17
 msgctxt "Main navigation item"
 msgid "Home"
@@ -1185,7 +1196,7 @@ msgctxt "Empty cart message"
 msgid "There are no products in your shopping cart."
 msgstr ""
 
-#: templates/cart/index.html:87 templates/cart_dropdown.html:62
+#: templates/cart/index.html:87 templates/cart_dropdown.html:58
 msgctxt "Empty cart link"
 msgid "Check out our sales"
 msgstr ""
@@ -1207,6 +1218,11 @@ msgstr ""
 #: templates/cart_dropdown.html:52
 msgctxt "Cart dropdown primary action"
 msgid "Checkout"
+msgstr ""
+
+#: templates/category/_items.html:34 templates/product/details.html:148
+msgctxt "Product details Net price"
+msgid "W/O VAT"
 msgstr ""
 
 #: templates/category/index.html:53
@@ -1475,7 +1491,7 @@ msgctxt "Dashboard search"
 msgid "Search"
 msgstr ""
 
-#: templates/dashboard/base.html:95 templates/dashboard/base.html:256
+#: templates/dashboard/base.html:95 templates/dashboard/base.html:263
 msgctxt "Dashboard homepage"
 msgid "Home"
 msgstr ""
@@ -1608,7 +1624,12 @@ msgctxt "Dashboard site settings"
 msgid "Site settings"
 msgstr ""
 
-#: templates/dashboard/base.html:242
+#: templates/dashboard/base.html:241
+msgctxt "Dashboard static pages"
+msgid "Pages"
+msgstr ""
+
+#: templates/dashboard/base.html:249
 msgctxt "Dashboard software version"
 msgid "Release:"
 msgstr ""
@@ -2343,6 +2364,26 @@ msgstr ""
 #: templates/dashboard/includes/_filters.html:47
 msgctxt "Category price filter"
 msgid "Filter"
+msgstr ""
+
+#: templates/dashboard/includes/_page_availability.html:5
+msgctxt "Page availability status"
+msgid "Published"
+msgstr ""
+
+#: templates/dashboard/includes/_page_availability.html:9
+#: templates/dashboard/includes/_page_availability.html:19
+msgctxt "Page availability status"
+msgid "Hidden"
+msgstr ""
+
+#: templates/dashboard/includes/_page_availability.html:13
+#, python-format
+msgctxt "Page availability status"
+msgid ""
+"\n"
+"      Hidden (will become visible on %(date)s)\n"
+"    "
 msgstr ""
 
 #: templates/dashboard/index.html:15 templates/dashboard/index.html:69
@@ -3115,11 +3156,124 @@ msgid ""
 "  "
 msgstr ""
 
+#: templates/dashboard/page/detail.html:9 templates/dashboard/page/list.html:8
+msgctxt "Pages list page title"
+msgid "Pages"
+msgstr ""
+
+#: templates/dashboard/page/detail.html:18
+msgctxt "Pages form breadcrumbs"
+msgid "Pages"
+msgstr ""
+
+#: templates/dashboard/page/detail.html:44
+msgctxt "Page URL"
+msgid "Page URL"
+msgstr ""
+
+#: templates/dashboard/page/detail.html:51
+msgctxt "Page action"
+msgid "Edit page"
+msgstr ""
+
+#: templates/dashboard/page/detail.html:54
+msgctxt "Page action"
+msgid "Remove page"
+msgstr ""
+
+#: templates/dashboard/page/detail.html:58
+msgctxt "Page action"
+msgid "View on site"
+msgstr ""
+
+#: templates/dashboard/page/form.html:6 templates/dashboard/page/form.html:8
+#: templates/dashboard/page/form.html:26
+msgid "Add new page"
+msgstr ""
+
+#: templates/dashboard/page/form.html:20 templates/dashboard/page/list.html:26
+msgid "Pages"
+msgstr ""
+
+#: templates/dashboard/page/form.html:39
+msgctxt "Page action"
+msgid "Delete page"
+msgstr ""
+
+#: templates/dashboard/page/form.html:68 templates/dashboard/page/form.html:71
+#: templates/dashboard/page/modal_delete.html:20
+msgid "Cancel"
+msgstr ""
+
+#: templates/dashboard/page/form.html:69
+msgid "Save"
+msgstr ""
+
+#: templates/dashboard/page/form.html:72
+msgid "Create"
+msgstr ""
+
+#: templates/dashboard/page/list.html:18
+msgid "Add page page"
+msgstr ""
+
+#: templates/dashboard/page/list.html:39
+msgctxt "Static pages table header name"
+msgid "Title"
+msgstr ""
+
+#: templates/dashboard/page/list.html:42
+msgctxt "Static pages table header url"
+msgid "URL"
+msgstr ""
+
+#: templates/dashboard/page/list.html:45
+msgctxt "Pages table header"
+msgid "Visibility"
+msgstr ""
+
+#: templates/dashboard/page/list.html:75
+msgctxt "Empty pages list message"
+msgid "No pages found."
+msgstr ""
+
+#: templates/dashboard/page/modal_delete.html:8
+msgid "Are you sure?"
+msgstr ""
+
+#: templates/dashboard/page/modal_delete.html:12
+#, python-format
+msgid ""
+"\n"
+"                Are you sure you want to delete the page %(page)s?\n"
+"            "
+msgstr ""
+
+#: templates/dashboard/page/modal_delete.html:19
+msgid "Delete"
+msgstr ""
+
+#: templates/dashboard/page/zero_page.html:5
+msgid "No pages found."
+msgstr ""
+
+#: templates/dashboard/page/zero_page.html:8
+#, python-format
+msgid ""
+"\n"
+"    Pages allows to create custom static pages such as \"About us\" that "
+"will be displayed at particular url.<br>\n"
+"    You can create pages by using the <span class=\"btn-fab-presentation"
+"\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"  "
+msgstr ""
+
 #: templates/dashboard/product/_stock_table.html:8
 msgid "Location"
 msgstr ""
 
 #: templates/dashboard/product/_stock_table.html:9
+#: templates/pdf_invoice.html:105
 msgid "Quantity"
 msgstr ""
 
@@ -4339,47 +4493,6 @@ msgid ""
 "  "
 msgstr ""
 
-#: templates/dashboard/storage/_bucket_files_table.html:12
-msgid "Path"
-msgstr ""
-
-#: templates/dashboard/storage/_bucket_files_table.html:13
-msgid "ID"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:9
-msgid "Bucket information"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:16
-msgid "Storage"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:21
-#, python-format
-msgid "%(bucket_name)s bucket"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:30
-msgid "Missing Files"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:30
-msgid "No missing files found."
-msgstr ""
-
-#: templates/dashboard/storage/base.html:34
-msgid "Files to be removed"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:34
-msgid "No files to remove found."
-msgstr ""
-
-#: templates/dashboard/storage/base.html:44
-msgid "sync"
-msgstr ""
-
 #: templates/home.html:12
 msgctxt "Homepage title"
 msgid "Promo &amp; Sale"
@@ -4405,7 +4518,7 @@ msgctxt "Homepage title"
 msgid "Digital Downloads"
 msgstr ""
 
-#: templates/home.html:50
+#: templates/home.html:51
 msgctxt "Homepage title"
 msgid "Featured products"
 msgstr ""
@@ -4693,6 +4806,102 @@ msgctxt "Payment form (Stripe) secondary action"
 msgid "Change payment method"
 msgstr ""
 
+#: templates/page/details.html:25
+#, python-format
+msgctxt "Page details text"
+msgid ""
+"<strong>Warning!</strong> You are previewing a page that will become visible "
+"on <strong>%(date)s</strong>."
+msgstr ""
+
+#: templates/pdf_invoice.html:6
+#, python-format
+msgid "Invoice %(order_id)s"
+msgstr ""
+
+#: templates/pdf_invoice.html:33
+msgid "\"Page \" counter(page) \" of \" counter(pages)"
+msgstr ""
+
+#: templates/pdf_invoice.html:41
+#, python-format
+msgid "VAT Number: %(vat_number)s"
+msgstr ""
+
+#: templates/pdf_invoice.html:81
+#, python-format
+msgid "Order ID: %(order_id)s"
+msgstr ""
+
+#: templates/pdf_invoice.html:85
+#, python-format
+msgid "Customer ID: %(customer_id)s"
+msgstr ""
+
+#: templates/pdf_invoice.html:90
+msgid "The order will be shipped upon receipt of payment."
+msgstr ""
+
+#: templates/pdf_invoice.html:93
+#, python-format
+msgid "Date of Invoice: %(date)s"
+msgstr ""
+
+#: templates/pdf_invoice.html:103
+msgid "REF"
+msgstr ""
+
+#: templates/pdf_invoice.html:104
+msgid "Description"
+msgstr ""
+
+#: templates/pdf_invoice.html:106
+msgid "Price per Unit"
+msgstr ""
+
+#: templates/pdf_invoice.html:107
+msgid "Tax Rate"
+msgstr ""
+
+#: templates/pdf_invoice.html:108
+msgid "Net Price"
+msgstr ""
+
+#: templates/pdf_invoice.html:129
+msgid "Total discounted"
+msgstr ""
+
+#: templates/pdf_invoice.html:137
+msgid "Shipping"
+msgstr ""
+
+#: templates/pdf_invoice.html:144
+msgid "Net total"
+msgstr ""
+
+#: templates/pdf_invoice.html:150
+#, python-format
+msgid "VAT (%(tax)s%%)"
+msgstr ""
+
+#: templates/pdf_invoice.html:156
+msgid "Gross total"
+msgstr ""
+
+#: templates/pdf_invoice.html:164
+msgid "Thank you for your order."
+msgstr ""
+
+#: templates/pdf_invoice.html:167
+#, python-format
+msgid "Please settle the payment by %(date)s"
+msgstr ""
+
+#: templates/pdf_invoice.html:172
+#, python-format
+msgid "Order will be delivered between %(from)s and %(to)s."
+msgstr ""
+
 #: templates/product/_filters.html:17
 msgctxt "Product list page filters"
 msgid "Clear filters"
@@ -4726,22 +4935,22 @@ msgid ""
 "visible on <strong>%(date)s</strong>."
 msgstr ""
 
-#: templates/product/details.html:117
+#: templates/product/details.html:118
 msgctxt "Product details link text"
 msgid "Edit in dashboard"
 msgstr ""
 
-#: templates/product/details.html:162
+#: templates/product/details.html:166
 msgctxt "Product details primary action"
 msgid "Add to cart"
 msgstr ""
 
-#: templates/product/details.html:174
+#: templates/product/details.html:178
 msgctxt "Product details text"
 msgid "This product is currently <strong>unavailable</strong>."
 msgstr ""
 
-#: templates/product/details.html:178
+#: templates/product/details.html:182
 msgctxt "Product details title"
 msgid "Description"
 msgstr ""

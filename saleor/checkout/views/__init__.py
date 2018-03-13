@@ -1,7 +1,7 @@
+from django.http import JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 
-from saleor.core.utils.billing import base_template_kwargs
 from .discount import add_voucher_form, validate_voucher
 from .shipping import (anonymous_user_shipping_address_view,
                        user_shipping_address_view)
@@ -14,6 +14,7 @@ from .validators import (
 from ..core import load_checkout
 from ..forms import ShippingMethodForm
 from ...registration.forms import LoginForm
+from ...core.utils.billing import get_tax_price, base_template_kwargs
 
 
 @load_checkout
@@ -82,3 +83,19 @@ def login(request, checkout):
         return redirect('checkout:index')
     form = LoginForm()
     return TemplateResponse(request, 'checkout/login.html', {'form': form})
+
+
+@load_checkout
+@validate_cart
+def get_taxed_total(request, checkout):
+    """Retrieve the estimations for gross price using tax from country."""
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    price, rate = get_tax_price(request, total=checkout.get_total())
+
+    resp = {
+        'gross': float(price.gross),
+        'rate': rate
+    }
+    return JsonResponse(resp)

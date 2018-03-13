@@ -9,6 +9,7 @@
   <a href="{{ product.get_absolute_url }}" class="link--clean">
     <div class="text-center">
       <div>
+        <div class="overlay"></div>
         <img class="img-responsive"
              src="{% product_first_image product method="fit" size="255x255" %}"
              srcset="{% product_first_image product method="fit" size="255x255" %} 1x, {% product_first_image product method="fit" size="510x510" %} 2x"
@@ -30,6 +31,7 @@
               </div>
             {% endif %}
           {% endif %}
+          <div class="price small">{% trans "W/O VAT" context "Product details Net price" %}</div>
         {% else %}
           &nbsp;
         {% endif %}

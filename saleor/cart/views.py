@@ -1,11 +1,10 @@
 """Cart-related views."""
-from django.http import JsonResponse, HttpResponseNotAllowed
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django_babel.templatetags.babel import currencyfmt
 
-from saleor.core.utils.billing import get_tax_price
 from ..core.utils import get_user_shipping_country, to_local_currency
 from ..product.models import ProductVariant
 from ..shipping.utils import get_shipment_options
@@ -52,21 +51,6 @@ def index(request, cart):
 
     return TemplateResponse(
         request, 'cart/index.html', ctx)
-
-
-@get_or_empty_db_cart(cart_queryset=Cart.objects.for_display())
-def get_taxed_total(request, cart):
-    """Retrieve the estimations for gross price using tax from country."""
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
-
-    price, rate = get_tax_price(request, total=cart.get_total())
-
-    resp = {
-        'gross': float(price.gross),
-        'rate': rate
-    }
-    return JsonResponse(resp)
 
 
 @get_or_empty_db_cart(cart_queryset=Cart.objects.for_display())

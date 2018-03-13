@@ -1,12 +1,16 @@
+import json
+
+import pytest
+
 from datetime import timedelta
 from unittest.mock import MagicMock, Mock
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
+from django.test import Client
+from django.urls import reverse
 from prices import Price
-import pytest
 from satchless.item import InsufficientStock
-from typing import Tuple, Union
 
 from saleor.checkout import views
 from saleor.checkout.core import STORAGE_SESSION_KEY, Checkout
@@ -15,6 +19,21 @@ from saleor.product.models import StockLocation, Stock
 
 from saleor.shipping.models import ShippingMethodCountry
 from saleor.userprofile.models import Address
+
+
+@pytest.fixture()
+def tax_price_factory(client: Client):
+    url = reverse('checkout:taxed-info')
+
+    def _send_request(country_code):
+        #: type: JsonResponse
+        response = client.post(url, {'country': country_code})
+        assert response.status_code == 200
+
+        data = json.loads(response.content.decode('utf-8'))
+        return data
+
+    return _send_request
 
 
 def test_checkout_version():
@@ -396,3 +415,40 @@ def test_is_shipping_same_as_billing(request_cart, customer_user, billing_addres
     checkout.shipping_address = billing_address
 
     assert checkout.is_shipping_same_as_billing is True
+
+
+def test_view_get_taxed_total(
+        tax_rates_countries, product_in_stock, request_cart,
+        tax_price_factory):
+
+    variant = product_in_stock.variants.get()
+    request_cart.add(variant, 1)
+
+    cart_total = float(request_cart.get_total().net)
+
+    for country, tax_rate in tax_rates_countries.items():
+        expected_total = cart_total * (1 + tax_rate)
+        resp = tax_price_factory(country)
+        assert resp['rate'] == tax_rate
+        assert resp['gross'] == expected_total
+
+
+def test_view_get_taxed_total_with_shipping(
+        tax_rates_countries, product_in_stock, checkout: Checkout,
+        tax_price_factory, multiple_shipping_methods, request_checkout):
+
+    variant = product_in_stock.variants.get()
+    checkout.cart.add(variant, 1)
+
+    with request_checkout:
+        for shipping_method in multiple_shipping_methods:
+            for country, tax_rate in tax_rates_countries.items():
+                checkout.shipping_method = shipping_method
+
+                cart_total = float(checkout.get_total().net)
+                expected_total = cart_total * (1 + tax_rate)
+
+                resp = tax_price_factory(country)
+
+                assert resp['rate'] == tax_rate
+                assert resp['gross'] == expected_total

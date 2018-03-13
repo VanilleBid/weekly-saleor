@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-05 11:14+0100\n"
+"POT-Creation-Date: 2018-03-12 04:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Jihan Chung <jihanchung20@gmail.com>, 2017\n"
 "Language-Team: Korean (https://www.transifex.com/mirumee/teams/34782/ko/)\n"
@@ -190,7 +190,7 @@ msgid "Found %(counter)d matching record"
 msgid_plural "Found %(counter)d matching records"
 msgstr[0] ""
 
-#: saleor/core/views.py:44
+#: saleor/core/views.py:38
 msgctxt "Impersonation message"
 msgid "You are now logged as {}"
 msgstr "{} 로 로그인 하였습니다"
@@ -415,6 +415,22 @@ msgstr ""
 msgctxt "storefront message"
 msgid "The order is now assigned to your account"
 msgstr ""
+
+#: saleor/page/models.py:33
+#, fuzzy
+#| msgctxt "Permission description"
+#| msgid "Can view sales"
+msgctxt "Permission description"
+msgid "Can view pages"
+msgstr "할인 상품을 볼 수 있습니다"
+
+#: saleor/page/models.py:35
+#, fuzzy
+#| msgctxt "Permission description"
+#| msgid "Can edit sales"
+msgctxt "Permission description"
+msgid "Can edit pages"
+msgstr "할인 상품을 수정할 수 있습니다"
 
 #: saleor/product/__init__.py:16
 msgctxt "Product status"
@@ -848,7 +864,7 @@ msgid "Page not found"
 msgstr ""
 
 #. Translators: Layout may break if character length is different than four.
-#: templates/_items.html:27 templates/category/_items.html:28
+#: templates/_items.html:27 templates/category/_items.html:29
 #: templates/product/_items.html:29
 msgctxt "Sale (discount) label for item in product list"
 msgid "Sale"
@@ -900,7 +916,8 @@ msgstr "구글"
 
 #: templates/account/password_change.html:7 templates/cart/index.html:11
 #: templates/order/details.html:18 templates/order/payment.html:20
-#: templates/product/details.html:39 templates/userprofile/address_edit.html:16
+#: templates/page/details.html:11 templates/product/details.html:39
+#: templates/userprofile/address_edit.html:16
 #: templates/userprofile/details.html:17
 msgctxt "Main navigation item"
 msgid "Home"
@@ -1198,7 +1215,7 @@ msgctxt "Empty cart message"
 msgid "There are no products in your shopping cart."
 msgstr "쇼핑 카트에 제품이 없습니다"
 
-#: templates/cart/index.html:87 templates/cart_dropdown.html:62
+#: templates/cart/index.html:87 templates/cart_dropdown.html:58
 msgctxt "Empty cart link"
 msgid "Check out our sales"
 msgstr "판매 상품을 확인해 보세요"
@@ -1221,6 +1238,11 @@ msgstr "카트로 이동"
 msgctxt "Cart dropdown primary action"
 msgid "Checkout"
 msgstr "체크아웃"
+
+#: templates/category/_items.html:34 templates/product/details.html:148
+msgctxt "Product details Net price"
+msgid "W/O VAT"
+msgstr ""
 
 #: templates/category/index.html:53
 msgctxt "Category breadcrumbs home"
@@ -1497,7 +1519,7 @@ msgctxt "Dashboard search"
 msgid "Search"
 msgstr "검색"
 
-#: templates/dashboard/base.html:95 templates/dashboard/base.html:256
+#: templates/dashboard/base.html:95 templates/dashboard/base.html:263
 msgctxt "Dashboard homepage"
 msgid "Home"
 msgstr "홈"
@@ -1630,7 +1652,14 @@ msgctxt "Dashboard site settings"
 msgid "Site settings"
 msgstr "사이트 설정"
 
-#: templates/dashboard/base.html:242
+#: templates/dashboard/base.html:241
+#, fuzzy
+#| msgid "Images"
+msgctxt "Dashboard static pages"
+msgid "Pages"
+msgstr "이미지"
+
+#: templates/dashboard/base.html:249
 msgctxt "Dashboard software version"
 msgid "Release:"
 msgstr "출시:"
@@ -2371,6 +2400,29 @@ msgstr "초기화"
 msgctxt "Category price filter"
 msgid "Filter"
 msgstr "검색필터"
+
+#: templates/dashboard/includes/_page_availability.html:5
+#, fuzzy
+#| msgctxt "Product field"
+#| msgid "Published"
+msgctxt "Page availability status"
+msgid "Published"
+msgstr "퍼블리싱 됨"
+
+#: templates/dashboard/includes/_page_availability.html:9
+#: templates/dashboard/includes/_page_availability.html:19
+msgctxt "Page availability status"
+msgid "Hidden"
+msgstr ""
+
+#: templates/dashboard/includes/_page_availability.html:13
+#, python-format
+msgctxt "Page availability status"
+msgid ""
+"\n"
+"      Hidden (will become visible on %(date)s)\n"
+"    "
+msgstr ""
 
 #: templates/dashboard/index.html:15 templates/dashboard/index.html:69
 #: templates/dashboard/index.html:133
@@ -3142,11 +3194,165 @@ msgid ""
 "  "
 msgstr ""
 
+#: templates/dashboard/page/detail.html:9 templates/dashboard/page/list.html:8
+#, fuzzy
+#| msgid "Images"
+msgctxt "Pages list page title"
+msgid "Pages"
+msgstr "이미지"
+
+#: templates/dashboard/page/detail.html:18
+#, fuzzy
+#| msgid "Images"
+msgctxt "Pages form breadcrumbs"
+msgid "Pages"
+msgstr "이미지"
+
+#: templates/dashboard/page/detail.html:44
+msgctxt "Page URL"
+msgid "Page URL"
+msgstr ""
+
+#: templates/dashboard/page/detail.html:51
+#, fuzzy
+#| msgid "Edit images"
+msgctxt "Page action"
+msgid "Edit page"
+msgstr "이미지 수정"
+
+#: templates/dashboard/page/detail.html:54
+#, fuzzy
+#| msgctxt "Sale (discount) action"
+#| msgid "Remove sale"
+msgctxt "Page action"
+msgid "Remove page"
+msgstr "할인 제거"
+
+#: templates/dashboard/page/detail.html:58
+#, fuzzy
+#| msgctxt "Product action"
+#| msgid "View on site"
+msgctxt "Page action"
+msgid "View on site"
+msgstr "사이트에서 보기"
+
+#: templates/dashboard/page/form.html:6 templates/dashboard/page/form.html:8
+#: templates/dashboard/page/form.html:26
+#, fuzzy
+#| msgctxt "Sale (discount) page title"
+#| msgid "Add new sale"
+msgid "Add new page"
+msgstr "새로운 할인 추가"
+
+#: templates/dashboard/page/form.html:20 templates/dashboard/page/list.html:26
+#, fuzzy
+#| msgid "Images"
+msgid "Pages"
+msgstr "이미지"
+
+#: templates/dashboard/page/form.html:39
+#, fuzzy
+#| msgctxt "Modal release payment text"
+#| msgid "Release payment"
+msgctxt "Page action"
+msgid "Delete page"
+msgstr "지불 취소"
+
+#: templates/dashboard/page/form.html:68 templates/dashboard/page/form.html:71
+#: templates/dashboard/page/modal_delete.html:20
+#, fuzzy
+#| msgctxt "Dashboard cancel action"
+#| msgid "Cancel"
+msgid "Cancel"
+msgstr "취소"
+
+#: templates/dashboard/page/form.html:69
+#, fuzzy
+#| msgctxt "Dashboard update action"
+#| msgid "Save"
+msgid "Save"
+msgstr "저장"
+
+#: templates/dashboard/page/form.html:72
+#, fuzzy
+#| msgctxt "Dashboard create action"
+#| msgid "Create"
+msgid "Create"
+msgstr "생성"
+
+#: templates/dashboard/page/list.html:18
+#, fuzzy
+#| msgctxt "Sale (discount) page title"
+#| msgid "Add new sale"
+msgid "Add page page"
+msgstr "새로운 할인 추가"
+
+#: templates/dashboard/page/list.html:39
+msgctxt "Static pages table header name"
+msgid "Title"
+msgstr ""
+
+#: templates/dashboard/page/list.html:42
+msgctxt "Static pages table header url"
+msgid "URL"
+msgstr ""
+
+#: templates/dashboard/page/list.html:45
+msgctxt "Pages table header"
+msgid "Visibility"
+msgstr ""
+
+#: templates/dashboard/page/list.html:75
+#, fuzzy
+#| msgctxt "Empty sales table message"
+#| msgid "No sales found"
+msgctxt "Empty pages list message"
+msgid "No pages found."
+msgstr "할인상품을 찾지 못했습니다."
+
+#: templates/dashboard/page/modal_delete.html:8
+#, fuzzy
+#| msgctxt "Dashboard confirmation modal"
+#| msgid "Are you sure?"
+msgid "Are you sure?"
+msgstr "확실한가요?"
+
+#: templates/dashboard/page/modal_delete.html:12
+#, python-format
+msgid ""
+"\n"
+"                Are you sure you want to delete the page %(page)s?\n"
+"            "
+msgstr ""
+
+#: templates/dashboard/page/modal_delete.html:19
+msgid "Delete"
+msgstr ""
+
+#: templates/dashboard/page/zero_page.html:5
+#, fuzzy
+#| msgctxt "Empty sales table message"
+#| msgid "No sales found"
+msgid "No pages found."
+msgstr "할인상품을 찾지 못했습니다."
+
+#: templates/dashboard/page/zero_page.html:8
+#, python-format
+msgid ""
+"\n"
+"    Pages allows to create custom static pages such as \"About us\" that "
+"will be displayed at particular url.<br>\n"
+"    You can create pages by using the <span class=\"btn-fab-presentation"
+"\"><svg data-src=\"%(img_path)s\" /></span> button.\n"
+"  "
+msgstr ""
+
 #: templates/dashboard/product/_stock_table.html:8
 msgid "Location"
 msgstr "위치"
 
 #: templates/dashboard/product/_stock_table.html:9
+#: templates/pdf_invoice.html:105
 msgid "Quantity"
 msgstr "재고"
 
@@ -4371,53 +4577,6 @@ msgid ""
 "  "
 msgstr ""
 
-#: templates/dashboard/storage/_bucket_files_table.html:12
-msgid "Path"
-msgstr ""
-
-#: templates/dashboard/storage/_bucket_files_table.html:13
-msgid "ID"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:9
-msgid "Bucket information"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:16
-msgid "Storage"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:21
-#, python-format
-msgid "%(bucket_name)s bucket"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:30
-msgid "Missing Files"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:30
-#, fuzzy
-#| msgctxt "Empty sales table message"
-#| msgid "No sales found"
-msgid "No missing files found."
-msgstr "할인상품을 찾지 못했습니다."
-
-#: templates/dashboard/storage/base.html:34
-msgid "Files to be removed"
-msgstr ""
-
-#: templates/dashboard/storage/base.html:34
-#, fuzzy
-#| msgctxt "Empty customers table message"
-#| msgid "No customers found."
-msgid "No files to remove found."
-msgstr "고객을 찾을 수 없습니다."
-
-#: templates/dashboard/storage/base.html:44
-msgid "sync"
-msgstr ""
-
 #: templates/home.html:12
 msgctxt "Homepage title"
 msgid "Promo &amp; Sale"
@@ -4443,7 +4602,7 @@ msgctxt "Homepage title"
 msgid "Digital Downloads"
 msgstr "디지털 다운로드"
 
-#: templates/home.html:50
+#: templates/home.html:51
 msgctxt "Homepage title"
 msgid "Featured products"
 msgstr "주목할만한 제품들"
@@ -4741,6 +4900,134 @@ msgctxt "Payment form (Stripe) secondary action"
 msgid "Change payment method"
 msgstr "결제 방법 변경"
 
+#: templates/page/details.html:25
+#, fuzzy, python-format
+#| msgctxt "Product details text"
+#| msgid ""
+#| "<strong>Warning!</strong> You are previewing a product that will become "
+#| "visible on <strong>%(date)s</strong>."
+msgctxt "Page details text"
+msgid ""
+"<strong>Warning!</strong> You are previewing a page that will become visible "
+"on <strong>%(date)s</strong>."
+msgstr ""
+"<strong>주의!</strong> 지금 보고 계신 제품은 <strong>%(date)s</strong> 일 부"
+"터 확인 가능합니다."
+
+#: templates/pdf_invoice.html:6
+#, fuzzy, python-format
+#| msgctxt "Invoice title"
+#| msgid "Invoice for Order"
+msgid "Invoice %(order_id)s"
+msgstr "주문 인보이스"
+
+#: templates/pdf_invoice.html:33
+msgid "\"Page \" counter(page) \" of \" counter(pages)"
+msgstr ""
+
+#: templates/pdf_invoice.html:41
+#, python-format
+msgid "VAT Number: %(vat_number)s"
+msgstr ""
+
+#: templates/pdf_invoice.html:81
+#, fuzzy, python-format
+#| msgctxt "Order details page title"
+#| msgid "Order %(order)s"
+msgid "Order ID: %(order_id)s"
+msgstr "주문 %(order)s"
+
+#: templates/pdf_invoice.html:85
+#, fuzzy, python-format
+#| msgctxt "Dashboard customer"
+#| msgid "Customer: %(email)s"
+msgid "Customer ID: %(customer_id)s"
+msgstr "고객: %(email)s"
+
+#: templates/pdf_invoice.html:90
+msgid "The order will be shipped upon receipt of payment."
+msgstr ""
+
+#: templates/pdf_invoice.html:93
+#, python-format
+msgid "Date of Invoice: %(date)s"
+msgstr ""
+
+#: templates/pdf_invoice.html:103
+msgid "REF"
+msgstr ""
+
+#: templates/pdf_invoice.html:104
+#, fuzzy
+#| msgctxt "Category list table header description"
+#| msgid "Description"
+msgid "Description"
+msgstr "상품 설명"
+
+#: templates/pdf_invoice.html:106
+#, fuzzy
+#| msgctxt "Title of the per-country shipping price list"
+#| msgid "Price per country"
+msgid "Price per Unit"
+msgstr "국가별 가격"
+
+#: templates/pdf_invoice.html:107
+msgid "Tax Rate"
+msgstr ""
+
+#: templates/pdf_invoice.html:108
+#, fuzzy
+#| msgid "Price"
+msgid "Net Price"
+msgstr "가격"
+
+#: templates/pdf_invoice.html:129
+msgid "Total discounted"
+msgstr ""
+
+#: templates/pdf_invoice.html:137
+#, fuzzy
+#| msgctxt "Voucher: discount for"
+#| msgid "Shipping"
+msgid "Shipping"
+msgstr "배송"
+
+#: templates/pdf_invoice.html:144
+#, fuzzy
+#| msgctxt "Modal capture payment list title"
+#| msgid "Order total:"
+msgid "Net total"
+msgstr "주문 총합:"
+
+#: templates/pdf_invoice.html:150
+#, python-format
+msgid "VAT (%(tax)s%%)"
+msgstr ""
+
+#: templates/pdf_invoice.html:156
+#, fuzzy
+#| msgctxt "Order totals header"
+#| msgid "Grand total"
+msgid "Gross total"
+msgstr "총 합계"
+
+#: templates/pdf_invoice.html:164
+#, fuzzy
+#| msgctxt "Order details primary action"
+#| msgid "Pay for order"
+msgid "Thank you for your order."
+msgstr "주문을 위한 결제"
+
+#: templates/pdf_invoice.html:167
+#, python-format
+msgid "Please settle the payment by %(date)s"
+msgstr ""
+
+#: templates/pdf_invoice.html:172
+#, python-format
+msgid "Order will be delivered between %(from)s and %(to)s."
+msgstr ""
+
 #: templates/product/_filters.html:17
 #, fuzzy
 #| msgctxt "Category page filters"
@@ -4788,22 +5075,22 @@ msgstr ""
 "<strong>주의!</strong> 지금 보고 계신 제품은 <strong>%(date)s</strong> 일 부"
 "터 확인 가능합니다."
 
-#: templates/product/details.html:117
+#: templates/product/details.html:118
 msgctxt "Product details link text"
 msgid "Edit in dashboard"
 msgstr "대시보드에서 수정"
 
-#: templates/product/details.html:162
+#: templates/product/details.html:166
 msgctxt "Product details primary action"
 msgid "Add to cart"
 msgstr "카트에 담기"
 
-#: templates/product/details.html:174
+#: templates/product/details.html:178
 msgctxt "Product details text"
 msgid "This product is currently <strong>unavailable</strong>."
 msgstr "이 제품은 현재 구매가 <strong>불가능</strong>합니다."
 
-#: templates/product/details.html:178
+#: templates/product/details.html:182
 msgctxt "Product details title"
 msgid "Description"
 msgstr "설명"
@@ -5217,6 +5504,18 @@ msgstr "수정"
 msgctxt "No addresses text"
 msgid "You will see new addresses here after first successful checkout."
 msgstr "첫번째 주문이 완료되면 주소를 확인할 수 있습니다."
+
+#, fuzzy
+#~| msgctxt "Empty sales table message"
+#~| msgid "No sales found"
+#~ msgid "No missing files found."
+#~ msgstr "할인상품을 찾지 못했습니다."
+
+#, fuzzy
+#~| msgctxt "Empty customers table message"
+#~| msgid "No customers found."
+#~ msgid "No files to remove found."
+#~ msgstr "고객을 찾을 수 없습니다."
 
 #~ msgid ""
 #~ "Thank you for using %(site_name)s!\n"

@@ -18,12 +18,15 @@ from saleor.discount.models import Sale, Voucher
 from saleor.order import GroupStatus
 from saleor.order.models import DeliveryGroup, Order, OrderLine
 from saleor.order.utils import recalculate_order
+from saleor.page.models import Page
 from saleor.product.models import (
     AttributeChoiceValue, Category, Collection, Product, ProductAttribute,
     ProductImage, ProductType, ProductVariant, Stock, StockLocation)
 from saleor.shipping.models import ShippingMethod
 from saleor.site.models import AuthorizationKey, SiteSettings
 from saleor.userprofile.models import Address, User
+
+from .utils import set_value
 
 
 @pytest.fixture(autouse=True)
@@ -67,6 +70,17 @@ def request_cart_with_item(product_in_stock, request_cart):
     # Prepare some data
     request_cart.add(variant)
     return request_cart
+
+
+@pytest.fixture
+def request_checkout(checkout):
+    import saleor.checkout.core
+
+    def _override(*args, **kwargs):
+        return checkout
+
+    return set_value(
+        saleor.checkout.core.Checkout, 'from_storage', _override)
 
 
 @pytest.fixture
@@ -142,10 +156,10 @@ def multiple_shipping_methods():
         method = ShippingMethod.objects.create(name=str(i))
 
         for country_code, price in shipment_method:
-            method.price_per_country.create(
+            method_country = method.price_per_country.create(
                 country_code=country_code, price=price)
 
-        shipping_methods.append(method)
+            shipping_methods.append(method_country)
 
     return shipping_methods
 
@@ -695,3 +709,12 @@ def collection(db):
 @pytest.fixture
 def tax_rates_countries():
     return {'FR': .20, 'FI': .24}
+
+@pytest.fixture
+def page(db):
+    data = {
+        'slug': 'test-url',
+        'title': 'Test page',
+        'content': 'test content'}
+    page = Page.objects.create(**data)
+    return page

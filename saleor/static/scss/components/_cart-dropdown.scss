@@ -70,10 +70,14 @@
   }
   &__actions {
     margin-top: $global-margin * 2;
+    align-items: center;
   }
   &__empty {
     img {
       margin: $global-margin 0;
+    }
+    h3 {
+      margin-bottom: $global-padding * 2;
     }
   }
   @include media-breakpoint-up(md) {

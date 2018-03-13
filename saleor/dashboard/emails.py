@@ -5,8 +5,8 @@ from django.contrib.sites.models import Site
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from templated_email import send_templated_mail
 
+from ..core.emails import send_templated_mail
 from ..core.utils import build_absolute_uri
 
 
