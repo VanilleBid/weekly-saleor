@@ -86,6 +86,11 @@
               {% trans 'Impersonate customer' context 'Customer impersonate action' %}
             </a>
           {% endif %}
+          {% if perms.order.edit_order %}
+            <a href="{% url 'dashboard:create-order' customer_pk=customer.pk %}" class="btn-flat waves-effect">
+              {% trans 'Create Order' context 'Create order from customer details' %}
+            </a>
+          {% endif %}
         </div>
 
       </div>

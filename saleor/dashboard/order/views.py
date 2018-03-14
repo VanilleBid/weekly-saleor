@@ -12,6 +12,7 @@ from payments import PaymentStatus
 from prices import Price
 from satchless.item import InsufficientStock
 
+from saleor.userprofile.models import User
 from ...core.utils import get_paginator_items
 from ...order import GroupStatus
 from ...order.models import DeliveryGroup, Order, OrderLine, OrderNote
@@ -22,7 +23,8 @@ from .forms import (
     AddressForm, AddVariantToDeliveryGroupForm, CancelGroupForm,
     CancelOrderForm, CancelOrderLineForm, CapturePaymentForm,
     ChangeQuantityForm, ChangeStockForm, MoveLinesForm, OrderNoteForm,
-    RefundPaymentForm, ReleasePaymentForm, RemoveVoucherForm, ShipGroupForm)
+    RefundPaymentForm, ReleasePaymentForm, RemoveVoucherForm, ShipGroupForm,
+    CreateOrderSelectCustomer, OrderCreationForm)
 from .utils import (
     create_invoice_pdf, create_packing_slip_pdf, get_statics_absolute_url)
 
@@ -40,6 +42,31 @@ def order_list(request):
         'orders': orders, 'filter_set': order_filter,
         'is_empty': not order_filter.queryset.exists()}
     return TemplateResponse(request, 'dashboard/order/list.html', ctx)
+
+
+@staff_member_required
+@permission_required('order.edit_order')
+def create_order_select_customer(request):
+    status = 200
+    form = CreateOrderSelectCustomer(request.POST or None)
+
+    if form.is_valid():
+        return form.save()
+    elif form.errors:
+        status = 400
+
+    ctx = {'form': form}
+    return TemplateResponse(
+        request, 'dashboard/order/create_select_customer.html', ctx, status=status)
+
+
+@staff_member_required
+@permission_required('order.edit_order')
+def create_order(request, customer_pk):
+    customer = get_object_or_404(User.objects, pk=customer_pk)
+    form = OrderCreationForm(customer, request.POST or None)
+    ctx = {'customer': customer, 'form': form}
+    return TemplateResponse(request, 'dashboard/order/create.html', ctx)
 
 
 @staff_member_required

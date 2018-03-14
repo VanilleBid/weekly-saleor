@@ -12,6 +12,18 @@ strong {
   font-weight: bold;
 }
 
+.big {
+  font-size: 1.2rem;
+}
+
+.row.bottom-aligned {
+  > .col {
+    float: none;
+    display: table-cell;
+    vertical-align: bottom;
+  }
+}
+
 h5 {
   font-weight: 400;
   font-size: 1.2rem;

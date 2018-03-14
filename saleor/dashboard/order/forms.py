@@ -1,6 +1,11 @@
+from decimal import Decimal
+
 from django import forms
 from django.conf import settings
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (
+    MaxLengthValidator, MaxValueValidator, MinLengthValidator,
+    MinValueValidator)
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import npgettext_lazy, pgettext_lazy
 from django_prices.forms import PriceField
@@ -9,6 +14,7 @@ from satchless.item import InsufficientStock
 
 from ...cart.forms import QuantityField
 from ...core.utils import build_absolute_uri
+from ...discount import DiscountValueType
 from ...discount.utils import decrease_voucher_usage
 from ...order import GroupStatus
 from ...order.emails import send_note_confirmation, send_shipping_confirmation
@@ -19,10 +25,60 @@ from ...order.utils import (
     recalculate_order, remove_empty_groups)
 from ...product.models import Product, ProductVariant, Stock
 from ...product.utils import allocate_stock, deallocate_stock
+from ...shipping.models import ShippingMethod
 from ...userprofile.i18n import (
     AddressForm as StorefrontAddressForm, PossiblePhoneNumberFormField)
+from ...userprofile.models import Address, User
 from ..forms import AjaxSelect2ChoiceField
 from ..widgets import PhonePrefixWidget
+
+
+class CreateOrderSelectCustomer(forms.Form):
+    customer = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),
+        validators=[MaxLengthValidator(1), MinLengthValidator(1)],
+        error_messages={
+            'max_length': pgettext_lazy(
+                'Customer Selection Error',
+                'You must only select %(limit_value)d customer (%(show_value)d selected).')})
+
+    def save(self):
+        return redirect(
+            'dashboard:create-order',
+            customer_pk=self.cleaned_data['customer'].first().pk)
+
+
+class OrderCreationForm(forms.Form):
+    is_shipping_required = forms.BooleanField(initial=True)
+    shipping_address = forms.ModelChoiceField(queryset=Address.objects.none())
+    billing_address = forms.ModelChoiceField(queryset=Address.objects.none())
+    shipping_method = forms.ModelChoiceField(queryset=ShippingMethod.objects.none())
+    note = forms.CharField(widget=forms.Textarea, required=False)
+
+    # FIXME: #69 should set the initial value to the user base discount
+    discount = PriceField(
+        initial=Decimal(0.0),
+        max_digits=12, decimal_places=2, currency=settings.DEFAULT_CURRENCY)
+    discount_type = forms.ChoiceField(
+        choices=DiscountValueType.CHOICES, initial=DiscountValueType.FIXED)
+
+    # voucher_code = TODO
+    is_shipping_same_as_billing = forms.BooleanField(initial=False)
+
+    # products = TODO (may be removed from this form)
+
+    def __init__(self, customer: User, data, *args, **kwargs):
+        super(OrderCreationForm, self).__init__(data, *args, **kwargs)
+
+        addresses = customer.addresses
+        shipping_address_field = self.fields['shipping_address']  # type: forms.ModelChoiceField
+        billing_address_field = self.fields['billing_address']  # type: forms.ModelChoiceField
+
+        shipping_address_field.initial = customer.default_shipping_address
+        billing_address_field.initial = customer.default_billing_address
+
+        self.fields['billing_address'].queryset = addresses
+        self.fields['shipping_address'].queryset = addresses
 
 
 class OrderNoteForm(forms.ModelForm):
