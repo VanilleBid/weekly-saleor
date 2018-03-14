@@ -104,7 +104,6 @@
             <td>{% blocktrans %}Description{% endblocktrans %}</td>
             <td>{% blocktrans %}Quantity{% endblocktrans %}</td>
             <td>{% blocktrans %}Price per Unit{% endblocktrans %}</td>
-            <td>{% blocktrans %}Tax Rate{% endblocktrans %}</td>
             <td>{% blocktrans %}Net Price{% endblocktrans %}</td>
           </tr>
         </thead>
@@ -115,7 +114,6 @@
             <td>{{ item.text|safe }}</td>
             <td class="nowrap text-center">{{ item.quantity }}</td>
             <td class="nowrap text-center">{{ item.net_price|floatformat:2 }} {{ currency }}</td>
-            <td class="nowrap text-center">{{ item.tax_rate }} %</td>
             <td class="nowrap text-center">{{ item.total_net|floatformat:2 }} {{ currency }}</td>
           </tr>
           {% endfor %}
@@ -126,7 +124,7 @@
           <tr class="tfoot">
             <td class="noborder"></td>
             <td class="noborder"></td>
-            <td colspan="3"> {% blocktrans %}Total discounted{% endblocktrans %}</td>
+            <td colspan="2"> {% blocktrans %}Total discounted{% endblocktrans %}</td>
             <td class="nowrap" colspan="2">{{ order.total_discounted|floatformat:2 }} {{ currency }}</td>
           </tr>
           {% endif %}
@@ -134,26 +132,26 @@
           <tr class="tfoot">
             <td class="noborder"></td>
             <td class="noborder"></td>
-            <td colspan="3"> {% blocktrans %}Shipping{% endblocktrans %}</td>
+            <td colspan="2"> {% blocktrans %}Shipping{% endblocktrans %}</td>
             <td class="nowrap" colspan="2">{{ order.total_shipping_net|floatformat:2 }} {{ currency }}</td>
           </tr>
           {% endif %}
           <tr class="tfoot">
             <td class="noborder"></td>
             <td class="noborder"></td>
-            <td colspan="3"> {% blocktrans %}Net total{% endblocktrans %}</td>
+            <td colspan="2"> {% blocktrans %}Net total{% endblocktrans %}</td>
             <td class="nowrap" colspan="2">{{ order.total_net|floatformat:2 }} {{ currency }}</td>
           </tr>
           <tr class="tfoot">
             <td class="noborder"></td>
             <td class="noborder"></td>
-            <td colspan="3">{% blocktrans with tax=order.tax_rate %}VAT ({{ tax }}%){% endblocktrans %}</td>
+            <td colspan="2">{% blocktrans with tax=order.tax_rate %}VAT ({{ tax }}%){% endblocktrans %}</td>
             <td class="nowrap" colspan="2">{{ order.total_tax|floatformat:2 }} {{ currency }}</td>
           </tr>
           <tr class="tfoot gross-total bold">
             <td class="noborder"></td>
             <td class="noborder"></td>
-            <td colspan="3"> {% blocktrans %}Gross total{% endblocktrans %}</td>
+            <td colspan="2"> {% blocktrans %}Gross total{% endblocktrans %}</td>
             <td class="nowrap" colspan="2">{{ order.total_gross|floatformat:2 }} {{ currency }}</td>
           </tr>
         </tbody>

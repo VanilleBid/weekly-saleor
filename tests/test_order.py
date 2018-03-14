@@ -6,7 +6,7 @@ from prices import Price
 from saleor.order import models, OrderStatus
 from saleor.order.forms import OrderNoteForm
 from saleor.order.utils import add_variant_to_delivery_group
-from saleor.userprofile.models import Address
+from saleor.userprofile.models import Address, User
 from tests.utils import get_redirect_location, assert_decimal
 
 
@@ -180,6 +180,39 @@ def test_view_order_invoice_unauthorized(
 
     assert response.status_code == 404
     assert response['content-type'] != 'application/pdf'
+
+
+def test_view_order_invoice_staff_access(
+        order_with_lines_and_stock,
+        staff_client, staff_user, staff_group,
+        permission_view_order):
+
+    order = order_with_lines_and_stock
+    url = reverse(
+        'order:invoice', kwargs={'token': order.token})
+
+    def _get():
+        _response = staff_client.get(url)
+        return _response
+
+    assert not staff_user.has_perm("order.view_order")
+    assert _get().status_code == 404
+
+    staff_group.permissions.add(permission_view_order)
+    staff_user.groups.add(staff_group)
+    staff_user = User.objects.get(pk=staff_user.pk)
+    assert staff_user.has_perm("order.view_order")
+
+    response = _get()
+
+    assert response.status_code == 200
+    assert response['content-type'] == 'application/pdf'
+    name = "invoice-%s" % order.id
+    assert response['Content-Disposition'] == 'filename=%s' % name
+
+    staff_user.is_active = False
+    staff_user.save()
+    assert _get().status_code == 302
 
 
 def test_view_connect_order_with_user_different_email(
