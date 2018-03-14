@@ -1,6 +1,7 @@
 from django import forms
 
 from ...userprofile.models import User
+from ..forms import RichTextField
 
 
 class CustomerForm(forms.ModelForm):
@@ -13,4 +14,6 @@ class CustomerForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['email', 'is_active']
+        fields = ['email', 'is_active', 'notes']
+
+    notes = RichTextField(required=False)

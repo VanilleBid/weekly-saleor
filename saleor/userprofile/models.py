@@ -103,6 +103,8 @@ class User(PermissionsMixin, AbstractBaseUser, WebhookModel):
         Address, related_name='+', null=True, blank=True,
         on_delete=models.SET_NULL)
 
+    notes = models.TextField(null=True, blank=True)
+
     USERNAME_FIELD = 'email'
 
     objects = UserManager()
