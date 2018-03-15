@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load materializecss %}
 {% load staticfiles %}
+{% load product_first_image from product_images %}
 
 {% block title %}
   {% trans "Create Order" context "Dashboard create order" %} - {{ block.super }}
@@ -77,7 +78,9 @@
         </li>
       </ul>
     </div>
+  </div>
 
+  <div class="row">
     <div class="row tab-content" id="order-products">
       <div class="row">
         <div class="col s12 m8">
@@ -88,6 +91,53 @@
                 <label class="input-field">
                   <input filter-field="product__title" type="text" placeholder="{% trans 'Title' %}" />
                 </label>
+              </div>
+
+              <div class="body-create-order__product-list">
+                <label>
+                  <input type="text" class="body-create-order__product-search" />
+                </label>
+
+                <div class="body-create-order__product-container">
+                  <div class="row">
+                    <div class="col s12 m4 l3">
+                      <div class="card">
+                        <a href="{{ product.get_absolute_url }}" target="_blank" class="img-container">
+                          <div class="img-overlay"></div>
+                          <img src="{% product_first_image product size="510x510" method="fit" %}" class="responsive-img">
+                        </a>
+
+                        <div class="card-content">
+                          <div class="card-title">
+                            {{ product.name }}
+                          </div>
+
+                          <table>
+                            {% for attribute, value in product_attributes.items %}
+                              <tr>
+                                <td>{{ attribute }}</td>
+                                <td><strong>{{ value }}</strong></td>
+                              </tr>
+                            {% endfor %}
+                          </table>
+                        </div>
+
+                        <div class="table-toggle">
+                          <span></span>
+                        </div>
+
+                        <div class="card-action center-align">
+                          <div class="small">
+{#                            TODO: click selects the variant/ show pic#}
+                            {% for variant in product.variants.all %}
+                              <p>{{ variant.sku }}</p>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

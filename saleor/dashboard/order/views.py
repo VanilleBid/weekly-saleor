@@ -16,7 +16,8 @@ from ...userprofile.models import User
 from ...core.utils import get_paginator_items
 from ...order import GroupStatus
 from ...order.models import DeliveryGroup, Order, OrderLine, OrderNote
-from ...product.models import StockLocation
+from ...product.utils import get_product_attributes_data
+from ...product.models import StockLocation, Product
 from ..views import staff_member_required
 from .filters import OrderFilter, OrderCreationStaticFilters
 from .forms import (
@@ -66,7 +67,14 @@ def create_order(request, customer_pk):
     customer = get_object_or_404(User.objects, pk=customer_pk)
     form = OrderCreationForm(customer, request.POST or None)
     filters = OrderCreationStaticFilters()
-    ctx = {'customer': customer, 'form': form, 'filters': filters}
+
+    # TEST DATA
+    product = Product.objects.first()
+    product_attributes = get_product_attributes_data(product)
+    # END TEST DATA
+
+    ctx = {'customer': customer, 'form': form, 'filters': filters,
+           'product': product, 'product_attributes': product_attributes}
     return TemplateResponse(request, 'dashboard/order/create.html', ctx)
 
 

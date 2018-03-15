@@ -2,6 +2,7 @@
   background: none;
   li {
     a {
+      outline: none;
       span {
         display: none;
         @media (min-width: $small-screen-up) {
