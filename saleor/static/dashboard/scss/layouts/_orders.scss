@@ -61,7 +61,7 @@
             padding-bottom: 1rem;
 
             span {
-              &.toggled:before {
+              &[is-toggled="true"]:before {
                 content: '-';
               }
               &:before {
@@ -90,6 +90,21 @@
               &:hover {
                 transform: scale(1.4);
                 border-radius: 2rem;
+              }
+            }
+          }
+
+          .card-action {
+            .product-entry {
+              display: flex;
+              align-items: baseline;
+              > span {
+                flex-grow: 1;
+              }
+              input {
+                max-width: 60px;
+                border: 0;
+                text-align: center;
               }
             }
           }

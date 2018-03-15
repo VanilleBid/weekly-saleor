@@ -7,13 +7,21 @@ function appendOption ($select, option) {
 }
 
 function initSelects() {
-  $('select:not(.browser-default):not(.enable-ajax-select2):not([multiple])').material_select();
-  $('select[multiple]:not(.browser-default):not(.enable-ajax-select2)').select2({width: '100%'});
+  $('select:not(.browser-default):not(.enable-ajax-select2):not([multiple])').select2({
+    width: '100%',
+    tags: true,
+    minimumResultsForSearch: -1
+  });
+  $('select[multiple]:not(.browser-default):not(.enable-ajax-select2)').select2({
+    width: '100%',
+    tags: true
+  });
 
   $('select[data-options]').each((i, select) => {
     const $select = $(select);
     $select.select2({
-      width: '100%'
+      width: '100%',
+      tags: true
     });
   });
 

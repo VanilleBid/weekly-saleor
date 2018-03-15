@@ -83,36 +83,41 @@
   <div class="row">
     <div class="row tab-content" id="order-products">
       <div class="row">
-        <div class="col s12 m8">
+        <div class="col s12 m8" ng-app="createOrderForm" ng-controller="productList">
           <div class="card">
             <div class="card-content">
               <div class="card-title">
-                <p>{% trans 'Products' %}</p>
+                <p>
+                  {% trans 'Products' %}
+                  <span ng-if="selected_category.category_name">
+                    &mdash; [[selected_category.category_name]]
+                  </span>
+                </p>
                 <label class="input-field">
-                  <input filter-field="product__title" type="text" placeholder="{% trans 'Title' %}" />
+                  <input ng-model="productTitleModel" filter-field="product__title" type="text" placeholder="{% trans 'Title' %}" />
                 </label>
               </div>
 
               <div class="body-create-order__product-list">
-                <label>
-                  <input type="text" class="body-create-order__product-search" />
-                </label>
-
                 <div class="body-create-order__product-container">
                   <div class="row">
-                    <div class="col s12 m4 l3">
+                    <div ng-repeat="product in products | filter: {category_id: category_id} | filter: {name: productTitleModel}" class="col s12 m4 l3">
                       <div class="card">
                         <a href="{{ product.get_absolute_url }}" target="_blank" class="img-container">
                           <div class="img-overlay"></div>
-                          <img src="{% product_first_image product size="510x510" method="fit" %}" class="responsive-img">
+                          <img src="{% product_first_image product size="510x510" method="fit" %}" class="responsive-img"/>
                         </a>
 
                         <div class="card-content">
                           <div class="card-title">
-                            {{ product.name }}
+                            [[ product.name ]]
                           </div>
 
-                          <table>
+                          <div class="table-toggle">
+                            <span ng-click="show=!show" is-toggled="[[show]]"></span>
+                          </div>
+
+                          <table ng-show="show">
                             {% for attribute, value in product_attributes.items %}
                               <tr>
                                 <td>{{ attribute }}</td>
@@ -122,15 +127,16 @@
                           </table>
                         </div>
 
-                        <div class="table-toggle">
-                          <span></span>
-                        </div>
-
                         <div class="card-action center-align">
                           <div class="small">
 {#                            TODO: click selects the variant/ show pic#}
                             {% for variant in product.variants.all %}
-                              <p>{{ variant.sku }}</p>
+                              <div class="product-entry">
+                                <span>{{ variant.sku }} — €21</span>
+                                <label>
+                                  <input type="number" value="0"/>
+                                </label>
+                              </div>
                             {% endfor %}
                           </div>
                         </div>
