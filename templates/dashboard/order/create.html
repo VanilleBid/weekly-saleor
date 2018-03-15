@@ -48,62 +48,123 @@
 {% endblock %}
 
 {% block content %}
-  {% if customer.notes %}
-    <div class="row">
-      <div class="col s12">
-        <div class="card">
-          <div class="card-content">
-            <div class="card-title">
-              {% trans "Notes about the customer" context "Order creation form, notes about the customer title" %}
-            </div>
-            <span class="materialize-red-text big">
-              {{ customer.notes|safe }}
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs" role="tablist">
+        <li role="presentation" class="tab col s4">
+          <a href="#order-products" role="tab" class="active">
+            <span>
+              {% trans "Products" context "Order creation tab" %}
             </span>
+            <svg data-src="{% static "dashboard/images/description.svg" %}" class="fill-secondary" />
+          </a>
+        </li>
+        <li role="presentation" class="tab col s4">
+          <a href="#order-addresses" role="tab">
+            <span>
+              {% trans "Shipping & Billing" context "Order creation tab" %}
+            </span>
+            <svg data-src="{% static "dashboard/images/payment.svg" %}" class="fill-secondary" />
+          </a>
+        </li>
+        <li role="presentation" class="tab col s4">
+          <a href="#order-summary" role="tab">
+            <span>
+              {% trans "Summary" context "Order creation tab" %}
+            </span>
+            <svg data-src="{% static "dashboard/images/description.svg" %}" class="fill-secondary" />
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="row tab-content" id="order-products">
+      <div class="row">
+        <div class="col s12 m8">
+          <p>order-products</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row tab-content" id="order-addresses">
+      <div class="row">
+        <div class="col s12 m8">
+          <p>order-addresses</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row tab-content" id="order-summary">
+      {% if customer.notes %}
+        <div class="row">
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content">
+                <div class="card-title">
+                  {% trans "Notes about the customer" context "Order creation form, notes about the customer title" %}
+                </div>
+                <span class="materialize-red-text big">
+                  {{ customer.notes|safe }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <div class="row">
+        <div class="col s12 m8">
+          <form class="card" method="post">
+            <div class="card-content">
+              <div class="card-title">
+                {% trans 'Order Creation' context 'Order creation form title' %}
+              </div>
+              <div class="data">
+                {% csrf_token %}
+                <div class="row">
+                  {{ form.shipping_address|materializecss }}
+                </div>
+                <div class="row">
+                  {{ form.billing_address|materializecss }}
+                </div>
+                <div class="row">
+                  {{ form.shipping_method|materializecss }}
+                </div>
+                <div class="row">
+                </div>
+                <div class="row bottom-aligned">
+                  <div class="col s12 m8">
+                    {{ form.note|materializecss }}
+                  </div>
+                  <div class="col s2">
+                    {{ form.discount|materializecss }}
+                  </div>
+                  <div class="col s2">
+                    {{ form.discount_type|materializecss }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-action right-align">
+              <button type="submit" class="btn waves-effect">
+                {% trans 'Next' context 'Order creation, customer selection step, confirm selection action' %}
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="col s12 m4">
+          <div class="data-table-container">
+            <table class="bordered highlight responsive data-table">
+              <thead>
+                <tr>
+                  <th>Hello</th>
+                  <th>world</th>
+                </tr>
+              </thead>
+            </table>
           </div>
         </div>
       </div>
     </div>
-  {% endif %}
 
-  <div class="row">
-    <div class="col s12">
-      <form class="card" method="post">
-        <div class="card-content">
-          <div class="card-title">
-            {% trans 'Order Creation' context 'Order creation form title' %}
-          </div>
-          <div class="data">
-            {% csrf_token %}
-            <div class="row">
-              {{ form.shipping_address|materializecss }}
-            </div>
-            <div class="row">
-              {{ form.billing_address|materializecss }}
-            </div>
-            <div class="row">
-              {{ form.shipping_method|materializecss }}
-            </div>
-            <div class="row">
-            </div>
-            <div class="row bottom-aligned">
-              <div class="col s12 m8">
-                {{ form.note|materializecss }}
-              </div>
-              <div class="col s2">
-                {{ form.discount|materializecss }}
-              </div>
-              <div class="col s2">
-                {{ form.discount_type|materializecss }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-action right-align">
-          <button type="submit" class="btn waves-effect">
-            {% trans 'Next' context 'Order creation, customer selection step, confirm selection action' %}
-          </button>
-        </div>
-      </form>
-    </div>
   </div>
 {% endblock %}
