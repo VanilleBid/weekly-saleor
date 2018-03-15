@@ -5,3 +5,28 @@
     }
   }
 }
+
+.body-create-order {
+  #order-products {
+    .card:first-child {
+      .card-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        label {
+          flex-grow: 1;
+          width: 100%;
+
+          [type='text'] {
+            border-bottom: 1px dashed #bbb;
+            color: #111;
+            &::placeholder {
+              color: #111;
+            }
+          }
+        }
+      }
+    }
+  }
+}

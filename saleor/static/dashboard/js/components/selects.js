@@ -1,4 +1,5 @@
 import 'select2';
+import {extend} from 'jquery';
 
 function appendOption ($select, option) {
   $select.append($('<option></option>')
@@ -9,9 +10,23 @@ function initSelects() {
   $('select:not(.browser-default):not(.enable-ajax-select2):not([multiple])').material_select();
   $('select[multiple]:not(.browser-default):not(.enable-ajax-select2)').select2({width: '100%'});
 
+  $('select[data-options]').each((i, select) => {
+    const $select = $(select);
+    $select.select2({
+      width: '100%'
+    });
+  });
+
   $('select.enable-ajax-select2:not(.select2-enabled)').each((i, select) => {
     const $select = $(select);
     const initial = $select.data('initial');
+    let options = $select.getAttribute('select2-options');
+
+    if (options !== null) {
+      options = JSON.parse(options);
+    } else {
+      options = {};
+    }
 
     if (initial) {
       const initialData = initial instanceof Array ? initial : [initial];
@@ -22,7 +37,7 @@ function initSelects() {
       $select.val(selected);
     }
 
-    $select.select2({
+    extend(options, {
       ajax: {
         url: $select.data('url'),
         delay: 250
@@ -30,7 +45,9 @@ function initSelects() {
       width: '100%',
       minimumInputLength: 2
     });
-    $select.addClass('select2-enabled')
+
+    $select.select2(options);
+    $select.addClass('select2-enabled');
   });
 }
 

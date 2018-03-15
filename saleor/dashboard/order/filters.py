@@ -4,8 +4,10 @@ from django.utils.translation import npgettext, pgettext_lazy
 from django_filters import (
     CharFilter, ChoiceFilter, DateFromToRangeFilter, NumberFilter,
     OrderingFilter, RangeFilter)
+from mptt.forms import TreeNodeMultipleChoiceField
 from payments import PaymentStatus
 
+from ...product.models import Category
 from ...core.filters import SortedFilterSet
 from ...order import OrderStatus
 from ...order.models import Order
@@ -80,3 +82,7 @@ class OrderFilter(SortedFilterSet):
             'Found %(counter)d matching order',
             'Found %(counter)d matching orders',
             number=counter) % {'counter': counter}
+
+
+class OrderCreationStaticFilters(forms.Form):
+    category = TreeNodeMultipleChoiceField(queryset=Category.objects.all())

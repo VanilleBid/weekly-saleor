@@ -52,6 +52,7 @@
           </div>
           <div class="data">
             {% csrf_token %}
+{#            FIXME: saleor is bugged for that <div class="row" select2-options='{"maximumSelectionLength": 1}'>#}
             <div class="row">
               {{ form.customer|materializecss }}
             </div>

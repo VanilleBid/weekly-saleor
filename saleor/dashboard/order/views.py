@@ -12,13 +12,13 @@ from payments import PaymentStatus
 from prices import Price
 from satchless.item import InsufficientStock
 
-from saleor.userprofile.models import User
+from ...userprofile.models import User
 from ...core.utils import get_paginator_items
 from ...order import GroupStatus
 from ...order.models import DeliveryGroup, Order, OrderLine, OrderNote
 from ...product.models import StockLocation
 from ..views import staff_member_required
-from .filters import OrderFilter
+from .filters import OrderFilter, OrderCreationStaticFilters
 from .forms import (
     AddressForm, AddVariantToDeliveryGroupForm, CancelGroupForm,
     CancelOrderForm, CancelOrderLineForm, CapturePaymentForm,
@@ -65,7 +65,8 @@ def create_order_select_customer(request):
 def create_order(request, customer_pk):
     customer = get_object_or_404(User.objects, pk=customer_pk)
     form = OrderCreationForm(customer, request.POST or None)
-    ctx = {'customer': customer, 'form': form}
+    filters = OrderCreationStaticFilters()
+    ctx = {'customer': customer, 'form': form, 'filters': filters}
     return TemplateResponse(request, 'dashboard/order/create.html', ctx)
 
 
