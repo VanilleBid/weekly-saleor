@@ -19,13 +19,13 @@ function initCreateOrderAngularApp () {
     });
     let i = 0;
     $scope.products = this.products = [
-      {'category_id': 1, 'name': 'item ' + ++i},
-      {'category_id': 1, 'name': 'item ' + ++i},
-      {'category_id': 1, 'name': 'item ' + ++i},
-      {'category_id': 1, 'name': 'item ' + ++i},
-      {'category_id': 1, 'name': 'item ' + ++i},
-      {'category_id': 1, 'name': 'item ' + ++i},
-      {'category_id': 1, 'name': 'item ' + ++i}
+      {'sku': i, 'category_id': 1, 'name': 'item ' + ++i},
+      {'sku': i, 'category_id': 1, 'name': 'item ' + ++i},
+      {'sku': i, 'category_id': 1, 'name': 'item ' + ++i},
+      {'sku': i, 'category_id': 1, 'name': 'item ' + ++i},
+      {'sku': i, 'category_id': 1, 'name': 'item ' + ++i},
+      {'sku': i, 'category_id': 1, 'name': 'item ' + ++i},
+      {'sku': i, 'category_id': 1, 'name': 'item ' + ++i}
     ];
   }]);
 }
