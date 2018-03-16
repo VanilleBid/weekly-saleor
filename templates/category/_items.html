@@ -19,7 +19,7 @@
 
       <div class="panel-footer">
         {% if availability.available %}
-          {% price_range availability.price_range %}
+          {% price_range availability.taxed_price_range %}
           {% if availability.discount %}
             {% if availability.price_range_undiscounted.min_price != availability.price_range.min_price %}
               <div class="product-list__sale">
@@ -31,7 +31,7 @@
               </div>
             {% endif %}
           {% endif %}
-          <div class="price small">{% trans "W/O VAT" context "Product details Net price" %}</div>
+          <div class="price small">{% trans "With VAT" context "Product details Net price" %}</div>
         {% else %}
           &nbsp;
         {% endif %}

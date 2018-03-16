@@ -15,18 +15,18 @@ export default class VariantPrice extends Component {
     const variant = store.variant;
     if (!store.isEmpty) {
       // variant price
-      isDiscount = variant.price.gross !== variant.priceUndiscounted.gross;
-      priceText = `${variant.price.grossLocalized}`;
-      priceUndiscountedText = `${variant.priceUndiscounted.grossLocalized}`;
+      isDiscount = variant.taxedPrice.gross !== variant.taxedPriceUndiscounted.gross;
+      priceText = `${variant.taxedPrice.grossLocalized}`;
+      priceUndiscountedText = `${variant.taxedPriceUndiscounted.grossLocalized}`;
       if (variant.priceLocalCurrency) {
         priceLocalCurrency = variant.priceLocalCurrency.grossLocalized;
       }
     } else {
       // if there's no variant, fall back to product price
-      const { discount, priceRange, priceRangeUndiscounted } = availability;
+      const { discount, taxedPriceRange, taxedPriceRangeUndiscounted } = availability;
       isDiscount = discount && !!Object.keys(discount).length;
-      priceText = `${priceRange.minPrice.grossLocalized}`;
-      priceUndiscountedText = `${priceRangeUndiscounted.minPrice.grossLocalized}`;
+      priceText = `${taxedPriceRange.minPrice.grossLocalized}`;
+      priceUndiscountedText = `${taxedPriceRangeUndiscounted.minPrice.grossLocalized}`;
       if (availability.priceRangeLocalCurrency) {
         priceLocalCurrency = availability.priceRangeLocalCurrency.minPrice.grossLocalized;
       }
