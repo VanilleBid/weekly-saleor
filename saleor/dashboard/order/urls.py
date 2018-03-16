@@ -8,6 +8,10 @@ urlpatterns = [
         views.create_order_select_customer, name='create-order'),
     url(r'^create/(?P<customer_pk>\d+)/$',
         views.create_order, name='create-order'),
+    # FIXME: this is a temporary view while waiting for Dashboard 2.0
+    # This way we would allow caching.
+    url(r'^create/_get/products.json$',
+        views.get_products_json, name='get-products-json'),
     url(r'^(?P<order_pk>\d+)/$',
         views.order_details, name='order-details'),
     url(r'^(?P<order_pk>\d+)/add-note/$',

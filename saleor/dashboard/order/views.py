@@ -1,12 +1,16 @@
+import json
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.context_processors import csrf
 from django.template.response import TemplateResponse
 from django.utils.translation import pgettext_lazy
+from django.views.decorators.cache import cache_page
 from django_prices.templatetags.prices_i18n import gross
 from payments import PaymentStatus
 from prices import Price
@@ -16,7 +20,7 @@ from ...userprofile.models import User
 from ...core.utils import get_paginator_items
 from ...order import GroupStatus
 from ...order.models import DeliveryGroup, Order, OrderLine, OrderNote
-from ...product.utils import get_product_attributes_data
+from ...product.utils import get_product_attributes_data, products_with_details
 from ...product.models import StockLocation, Product
 from ..views import staff_member_required
 from .filters import OrderFilter, OrderCreationStaticFilters
@@ -497,3 +501,16 @@ def orderline_change_stock(request, order_pk, line_pk):
     ctx = {'order_pk': order_pk, 'line_pk': line_pk, 'form': form}
     template = 'dashboard/order/modal/shipment_group_stock.html'
     return TemplateResponse(request, template, ctx, status=status)
+
+
+@staff_member_required
+@permission_required('order.edit_order')
+@cache_page(60 * 9, cache="default")
+def get_products_json(request):
+    qs = products_with_details(request.user, staff_view_all=False)
+    qs_json = [p.as_dict() for p in qs]
+    resp = HttpResponse(
+        json.dumps(qs_json, cls=DjangoJSONEncoder),
+        content_type='application/javascript')
+    resp['Cache-Control'] = 'private, max-age=600'
+    return resp

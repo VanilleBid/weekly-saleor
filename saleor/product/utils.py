@@ -118,7 +118,7 @@ def products_for_cart(user):
     return products
 
 
-def product_json_ld(product, attributes=None):
+def product_json_ld(product, attributes=None, show_sku=False):
     # type: (saleor.product.models.Product, saleor.product.utils.ProductAvailability, dict) -> dict  # noqa
     """Generate JSON-LD data for product."""
     data = {'@context': 'http://schema.org/',
@@ -140,8 +140,9 @@ def product_json_ld(product, attributes=None):
             'availability': available,
             'itemCondition': 'http://schema.org/NewCondition',
             'price': price.gross,
-            'priceCurrency': price.currency,
-            'sku': variant.sku}
+            'priceCurrency': price.currency}
+        if show_sku:
+            variant_data['sku'] = variant.sku
         data['offers'].append(variant_data)
 
     if attributes is not None:

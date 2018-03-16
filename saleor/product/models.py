@@ -21,7 +21,8 @@ from versatileimagefield.fields import PPOIField, VersatileImageField
 
 from ..core.utils.warmer import ProductWarmer, CategoryWarmer
 from ..discount.utils import calculate_discounted_price
-from .utils import get_attributes_display_map
+from .utils import (
+    get_attributes_display_map, get_product_attributes_data)
 
 
 class Category(MPTTModel):
@@ -95,6 +96,14 @@ class ProductQuerySet(models.QuerySet):
             Q(is_published=True))
 
 
+class JSONModel(object):
+    def as_dict(self):
+        data = {
+            k.name: self.serializable_value(k.name) for k in self._meta.fields
+        }
+        return data
+
+
 AVAILABILITY_MSG_FROM_TO = gettext_lazy(
     'This product is available within %(from)d to %(to)d days.')
 
@@ -102,7 +111,7 @@ AVAILABILITY_MSG_WITHIN = gettext_lazy(
     'This product is available within %(from)d days.')
 
 
-class Product(models.Model, ItemRange):
+class Product(models.Model, ItemRange, JSONModel):
     product_type = models.ForeignKey(
         ProductType, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
@@ -145,6 +154,28 @@ class Product(models.Model, ItemRange):
 
     def __str__(self):
         return self.name
+
+    def as_dict(self):
+        # 'product_attributes': product_attributes,
+        # 'product_images': product_images,
+        # stocks = self._get_stocks(self, discounts=None)
+        product_images = [i.image.fit['510x510'].url for i in self.images.all()]
+        # variant_picker_data = get_variant_picker_data(self, None)
+        _product_attributes = get_product_attributes_data(self)
+        product_attributes = {}
+
+        for k, v in _product_attributes.items():
+            product_attributes[str(k)] = type(v) is AttributeChoiceValue and v.as_dict() or v
+
+        data = super(Product, self).as_dict()
+        data['variants'] = [
+            {'sku': variant.sku, **variant.as_data()} for variant in self.variants.all()
+        ]
+        data['product_images'] = product_images
+        # data['variant_picker_data'] = variant_picker_data
+        data['product_attributes'] = product_attributes
+        data['url'] = self.get_absolute_url()
+        return data
 
     def get_absolute_url(self):
         return reverse(
@@ -242,7 +273,7 @@ class Product(models.Model, ItemRange):
         return self.get_availability_range()
 
 
-class ProductVariant(models.Model, Item):
+class ProductVariant(models.Model, Item, JSONModel):
     sku = models.CharField(max_length=32, unique=True)
     name = models.CharField(max_length=100, blank=True)
     price_override = PriceField(
@@ -404,7 +435,7 @@ class ProductAttribute(models.Model):
         return self.values.exists()
 
 
-class AttributeChoiceValue(models.Model):
+class AttributeChoiceValue(models.Model, JSONModel):
     name = models.CharField(max_length=100)
     slug = models.SlugField()
     color = models.CharField(

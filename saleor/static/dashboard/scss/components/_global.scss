@@ -8,6 +8,30 @@ html {
   }
 }
 
+.light-grey-text {
+  color: lighten($grey-color, 10);
+}
+
+.wait-angular {
+  position: relative;
+  .angular-loading-overlay {
+    bottom: 0;
+    right: 0;
+    background: $body-bg;
+    position: absolute;
+    z-index: 999;
+    transition: 1s;
+    height: 0;
+    width: 100%;
+  }
+  &:not(.ng-scope) {
+    .angular-loading-overlay {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
+
 strong {
   font-weight: bold;
 }

@@ -52,7 +52,7 @@
   <div class="row">
     <div class="col s12">
       <ul class="tabs" role="tablist">
-        <li role="presentation" class="tab col s4">
+        <li role="presentation" class="tab col s6">
           <a href="#order-products" role="tab" class="active">
             <span>
               {% trans "Products" context "Order creation tab" %}
@@ -60,18 +60,10 @@
             <svg data-src="{% static "dashboard/images/description.svg" %}" class="fill-secondary" />
           </a>
         </li>
-        <li role="presentation" class="tab col s4">
-          <a href="#order-addresses" role="tab">
-            <span>
-              {% trans "Shipping & Billing" context "Order creation tab" %}
-            </span>
-            <svg data-src="{% static "dashboard/images/payment.svg" %}" class="fill-secondary" />
-          </a>
-        </li>
-        <li role="presentation" class="tab col s4">
+        <li role="presentation" class="tab col s6">
           <a href="#order-summary" role="tab">
             <span>
-              {% trans "Summary" context "Order creation tab" %}
+              {% trans "Checkout" context "Order creation tab" %}
             </span>
             <svg data-src="{% static "dashboard/images/description.svg" %}" class="fill-secondary" />
           </a>
@@ -81,16 +73,18 @@
   </div>
 
   <div class="row">
-    <div class="row tab-content" id="order-products">
-      <div class="row" ng-app="createOrderForm" ng-controller="productList">
+    <div class="row tab-content" id="order-products" json-url="{% url 'dashboard:get-products-json' %}">
+      <div class="row wait-angular" ng-app="createOrderForm" ng-controller="productList">
+        <div class="angular-loading-overlay"></div>
         <div class="col s12 m8">
           <div class="card">
             <div class="card-content">
+              <span class="small right">[[ filteredProducts.length || '~' ]]</span>
               <div class="card-title">
                 <p>
                   {% trans 'Products' %}
-                  <span ng-if="selected_category.category_name">
-                    &mdash; [[selected_category.category_name]]
+                  <span ng-if="category_name">
+                    &mdash; [[category_name]]
                   </span>
                 </p>
                 <label class="input-field">
@@ -101,14 +95,21 @@
               <div class="body-create-order__product-list">
                 <div class="body-create-order__product-container">
                   <div class="row">
+                    <div ng-hide="filteredProducts.length" class="center-align big">
+                      <div class="row">
+                        <p class="grey-text">{% trans 'No product to show.' %}</p>
+                        <p><span class="light-grey-text">{% trans 'Please select a category with products.' %}</span></p>
+                      </div>
+                      <svg data-src="{% static "images/no-results-bg.svg" %}" width="360" height="360"/>
+                    </div>
                     <div
-                        ng-repeat="product in products | filter: {category_id: category_id} | filter: {name: productTitleModel, sku: productSKUModel}"
-                        class="col s12 m4 l3"
+                        ng-repeat="product in filteredProducts = (products | filter: {category: category_id} | filter: {name: productTitleModel})"
+                        class="col s12 m4 l3" ng-if="product.category == category_id"
                     >
                       <div class="card">
-                        <a href="{{ product.get_absolute_url }}" target="_blank" class="img-container">
+                        <a ng-href="[[ product.url ]]" target="_blank" class="img-container">
                           <div class="img-overlay"></div>
-                          <img src="{% product_first_image product size="510x510" method="fit" %}" class="responsive-img"/>
+                          <img src="{% static 'images/placeholder540x540.png' %}" ng-src="[[ product.product_images[0] ]]" class="responsive-img" />
                         </a>
 
                         <div class="card-content">
@@ -121,26 +122,23 @@
                           </div>
 
                           <table ng-show="show">
-                            {% for attribute, value in product_attributes.items %}
-                              <tr>
-                                <td>{{ attribute }}</td>
-                                <td><strong>{{ value }}</strong></td>
-                              </tr>
-                            {% endfor %}
+                            <tr ng-repeat="( attribute, value ) in product.product_attributes">
+                              <td>[[ attribute ]]</td>
+                              <td><strong>[[ value.name || value ]]</strong></td>
+                            </tr>
                           </table>
                         </div>
 
-                        <div class="card-action center-align">
+                        <div class="card-action">
                           <div class="small">
 {#                            TODO: click selects the variant/ show pic#}
-                            {% for variant in product.variants.all %}
-                              <div class="product-entry">
-                                <span>{{ variant.sku }} — €21</span>
-                                <label>
-                                  <input type="number" value="0"/>
-                                </label>
-                              </div>
-                            {% endfor %}
+                            <div ng-repeat="variant in product.variants" class="product-entry">
+                              <span>[[ variant.sku ]] — [[ variant.unit_price ]]€ </span>
+                              <label>
+                                <input type="number" min="0" ng-min="0" value="0"
+                                       ng-model="variant.in_cart" ng-init="variant.in_cart = 0" />
+                              </label>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -160,10 +158,10 @@
                   {% trans 'Filters' context 'Order creation products filters' %}
                 </div>
 
-                <label class="input-field">
-                  {% trans 'SKU' %}
-                  <input filter-field="product__title" type="text" ng-model="productSKUModel" />
-                </label>
+{#                <label class="input-field">#}
+{#                  {% trans 'SKU' %}#}
+{#                  <input filter-field="product__title" type="text" ng-model="productSKUModel" />#}
+{#                </label>#}
 
                 <label class="input-field">
                   {% trans 'Category' %}
@@ -172,14 +170,27 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+          <div class="row">
+            <div class="card">
+              <div class="card-content">
+                <div class="card-title">
+                  {% trans 'In cart' context 'Order creation products filters' %}
+                </div>
 
-    <div class="row tab-content" id="order-addresses">
-      <div class="row">
-        <div class="col s12 m8">
-          <p>order-addresses</p>
+                <ul ng-repeat="product in products">
+                  [[ $first ? resetCartTotal() : '' ]]
+                  <li ng-repeat="variant in product.variants | filter: greaterThan('in_cart', 0)">
+                    [[ variant.in_cart ]] x [[ variant.sku ]],
+                    [[ getPrice(variant, variant) ]]€
+                  </li>
+                </ul>
+              </div>
+
+              <div class="card-action center-align big">
+                <strong>[[ getCartTotal() ]] €</strong>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -202,7 +213,7 @@
         </div>
       {% endif %}
       <div class="row">
-        <div class="col s12 m8">
+        <div class="col s12">
           <form class="card" method="post">
             <div class="card-content">
               <div class="card-title">
@@ -210,17 +221,6 @@
               </div>
               <div class="data">
                 {% csrf_token %}
-                <div class="row">
-                  {{ form.shipping_address|materializecss }}
-                </div>
-                <div class="row">
-                  {{ form.billing_address|materializecss }}
-                </div>
-                <div class="row">
-                  {{ form.shipping_method|materializecss }}
-                </div>
-                <div class="row">
-                </div>
                 <div class="row bottom-aligned">
                   <div class="col s12 m8">
                     {{ form.note|materializecss }}
@@ -236,25 +236,12 @@
             </div>
             <div class="card-action right-align">
               <button type="submit" class="btn waves-effect">
-                {% trans 'Next' context 'Order creation, customer selection step, confirm selection action' %}
+                {% trans 'Create' context 'Order creation, customer selection step, confirm selection action' %}
               </button>
             </div>
           </form>
         </div>
-        <div class="col s12 m4">
-          <div class="data-table-container">
-            <table class="bordered highlight responsive data-table">
-              <thead>
-                <tr>
-                  <th>Hello</th>
-                  <th>world</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-        </div>
       </div>
     </div>
-
   </div>
 {% endblock %}
