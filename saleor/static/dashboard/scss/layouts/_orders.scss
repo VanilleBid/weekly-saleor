@@ -7,6 +7,21 @@
 }
 
 .body-create-order {
+  .card-action.discounts {
+    * {
+      margin: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      border: none;
+    }
+    .col {
+      position: relative;
+      > * { text-align: left; float: left; clear: both }
+    }
+    .col:first-child {
+      * { text-align: right; float: right; clear: both }
+    }
+  }
   #order-products {
     .card:first-child {
       .card-title {

@@ -12,6 +12,11 @@ html {
   color: lighten($grey-color, 10);
 }
 
+.ng-invalid,
+.ng-invalid-number {
+  border: 2px solid orangered !important;
+}
+
 .wait-angular {
   position: relative;
   .angular-loading-overlay {
