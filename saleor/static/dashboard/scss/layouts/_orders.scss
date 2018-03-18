@@ -7,6 +7,9 @@
 }
 
 .body-create-order {
+  form p {
+    text-align: inherit;
+  }
   .card-action.discounts {
     * {
       margin: 0 !important;
@@ -112,7 +115,7 @@
           .card-action {
             .product-entry {
               display: flex;
-              align-items: baseline;
+              align-items: center;
               > span {
                 flex-grow: 1;
               }

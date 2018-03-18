@@ -169,7 +169,9 @@ class Product(models.Model, ItemRange, JSONModel):
 
         data = super(Product, self).as_dict()
         data['variants'] = [
-            {'sku': variant.sku, **variant.as_data()} for variant in self.variants.all()
+            {'sku': variant.sku,
+             'in_stock': variant.get_stock_quantity(),
+             **variant.as_data()} for variant in self.variants.all()
         ]
         data['product_images'] = product_images
         # data['variant_picker_data'] = variant_picker_data

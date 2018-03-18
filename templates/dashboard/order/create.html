@@ -36,13 +36,17 @@
     </li>
     <li>
       <span>
-        {{ customer.email }}
+        {% if customer %}
+          {{ customer.email }}
 
-        {% with default_address=customer.default_billing_address %}
-          {% if default_address %}
-            ({{ default_address.full_name }})
-          {% endif %}
-        {% endwith %}
+          {% with default_address=customer.default_billing_address %}
+            {% if default_address %}
+              ({{ default_address.full_name }})
+            {% endif %}
+          {% endwith %}
+        {% else %}
+          {% trans 'Anonymous Customer' %}
+        {% endif %}
       </span>
     </li>
   </ul>
@@ -51,7 +55,8 @@
 {% block content %}
   <form class="row wait-angular" ng-app="createOrderForm" ng-controller="productList">
     <div class="angular-loading-overlay"></div>
-    <div class="row tab-content" id="order-products" json-url="{% url 'dashboard:get-products-json' %}">
+    <div class="row tab-content" id="order-products"
+         json-url="{% url 'dashboard:get-products-json' %}" submit-url="{% url 'dashboard:submit-order' %}">
       <div class="row">
         <div class="col s12 m8">
           <div class="card">
@@ -113,7 +118,8 @@
                             <div ng-repeat="variant in product.variants" class="product-entry">
                               <span>[[ variant.sku ]] — [[ variant.unit_price ]]€ </span>
                               <label>
-                                <input type="number" min="0" ng-min="0" value="0"
+                                <span class="right help-cursor" title="{% trans 'in stock' %}">[[ variant.in_stock ]]</span>
+                                <input type="number" min="0" ng-min="0" value="0" class="right"
                                        ng-model="variant.in_cart" ng-init="variant.in_cart = 0" />
                               </label>
                             </div>
@@ -135,11 +141,6 @@
                 <div class="card-title">
                   {% trans 'Filters' context 'Order creation products filters' %}
                 </div>
-
-{#                <label class="input-field">#}
-{#                  {% trans 'SKU' %}#}
-{#                  <input filter-field="product__title" type="text" ng-model="productSKUModel" />#}
-{#                </label>#}
 
                 <label class="input-field">
                   {% trans 'Category' %}
@@ -177,7 +178,7 @@
                   <div class="col s6">
                     <label class="active" for="id_discount">{% trans 'Discount' %}</label>
                     <div>
-                      <input name="discount" required id="id_discount"
+                      <input name="discount" id="id_discount"
                              ng-pattern="/^\d+(\.\d{1,2})?$/" ng-model="discount.value"/>
                     </div>
                   </div>
@@ -210,8 +211,23 @@
             </div>
           </div>
 
+          {% if customer and customer.notes %}
+            <div class="row">
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-title">
+                    {% trans "Notes about the customer" context "Order creation form, notes about the customer title" %}
+                  </div>
+                  <span class="materialize-red-text big">
+                    {{ customer.notes|safe }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
           <div class="row">
-            <input type="submit" class="btn waves-effect col s12" value="{% trans 'Submit' %}" />
+            <button class="btn waves-effect col s12" ng-click="submitForm()" type="button">{% trans 'Submit' %}</button>
           </div>
         </div>
       </div>

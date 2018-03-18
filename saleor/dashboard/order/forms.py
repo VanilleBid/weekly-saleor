@@ -1,7 +1,12 @@
-from decimal import Decimal
+import logging
 
+from decimal import Decimal
+from typing import List
+
+import uuid
 from django import forms
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.core.validators import (
     MaxLengthValidator, MaxValueValidator, MinLengthValidator,
     MinValueValidator)
@@ -10,12 +15,16 @@ from django.urls import reverse, reverse_lazy
 from django.utils.translation import npgettext_lazy, pgettext_lazy
 from django_prices.forms import PriceField
 from payments import PaymentError, PaymentStatus
+from prices import Price
 from satchless.item import InsufficientStock
 
 from ...cart.forms import QuantityField
+from ...cart.models import Cart
 from ...core.utils import build_absolute_uri
+from ...checkout.core import Checkout
 from ...discount import DiscountValueType
 from ...discount.utils import decrease_voucher_usage
+from ...discount.models import Voucher
 from ...order import GroupStatus
 from ...order.emails import send_note_confirmation, send_shipping_confirmation
 from ...order.models import DeliveryGroup, OrderLine, OrderNote
@@ -33,6 +42,9 @@ from ..forms import AjaxSelect2ChoiceField
 from ..widgets import PhonePrefixWidget
 
 
+logger = logging.getLogger(__name__)
+
+
 class CreateOrderSelectCustomer(forms.Form):
     customer = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
@@ -48,37 +60,100 @@ class CreateOrderSelectCustomer(forms.Form):
             customer_pk=self.cleaned_data['customer'].first().pk)
 
 
+INVALID_PERCENTAGE_DISCOUNT = pgettext_lazy(
+    'Invalid discount value for discount type \'percentage\'',
+    'Discount percentage must be < 100.')
+
+
+class FakeCheckout(Checkout):
+    def __init__(self, voucher: Voucher, *args, **kwargs):
+        super(FakeCheckout, self).__init__(*args, **kwargs)
+        self._given_voucher = voucher
+        if voucher:
+            self.voucher_code = 'code'
+            self.recalculate_discount()
+
+    def _get_voucher(self, vouchers=None):
+        return self._given_voucher
+
+
+class FakeVoucher(Voucher):
+    class Meta:
+        proxy = True
+
+    def __init__(self, *args, **kwargs):
+        super(FakeVoucher, self).__init__(*args, **kwargs)
+        code_max_length = self.__class__._meta.get_field('code').max_length
+        self.code = str(uuid.uuid4())[:code_max_length]
+
+    def get_discount_for_checkout(self, checkout):
+        cart_total = checkout.get_subtotal()
+        return self.get_fixed_discount_for(cart_total)
+
+
 class OrderCreationForm(forms.Form):
-    is_shipping_required = forms.BooleanField(initial=True)
-    shipping_address = forms.ModelChoiceField(queryset=Address.objects.none())
-    billing_address = forms.ModelChoiceField(queryset=Address.objects.none())
-    shipping_method = forms.ModelChoiceField(queryset=ShippingMethod.objects.none())
+    billing_address = forms.ModelChoiceField(queryset=Address.objects.none(), required=False)
+    shipping_method = forms.ModelChoiceField(queryset=ShippingMethod.objects.none(), required=False)
     note = forms.CharField(widget=forms.Textarea, required=False)
 
-    # FIXME: #69 should set the initial value to the user base discount
     discount = PriceField(
         initial=Decimal(0.0),
-        max_digits=12, decimal_places=2, currency=settings.DEFAULT_CURRENCY)
+        max_digits=12, decimal_places=2, currency=settings.DEFAULT_CURRENCY, required=False)
     discount_type = forms.ChoiceField(
-        choices=DiscountValueType.CHOICES, initial=DiscountValueType.FIXED)
+        choices=DiscountValueType.CHOICES, initial=DiscountValueType.FIXED, required=False)
 
     # voucher_code = TODO
-    is_shipping_same_as_billing = forms.BooleanField(initial=False)
+    is_shipping_same_as_billing = forms.BooleanField(initial=False, required=False)
 
-    # products = TODO (may be removed from this form)
+    def _get_discount(self):
+        discount = None
+        discount_type = self.cleaned_data['discount_type']  # type: str
+        discount_price = self.cleaned_data['discount'].net  # type: Price
 
-    def __init__(self, customer: User, data, *args, **kwargs):
-        super(OrderCreationForm, self).__init__(data, *args, **kwargs)
+        if discount_price > Decimal(0.0):
+            if discount_type == DiscountValueType.PERCENTAGE and discount_price > 100:
+                self.add_error('discount', INVALID_PERCENTAGE_DISCOUNT)
+            else:
+                discount = FakeVoucher(
+                    discount_value=discount_price, discount_value_type=discount_type)
+                discount.save()
 
-        addresses = customer.addresses
-        shipping_address_field = self.fields['shipping_address']  # type: forms.ModelChoiceField
-        billing_address_field = self.fields['billing_address']  # type: forms.ModelChoiceField
+        return discount
 
-        shipping_address_field.initial = customer.default_shipping_address
-        billing_address_field.initial = customer.default_billing_address
+    def save(self, products: List[Product], tracking_code, customer: User=None):
+        customer = customer or AnonymousUser()
+        order_note = self.cleaned_data['note']
+        base_discount = self._get_discount()
 
-        self.fields['billing_address'].queryset = addresses
-        self.fields['shipping_address'].queryset = addresses
+        billing_address = Address()
+        for k in Address._meta.fields_map.keys():
+            setattr(billing_address, k, '')
+
+        if not self._errors:
+            cart = Cart.objects.create()
+
+            try:
+                for product, quantity in products:
+                    variant = ProductVariant.objects.get(pk=product)
+                    cart.add(variant=variant, quantity=quantity)
+
+                checkout = FakeCheckout(base_discount, cart, customer, tracking_code)
+                checkout.shipping_address = checkout.billing_address = billing_address
+                checkout.email = 'fake_email'
+
+                if order_note:
+                    checkout.note = order_note
+
+                order = checkout.create_order()
+
+                return order
+            except Exception as e:
+                logger.exception(e)
+                self.add_error(None, str(e))
+            finally:
+                cart.delete()
+                if base_discount:
+                    base_discount.delete()
 
 
 class OrderNoteForm(forms.ModelForm):

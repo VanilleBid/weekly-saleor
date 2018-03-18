@@ -59,6 +59,9 @@
           </div>
         </div>
         <div class="card-action right-align">
+          <a href="{% url 'dashboard:create-order' customer_pk=0 %}" type="submit" class="btn waves-effect grey">
+            {% trans 'Skip' context 'Order creation, customer selection step, skip selectionning customer' %}
+          </a>
           <button type="submit" class="btn waves-effect">
             {% trans 'Next' context 'Order creation, customer selection step, confirm selection action' %}
           </button>

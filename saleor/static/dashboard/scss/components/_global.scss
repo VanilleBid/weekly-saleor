@@ -8,6 +8,10 @@ html {
   }
 }
 
+.help-cursor {
+  cursor: help;
+}
+
 .light-grey-text {
   color: lighten($grey-color, 10);
 }
@@ -15,6 +19,13 @@ html {
 .ng-invalid,
 .ng-invalid-number {
   border: 2px solid orangered !important;
+}
+
+.flex {
+  display: flex;
+  .flex-row {
+    flex-direction: row;
+  }
 }
 
 .wait-angular {

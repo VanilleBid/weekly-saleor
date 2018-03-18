@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.context_processors import csrf
 from django.template.response import TemplateResponse
@@ -17,11 +17,12 @@ from prices import Price
 from satchless.item import InsufficientStock
 
 from ...userprofile.models import User
+from ...core.analytics import get_client_id
 from ...core.utils import get_paginator_items
 from ...order import GroupStatus
 from ...order.models import DeliveryGroup, Order, OrderLine, OrderNote
-from ...product.utils import get_product_attributes_data, products_with_details
-from ...product.models import StockLocation, Product
+from ...product.utils import products_with_details
+from ...product.models import StockLocation
 from ..views import staff_member_required
 from .filters import OrderFilter, OrderCreationStaticFilters
 from .forms import (
@@ -68,18 +69,64 @@ def create_order_select_customer(request):
 @staff_member_required
 @permission_required('order.edit_order')
 def create_order(request, customer_pk):
-    customer = get_object_or_404(User.objects, pk=customer_pk)
-    form = OrderCreationForm(customer, request.POST or None)
+    if customer_pk == '0':
+        customer = None
+    else:
+        customer = get_object_or_404(User.objects, pk=customer_pk)
+
+    form = OrderCreationForm(request.POST or None)
     filters = OrderCreationStaticFilters()
 
-    # TEST DATA
-    product = Product.objects.first()
-    product_attributes = get_product_attributes_data(product)
-    # END TEST DATA
-
-    ctx = {'customer': customer, 'form': form, 'filters': filters,
-           'product': product, 'product_attributes': product_attributes}
+    ctx = {'customer': customer, 'form': form, 'filters': filters}
     return TemplateResponse(request, 'dashboard/order/create.html', ctx)
+
+
+@staff_member_required
+@permission_required('order.edit_order')
+@cache_page(60 * 9, cache="default")
+def get_products_json(request):
+    qs = products_with_details(request.user, staff_view_all=False)
+    qs_json = [p.as_dict() for p in qs]
+    resp = HttpResponse(
+        json.dumps(qs_json, cls=DjangoJSONEncoder),
+        content_type='application/javascript')
+    resp['Cache-Control'] = 'private, max-age=600'
+    return resp
+
+
+NO_PRODUCT_SELECTED = pgettext_lazy(
+    'products field empty for order submit', 'No product selected.')
+
+
+@staff_member_required
+@permission_required('order.edit_order')
+def submit_order(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    status = 400
+    errors = []
+    order_id = None
+
+    try:
+        data = json.loads(request.body)
+        form = OrderCreationForm(data)
+        products = data.get('products')
+
+        if products:
+            if form.is_valid():
+                order = form.save(products, get_client_id(request))
+                if order:
+                    status = 200
+                    order_id = order.pk
+        else:
+            form.add_error(None, NO_PRODUCT_SELECTED)
+
+        errors += form.errors
+    except ValueError as e:
+        errors.append(str(e))
+
+    return JsonResponse({'errors': errors, 'order_id': order_id}, status=status)
 
 
 @staff_member_required
@@ -501,16 +548,3 @@ def orderline_change_stock(request, order_pk, line_pk):
     ctx = {'order_pk': order_pk, 'line_pk': line_pk, 'form': form}
     template = 'dashboard/order/modal/shipment_group_stock.html'
     return TemplateResponse(request, template, ctx, status=status)
-
-
-@staff_member_required
-@permission_required('order.edit_order')
-@cache_page(60 * 9, cache="default")
-def get_products_json(request):
-    qs = products_with_details(request.user, staff_view_all=False)
-    qs_json = [p.as_dict() for p in qs]
-    resp = HttpResponse(
-        json.dumps(qs_json, cls=DjangoJSONEncoder),
-        content_type='application/javascript')
-    resp['Cache-Control'] = 'private, max-age=600'
-    return resp

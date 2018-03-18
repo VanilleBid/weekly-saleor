@@ -10,8 +10,10 @@ function initCreateOrderAngularApp () {
   );
   app.controller('productList', ['$scope', '$http', function ($scope, $http) {
     const $baseContainer = $('#order-products');
+    const $orderNotesField = $('#id_note')[0];
     $scope.discount = {type: 'fixed', value: '0.00', discount: 0, discountedTotal: ''};
     $scope.products = [];
+    const submitURL = $baseContainer.attr('submit-url');
     $http({
       url: $baseContainer.attr('json-url')
     }).then(function successCallback(response) {
@@ -40,7 +42,6 @@ function initCreateOrderAngularApp () {
     $scope.getDiscount = function(cartTotal) {
       const value = parseDiscount($scope.discount.type, $scope.discount.value, cartTotal);
       $scope.discount.discountedTotal = intToDecimal(value);
-      console.log(value, $scope.discount.discountedTotal);
       return value;
     };
     function intToDecimal (val) {
@@ -63,7 +64,6 @@ function initCreateOrderAngularApp () {
     $scope.getCartTotal = function () {
       if ($scope.cartTotal) {
         let total = $scope.cartTotal;
-        // total -=
         return intToDecimal(total);
       }
       return '0.00';
@@ -89,6 +89,48 @@ function initCreateOrderAngularApp () {
       $scope.category_name = e.params.data.text.replace(/^(-{3})+/g, '');
       $scope.$apply();
     });
+    $scope.submitForm = function () {
+      const cart = [];
+      $scope.products.forEach((product) => {
+        if (product.variants) {
+          product.variants.forEach((variant) => {
+            if (variant.in_cart && variant.in_cart > 0) {
+              cart.push([
+                variant.variant_id,
+                variant.in_cart
+              ]);
+            }
+          });
+        }
+      });
+      const data = {
+        products: cart,
+        discount: $scope.discount.value,
+        discount_type: $scope.discount.type,
+        note: $orderNotesField.value,
+        is_shipping_required: false,
+        shipping_address: null,
+        billing_address: null,
+        shipping_method: null,
+        is_shipping_same_as_billing: true
+      };
+      $.ajax({
+        method: 'POST',
+        url: submitURL,
+        data: JSON.stringify(data),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        traditional: true,
+        headers: {
+          'X-CSRFToken': $.cookie('csrftoken')
+        }
+      }).then((a, b, c) => {
+        // todo check c.status, errors and c.getResponseHeader('Content-Type'));
+      },
+      (a, b) => {
+        // todo handle
+      });
+    };
   }]);
 }
 
