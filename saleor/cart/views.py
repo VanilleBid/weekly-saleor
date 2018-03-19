@@ -1,5 +1,5 @@
 """Cart-related views."""
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.response import TemplateResponse
 from django.urls import reverse
@@ -11,7 +11,8 @@ from ..shipping.utils import get_shipment_options
 from .forms import CountryForm, ReplaceCartLineForm
 from .models import Cart
 from .utils import (
-    check_product_availability_and_warn, get_cart_data, get_or_empty_db_cart)
+    check_product_availability_and_warn, get_cart_data, get_or_empty_db_cart, get_or_create_cart_from_request,
+    set_cart_cookie)
 
 
 @get_or_empty_db_cart(cart_queryset=Cart.objects.for_display())
@@ -141,3 +142,58 @@ def summary(request, cart):
             'lines': [prepare_line_data(line) for line in cart.lines.all()]}
 
     return render(request, 'cart_dropdown.html', data)
+
+
+def _get_variant_quantity_value(variant_id: str, quantity: str):
+    variant_id = int(variant_id)
+    quantity = int(quantity)
+
+    if quantity < 1:
+        raise Http404
+
+    variant = get_object_or_404(ProductVariant, pk=variant_id)
+    total_price = variant.get_price() * quantity
+    return variant, quantity, total_price
+
+
+def _parse_variant_quantity(text):
+    value = ''
+    variant_id = None
+
+    for c in text:
+        if c != '-':
+            value += c
+        elif value:
+            if not variant_id:
+                variant_id = value
+            else:
+                quantity = value
+                yield _get_variant_quantity_value(variant_id, quantity)
+                variant_id = None
+            value = ''
+    yield _get_variant_quantity_value(variant_id, value)
+
+
+def get_cart(request, variant_quantity):
+    cart_iterator = _parse_variant_quantity(variant_quantity)
+    if request.POST:
+        cart = get_or_create_cart_from_request(request)
+
+        for variant, quantity, total_price in tuple(cart_iterator):
+            cart.add(variant, quantity, replace=True, check_quantity=False)
+
+        response = redirect(reverse('cart:index'))
+
+        if not request.user.is_authenticated:
+            set_cart_cookie(cart, response)
+
+        return response
+    return TemplateResponse(request, 'cart/cart_clone_prompt.html', {'cart': cart_iterator})
+
+
+@get_or_empty_db_cart(cart_queryset=Cart.objects.for_display())
+def get_cart_permalink(request, cart):
+    if request.POST and not cart.is_empty():
+        permalink = request.build_absolute_uri(cart.generate_permalink())
+        return TemplateResponse(request, 'cart/generated_permalink.html', {'permalink': permalink})
+    raise Http404

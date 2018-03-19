@@ -1,7 +1,7 @@
 from decimal import Decimal
 from typing import Union, Tuple
 
-from prices import Price
+from prices import Price, PriceRange
 
 from TaxRate import RATES, CountryTax
 from saleor import settings
@@ -10,6 +10,15 @@ from saleor import settings
 def _get_taxed(rate: float, price: Price) -> Decimal:
     res = Decimal(float(price) * (1 + rate))
     return res
+
+
+def price_range_get_taxed(price_range):
+    if price_range:
+        _price = (
+            get_tax_price(total=price_range.min_price)[0],
+            get_tax_price(total=price_range.max_price)[0])
+        price_range = PriceRange(*_price)
+        return price_range
 
 
 def get_tax_country_code(code,
@@ -49,7 +58,7 @@ def get_by_billing_address(checkout):
         return country
 
 
-def get_tax_price(request, checkout=None, total=None,
+def get_tax_price(request=None, checkout=None, total=None,
                   get_first_shipping_addr=False) -> Tuple[Price, float]:
     if request:
         country = request.POST.get('country', None)

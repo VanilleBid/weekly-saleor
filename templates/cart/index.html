@@ -33,7 +33,7 @@
             <small>{% trans "Quantity" context "Cart table header" %}</small>
           </div>
           <div class="col-md-2 text-right">
-            <small>{% trans "Price" context "Cart table header" %}</small>
+            <small>{% trans "Price (excl. VAT)" context "Cart table header" %}</small>
           </div>
         </div>
       </div>
@@ -78,6 +78,12 @@
           <a href="{% url "checkout:login" %}" class="btn primary float-right cart__submit">
             {% trans "Checkout" context "Cart primary action" %}
           </a>
+          <form method="post" action="{% url 'cart:get-cart-permalink' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn secondary float-right mr-2 cart__submit">
+              {% trans "Permalink" context "Cart secondary action allowing to generate a permalink from cart" %}
+            </button>
+          </form>
         </div>
       </div>
     {% else %}

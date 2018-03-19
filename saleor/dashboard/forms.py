@@ -1,7 +1,33 @@
 import json
 
+import bleach
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.utils.translation import pgettext_lazy
+
+from .widgets import RichTextEditorWidget
+
+
+class RichTextField(forms.CharField):
+    """A field for rich text editor, providing backend sanitization."""
+
+    widget = RichTextEditorWidget
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.help_text = pgettext_lazy(
+            'Help text in rich-text editor field',
+            'Select text to enable text-formatting tools.')
+
+    def to_python(self, value):
+        tags = settings.ALLOWED_TAGS or bleach.ALLOWED_TAGS
+        attributes = settings.ALLOWED_ATTRIBUTES or bleach.ALLOWED_ATTRIBUTES
+        styles = settings.ALLOWED_STYLES or bleach.ALLOWED_STYLES
+        value = super().to_python(value)
+        value = bleach.clean(
+            value, tags=tags, attributes=attributes, styles=styles)
+        return value
 
 
 class AjaxSelect2ChoiceField(forms.ChoiceField):

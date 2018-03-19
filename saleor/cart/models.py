@@ -6,6 +6,7 @@ from uuid import uuid4
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.urls import reverse
 from django.utils.encoding import smart_str
 from django.utils.timezone import now
 from django_prices.models import PriceField
@@ -166,6 +167,12 @@ class Cart(models.Model):
         lines = self.lines.all()
         return lines.aggregate(total_quantity=models.Sum('quantity'))
 
+    def is_empty(self):
+        """Look if every line is empty.
+        Note that `self.count()['total_quantity']` can be None.
+        """
+        return (self.count()['total_quantity'] or 0) < 1
+
     def clear(self):
         """Remove the cart."""
         self.delete()
@@ -228,6 +235,29 @@ class Cart(models.Model):
         grouper = (
             lambda p: 'physical' if p.is_shipping_required() else 'digital')
         return partition(self.lines.all(), grouper, ProductGroup)
+
+    @staticmethod
+    def generate_permalink_from_lines(lines):
+        variant_quantity = ''
+        for line in lines:  # type: CartLine
+            if line.quantity > 0:
+                variant_quantity += '{line.variant_id}-{line.quantity}-'.format(line=line)
+
+        # remove last dash
+        variant_quantity = variant_quantity[:-1]
+        url = reverse('cart:get-cart', kwargs={'variant_quantity': variant_quantity})
+        return url
+
+    def generate_permalink(self, as_short_link=False):
+        url = None
+        lines = self.lines.all()
+
+        if lines:
+            url = self.generate_permalink_from_lines(lines)
+            if as_short_link:
+                raise NotImplementedError
+
+        return url
 
 
 class CartLine(models.Model, ItemLine):

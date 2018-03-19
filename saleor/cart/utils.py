@@ -1,5 +1,4 @@
 """Cart-related utility functions."""
-from datetime import timedelta
 from functools import wraps
 from uuid import UUID
 
@@ -12,6 +11,7 @@ from satchless.item import InsufficientStock
 
 from . import CartStatus
 from ..core.utils import to_local_currency
+from ..core.utils.billing import price_range_get_taxed
 from .models import Cart
 
 COOKIE_NAME = 'cart'
@@ -231,4 +231,5 @@ def get_cart_data(cart, shipping_range, currency, discounts):
         'local_cart_total': local_cart_total,
         'shipping_required': shipping_required,
         'total_with_shipping': total_with_shipping,
+        'taxed_total_with_shipping': price_range_get_taxed(total_with_shipping),
         'local_total_with_shipping': local_total_with_shipping}

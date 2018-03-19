@@ -23,6 +23,22 @@ from .invoice import create_invoice_pdf
 logger = logging.getLogger(__name__)
 
 
+def user_is_staff_or_can(user, permission_name):
+    is_staff = user.is_active and user.is_staff
+    staff_and_perm = is_staff and user.has_perms((permission_name, ))
+    return staff_and_perm
+
+
+def _can_view_pdf_invoice(view):
+    def _wrapper(request, token):
+        order = get_object_or_404(Order.objects, token=token)
+        if order.user == request.user or \
+                user_is_staff_or_can(request.user, 'order.view_order'):
+            return view(request, order)
+        raise Http404
+    return _wrapper
+
+
 def details(request, token):
     orders = Order.objects.prefetch_related('groups__lines__product')
     orders = orders.select_related(
@@ -44,12 +60,8 @@ def details(request, token):
 
 
 @login_required
-def invoice(request, token):
-    order = get_object_or_404(Order.objects, token=token)
-
-    if order.user != request.user:
-        raise Http404
-
+@_can_view_pdf_invoice
+def invoice(request, order):
     pdf = create_invoice_pdf(order).write_pdf()
     response = HttpResponse(pdf, content_type='application/pdf')
     name = "invoice-%s" % order.id
