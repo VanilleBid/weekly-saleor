@@ -10,6 +10,7 @@ from django.views.decorators.http import require_POST
 from django_prices.templatetags.prices_i18n import gross
 
 from . import forms
+from ...userprofile.models import User
 from ...core.utils import get_paginator_items
 from ...product.models import (
     AttributeChoiceValue, Product, ProductAttribute, ProductImage, ProductType,
@@ -822,3 +823,16 @@ def ajax_products_list(request):
         {'id': product.id, 'text': str(product)} for product in queryset
     ]
     return JsonResponse({'results': products})
+
+
+@staff_member_required
+@permission_required('userprofile.view_user')
+def ajax_customer_list(request):
+    queryset = User.objects.all()
+    search_query = request.GET.get('q', '')
+    if search_query:
+        queryset = queryset.filter(Q(email__icontains=search_query))
+    customers = [
+        {'id': customer.id, 'text': str(customer)} for customer in queryset
+    ]
+    return JsonResponse({'results': customers})

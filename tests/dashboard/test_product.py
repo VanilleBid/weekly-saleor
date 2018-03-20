@@ -4,7 +4,9 @@ import pytest
 from unittest.mock import Mock, MagicMock, call
 
 from django.conf import settings
+from django.db.models import Q
 from django.forms import HiddenInput
+from django.test import Client
 from django.urls import reverse
 from django.utils.encoding import smart_text
 from django.forms.models import model_to_dict
@@ -17,6 +19,7 @@ from saleor.product.forms import VariantChoiceField
 from saleor.product.models import (
     Collection, AttributeChoiceValue, Product, ProductAttribute, ProductImage,
     ProductType, ProductVariant, Stock, StockLocation)
+from saleor.userprofile.models import User
 
 from ..utils import create_image
 
@@ -718,3 +721,22 @@ def test_sanitize_product_description(product_type, default_category):
                                   '<p><a href="www.mirumee.com">link</a></p>'
                                   '<p>an &lt;script&gt;evil()&lt;/script&gt;'
                                   'example</p>')
+
+
+def test_ajax_customer_list(admin_user: User, admin_client: Client):
+    url = reverse('dashboard:ajax-customers')
+    customer_qs = User.objects.all()
+
+    def _search(_query):
+        _response = admin_client.get(url, data={'q': _query})
+        assert _response.status_code == 200
+        _data = json.loads(_response.content.decode('utf-8'))
+        return _data['results']
+
+    assert len(_search('')) == customer_qs.count()
+    assert len(_search('test')) == customer_qs.filter(Q(email__icontains='test')).count()
+    assert len(_search('@example.com')) == customer_qs.filter(Q(email__icontains='@example.com')).count()
+
+    values = _search('admin@example.com')
+    assert len(values) == 1
+    assert values[0] == {'id': admin_user.pk, 'text': 'admin@example.com'}
