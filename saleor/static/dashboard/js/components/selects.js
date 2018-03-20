@@ -28,7 +28,13 @@ function initSelects() {
   $('select.enable-ajax-select2:not(.select2-enabled)').each((i, select) => {
     const $select = $(select);
     const initial = $select.data('initial');
-    let options = $select.getAttribute('select2-options');
+    let options;
+
+    if ($select.getAttribute !== undefined) {
+      options = $select.getAttribute('select2-options');
+    } else {
+      options = null;
+    }
 
     if (options !== null) {
       options = JSON.parse(options);
