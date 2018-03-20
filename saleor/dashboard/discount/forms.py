@@ -5,10 +5,11 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from django.utils.translation import pgettext_lazy
 from django_prices.forms import PriceField
+from mptt.forms import TreeNodeMultipleChoiceField, TreeNodeChoiceField
 
 from ...discount import DiscountValueType, VoucherApplyToProduct
 from ...discount.models import Sale, Voucher
-from ...product.models import Product
+from ...product.models import Product, Category
 from ...shipping.models import COUNTRY_CODE_CHOICES, ShippingMethodCountry
 from ..forms import AjaxSelect2ChoiceField, AjaxSelect2MultipleChoiceField
 
@@ -17,6 +18,7 @@ class SaleForm(forms.ModelForm):
     products = AjaxSelect2MultipleChoiceField(
         queryset=Product.objects.all(),
         fetch_data_url=reverse_lazy('dashboard:ajax-products'), required=True)
+    categories = TreeNodeMultipleChoiceField(queryset=Category.objects.all())
 
     class Meta:
         model = Sale
@@ -194,6 +196,7 @@ class ProductVoucherForm(CommonVoucherForm):
 
 
 class CategoryVoucherForm(CommonVoucherForm):
+    category = TreeNodeChoiceField(queryset=Category.objects.all())
 
     class Meta:
         model = Voucher
