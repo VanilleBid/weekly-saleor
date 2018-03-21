@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.context_processors import csrf
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.utils.translation import pgettext_lazy
 from django.views.decorators.cache import cache_page
 from django_prices.templatetags.prices_i18n import gross
@@ -126,7 +127,12 @@ def submit_order(request):
     except ValueError as e:
         errors.append(str(e))
 
-    return JsonResponse({'errors': errors, 'order_id': order_id}, status=status)
+    if status != 200:
+        response = {'errors': errors}
+    else:
+        response = {'location': reverse('dashboard:order-details', kwargs={'order_pk': order_id})}
+
+    return JsonResponse(response, status=status)
 
 
 @staff_member_required

@@ -37,6 +37,9 @@
     <li>
       <span>
         {% if customer %}
+          <label>
+            <input type="hidden" id="_customer_id" value="{{ customer.pk }}" />
+          </label>
           {{ customer.email }}
 
           {% with default_address=customer.default_billing_address %}
@@ -57,6 +60,16 @@
     <div class="angular-loading-overlay"></div>
     <div class="row tab-content" id="order-products"
          json-url="{% url 'dashboard:get-products-json' %}" submit-url="{% url 'dashboard:submit-order' %}">
+      <div class="row" ng-if="errors.length > 0">
+        <div class="col s12 small">
+            <div class="card-title">
+              <h3>Errors:</h3>
+            </div>
+            <ul ng-repeat="error in errors">
+              <li>[[ error ]]</li>
+            </ul>
+        </div>
+      </div>
       <div class="row">
         <div class="col s12 m8">
           <div class="card">

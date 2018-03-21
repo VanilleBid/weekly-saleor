@@ -11,6 +11,8 @@ function initCreateOrderAngularApp () {
   app.controller('productList', ['$scope', '$http', function ($scope, $http) {
     const $baseContainer = $('#order-products');
     const $orderNotesField = $('#id_note')[0];
+    const $customerIDField = $('#_customer_id')[0];
+    $scope.errors = [];
     $scope.discount = {type: 'fixed', value: '0.00', discount: 0, discountedTotal: ''};
     $scope.products = [];
     const submitURL = $baseContainer.attr('submit-url');
@@ -114,6 +116,11 @@ function initCreateOrderAngularApp () {
         shipping_method: null,
         is_shipping_same_as_billing: true
       };
+
+      if ($customerIDField !== undefined) {
+        data['customer'] = $customerIDField.value;
+      }
+
       $.ajax({
         method: 'POST',
         url: submitURL,
@@ -124,11 +131,20 @@ function initCreateOrderAngularApp () {
         headers: {
           'X-CSRFToken': $.cookie('csrftoken')
         }
-      }).then((a, b, c) => {
-        // todo check c.status, errors and c.getResponseHeader('Content-Type'));
+      }).then((data, status, headers) => {
+        if (headers.status === 200) {
+          window.location = data['location'];
+        }
       },
-      (a, b) => {
-        // todo handle
+      (data, status, headers) => {
+        const errors = data.responseJSON.errors;
+        if (typeof errors === typeof []) {
+          $scope.errors = ['Some fields weren\'t filled. Please review your submission.'];
+          // TODO: $scope.errors = errors;
+        } else {
+          $scope.errors = ['Unexpected response from server (' + status + ')', data.responseText];
+        }
+        $scope.$apply();
       });
     };
   }]);

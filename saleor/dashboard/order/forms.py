@@ -105,6 +105,8 @@ class OrderCreationForm(forms.Form):
     # voucher_code = TODO
     is_shipping_same_as_billing = forms.BooleanField(initial=False, required=False)
 
+    customer = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
+
     def _get_discount(self):
         discount = None
         discount_type = self.cleaned_data['discount_type']  # type: str
@@ -120,8 +122,8 @@ class OrderCreationForm(forms.Form):
 
         return discount
 
-    def save(self, products: List[Product], tracking_code, customer: User=None):
-        customer = customer or AnonymousUser()
+    def save(self, products: List[Product], tracking_code):
+        customer = self.cleaned_data['customer']
         order_note = self.cleaned_data['note']
         base_discount = self._get_discount()
 
@@ -137,7 +139,7 @@ class OrderCreationForm(forms.Form):
                     variant = ProductVariant.objects.get(pk=product)
                     cart.add(variant=variant, quantity=quantity)
 
-                checkout = FakeCheckout(base_discount, cart, customer, tracking_code)
+                checkout = FakeCheckout(base_discount, cart, AnonymousUser(), tracking_code)
                 checkout.shipping_address = checkout.billing_address = billing_address
                 checkout.email = 'fake_email'
 
@@ -145,6 +147,10 @@ class OrderCreationForm(forms.Form):
                     checkout.note = order_note
 
                 order = checkout.create_order()
+
+                if customer:
+                    order.user = customer
+                    order.save()
 
                 return order
             except Exception as e:

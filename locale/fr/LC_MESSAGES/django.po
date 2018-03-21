@@ -1575,7 +1575,7 @@ msgstr "Remises"
 #: templates/dashboard/base.html:144
 msgctxt "Dashboard sales (discounts) list"
 msgid "Sales"
-msgstr "Soldes"
+msgstr "Promotions"
 
 #: templates/dashboard/base.html:151
 #: templates/dashboard/discount/voucher/form.html:12
@@ -1589,7 +1589,7 @@ msgstr "Bons d'achats"
 #: templates/dashboard/base.html:161
 msgctxt "Dashboard sales. `Sales' is noun of to sell"
 msgid "Sales"
-msgstr "Soldes"
+msgstr "Promotions"
 
 #: templates/dashboard/base.html:167
 #: templates/dashboard/order/address_form.html:7
@@ -2186,7 +2186,7 @@ msgstr "Ajouter une nouvelle solde"
 #: templates/dashboard/discount/sale/list.html:19
 msgctxt "Dashboard sales (discounts) list."
 msgid "Sales"
-msgstr "Soldes"
+msgstr "Promotions"
 
 #: templates/dashboard/discount/sale/form.html:32
 msgctxt "Sale (discount) action"
@@ -2200,7 +2200,7 @@ msgstr "Ajouter une nouvelle solde"
 
 #: templates/dashboard/discount/sale/list.html:10
 msgid "Sales"
-msgstr "Soldes"
+msgstr "Promotions"
 
 #: templates/dashboard/discount/sale/list.html:29
 msgctxt "Sale (discount) list add button text"
@@ -2220,7 +2220,7 @@ msgstr "Remise"
 #: templates/dashboard/discount/sale/list.html:75
 msgctxt "Empty sales table message"
 msgid "No sales found"
-msgstr "Pas de soldes trouvees"
+msgstr "Pas de promotions trouvees"
 
 #: templates/dashboard/discount/sale/modal/confirm_delete.html:12
 msgctxt "Remove sale (discount) text"
@@ -4607,7 +4607,7 @@ msgstr ""
 #: templates/home.html:12
 msgctxt "Homepage title"
 msgid "Promo &amp; Sale"
-msgstr "Promotion & Soldes"
+msgstr "Promotion & Promotions"
 
 #: templates/home.html:13
 msgctxt "Homepage title"
