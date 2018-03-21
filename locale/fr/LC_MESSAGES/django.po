@@ -4656,7 +4656,7 @@ msgstr ""
 #: templates/home.html:12
 msgctxt "Homepage title"
 msgid "Promo &amp; Sale"
-msgstr "Promotions & Soldes"
+msgstr "Promotions & Offres"
 
 #: templates/home.html:13
 msgctxt "Homepage title"

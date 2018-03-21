@@ -23,7 +23,7 @@ class SaleForm(forms.ModelForm):
     customers = AjaxSelect2MultipleChoiceField(
         queryset=User.objects.all(),
         fetch_data_url=reverse_lazy('dashboard:ajax-customers'), required=False)
-    categories = TreeNodeMultipleChoiceField(queryset=Category.objects.all())
+    categories = TreeNodeMultipleChoiceField(queryset=Category.objects.all(), required=False)
 
     class Meta:
         model = Sale

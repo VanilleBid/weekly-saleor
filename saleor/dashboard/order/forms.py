@@ -3,7 +3,6 @@ import logging
 from decimal import Decimal
 from typing import List
 
-import uuid
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
@@ -21,10 +20,8 @@ from satchless.item import InsufficientStock
 from ...cart.forms import QuantityField
 from ...cart.models import Cart
 from ...core.utils import build_absolute_uri
-from ...checkout.core import Checkout
 from ...discount import DiscountValueType
 from ...discount.utils import decrease_voucher_usage
-from ...discount.models import Voucher
 from ...order import GroupStatus
 from ...order.emails import send_note_confirmation, send_shipping_confirmation
 from ...order.models import DeliveryGroup, OrderLine, OrderNote
@@ -65,32 +62,6 @@ INVALID_PERCENTAGE_DISCOUNT = pgettext_lazy(
     'Discount percentage must be < 100.')
 
 
-class FakeCheckout(Checkout):
-    def __init__(self, voucher: Voucher, *args, **kwargs):
-        super(FakeCheckout, self).__init__(*args, **kwargs)
-        self._given_voucher = voucher
-        if voucher:
-            self.voucher_code = 'code'
-            self.recalculate_discount()
-
-    def _get_voucher(self, vouchers=None):
-        return self._given_voucher
-
-
-class FakeVoucher(Voucher):
-    class Meta:
-        proxy = True
-
-    def __init__(self, *args, **kwargs):
-        super(FakeVoucher, self).__init__(*args, **kwargs)
-        code_max_length = self.__class__._meta.get_field('code').max_length
-        self.code = str(uuid.uuid4())[:code_max_length]
-
-    def get_discount_for_checkout(self, checkout):
-        cart_total = checkout.get_subtotal()
-        return self.get_fixed_discount_for(cart_total)
-
-
 class OrderCreationForm(forms.Form):
     billing_address = forms.ModelChoiceField(queryset=Address.objects.none(), required=False)
     shipping_method = forms.ModelChoiceField(queryset=ShippingMethod.objects.none(), required=False)
@@ -108,6 +79,8 @@ class OrderCreationForm(forms.Form):
     customer = forms.ModelChoiceField(queryset=User.objects.all(), required=False)
 
     def _get_discount(self):
+        from .fake_models import FakeVoucher
+
         discount = None
         discount_type = self.cleaned_data['discount_type']  # type: str
         discount_price = self.cleaned_data['discount'].net  # type: Price
@@ -123,6 +96,8 @@ class OrderCreationForm(forms.Form):
         return discount
 
     def save(self, products: List[Product], tracking_code):
+        from .fake_models import FakeCheckout
+
         customer = self.cleaned_data['customer']
         order_note = self.cleaned_data['note']
         base_discount = self._get_discount()
