@@ -3,6 +3,7 @@ from decimal import Decimal
 from unittest.mock import Mock
 
 import pytest
+from django.test import Client
 from freezegun import freeze_time
 from prices import FixedDiscount, FractionalDiscount, Price
 
@@ -12,7 +13,9 @@ from saleor.discount.forms import CheckoutDiscountForm
 from saleor.discount.models import NotApplicable, Sale, Voucher
 from saleor.discount.utils import (
     decrease_voucher_usage, increase_voucher_usage)
-from saleor.product.models import Product, ProductVariant
+from saleor.product.models import Product, ProductVariant, StockLocation, Stock, Category
+from saleor.userprofile.models import User
+from tests.utils import json_variant_details
 
 
 @pytest.mark.parametrize('limit, value', [
@@ -327,3 +330,204 @@ def test_decrease_voucher_usage():
     decrease_voucher_usage(voucher)
     voucher.refresh_from_db()
     assert voucher.used == 9
+
+
+def _test_discount(client):
+    """Test if discount is correctly applied in frontstore."""
+
+    def _assert_product_details_view(product, expected_price):
+        """Test product details view, it looks at the variant picker JSON data."""
+        test_url = product.get_absolute_url()
+        response = client.get(test_url)
+        assert response.status_code == 200
+        data = json_variant_details(response.content)
+        assert data['variants'][0]['price']['net'] == str(expected_price)
+
+    def _wrapper(product: Product, expected_discount):
+        expected_price = product.price.net - expected_discount
+        _assert_product_details_view(product, expected_price)
+
+    return _wrapper
+
+
+def _test_discount_on_customers(client: Client, test_suite):
+    """Test if discount is correctly applied to specific customers in frontstore.
+    User must be None to be Anonymous.
+    """
+    def _wrapper(product, *user_vs_expected):
+        for user, expected in user_vs_expected:
+            client.logout()
+            if user:
+                client.login(username=user.email, password='password')
+
+            test_suite(product, expected)
+
+    return _wrapper
+
+
+def test_customer_sale_all_store(
+        client: Client, staff_user,
+        customer_user: User, product_in_stock: Product):
+
+    test_discount = _test_discount(client)
+    test_on_customers = _test_discount_on_customers(client, test_discount)
+    client.login(username=customer_user.email, password='password')
+
+    sale = Sale.objects.create(name='Test sale', value=Decimal(2.0))
+
+    # No discount should be applied
+    test_discount(product_in_stock, Decimal(0.0))
+
+    sale.customers.add(customer_user)
+    sale.save()
+
+    # Test whether discount is applied or not on customer, staff user and anonymous user.
+    test_on_customers(
+        product_in_stock,
+
+        # -- Only this customer should get the discount
+        (customer_user, Decimal(2.0)),
+
+        # -- Anonymous user shouldn't have any discount
+        (None, Decimal(0.0)),
+
+        # -- Staff user shouldn't have any discount since it's a different customer
+        (staff_user, Decimal(0.0)),
+    )
+
+
+def test_customer_sale_specific_product(
+        client: Client, staff_user,
+        customer_user: User, variant_list, stock_location: StockLocation):
+
+    products = []
+    for variant in variant_list:  # type: ProductVariant
+        Stock.objects.create(
+            variant=variant, cost_price=10, quantity=5, location=stock_location)
+        variant.product.is_published = True
+        variant.product.save()
+        products.append(variant.product)
+
+    discounted_product = products[0]
+    non_discounted_product = products[1]
+
+    test_discount = _test_discount(client)
+    test_on_customers = _test_discount_on_customers(client, test_discount)
+    client.login(username=customer_user.email, password='password')
+
+    sale = Sale.objects.create(name='Test sale', value=Decimal(2.0))
+
+    # No discount should be applied
+    test_discount(discounted_product, Decimal(0.0))
+    test_discount(non_discounted_product, Decimal(0.0))
+
+    sale.customers.add(customer_user)
+    sale.products.add(discounted_product)
+    sale.save()
+
+    # Test whether discount is applied or not on customer, staff user and anonymous user.
+    test_on_customers(
+        discounted_product,
+
+        # -- Only this customer should get the discount
+        (customer_user, Decimal(2.0)),
+
+        # -- Anonymous user shouldn't have any discount
+        (None, Decimal(0.0)),
+
+        # -- Staff user shouldn't have any discount since it's a different customer
+        (staff_user, Decimal(0.0)),
+    )
+
+    # Test whether discount is not applied when the product is not targeted
+    test_on_customers(
+        non_discounted_product,
+
+        # -- The customer shouldn't get the discount
+        (customer_user, Decimal(0.0)),
+
+        # -- Anonymous user shouldn't have any discount
+        (None, Decimal(0.0)),
+
+        # -- Staff user shouldn't have any discount since it's a different customer
+        (staff_user, Decimal(0.0)),
+    )
+
+
+def test_customer_sale_specific_category(
+        client: Client, staff_user,
+        customer_user: User, variant_list, stock_location: StockLocation):
+
+    NO_DISCOUNT_FOR_ALMOST_EVERYONE = (
+        # -- Anonymous user shouldn't have any discount
+        (None, Decimal(0.0)),
+
+        # -- Staff user shouldn't have any discount since it's a different customer
+        (staff_user, Decimal(0.0)))
+
+    NO_DISCOUNT_FOR_EVERYONE = (
+        # -- This customer shouldn't get the discount
+        (customer_user, Decimal(0.0)), *NO_DISCOUNT_FOR_ALMOST_EVERYONE)
+
+    DISCOUNT_ONLY_FOR_CUSTOMER_1 = ((customer_user, Decimal(2.0)), *NO_DISCOUNT_FOR_ALMOST_EVERYONE)
+
+    products = []
+    for variant in variant_list:  # type: ProductVariant
+        Stock.objects.create(
+            variant=variant, cost_price=10, quantity=5, location=stock_location)
+        variant.product.is_published = True
+        variant.product.save()
+        products.append(variant.product)
+
+    discounted_product = products[0]
+    discounted_product2 = products[1]
+
+    test_discount = _test_discount(client)
+    test_on_customers = _test_discount_on_customers(client, test_discount)
+    client.login(username=customer_user.email, password='password')
+
+    sale = Sale.objects.create(name='Test sale', value=Decimal(2.0))
+
+    # No discount should be applied
+    test_discount(discounted_product, Decimal(0.0))
+    test_discount(discounted_product2, Decimal(0.0))
+
+    sale.customers.add(customer_user)
+    sale.categories.add(discounted_product.category)
+    sale.save()
+
+    # Test whether discount is applied or not on customer, staff user and anonymous user.
+    test_on_customers(
+        discounted_product,
+
+        # -- Only this customer should get the discount
+        *DISCOUNT_ONLY_FOR_CUSTOMER_1
+    )
+
+    # Test whether discount is not applied when the product is not targeted
+    test_on_customers(
+        discounted_product2,
+
+        # -- Only this customer should get the discount
+        *DISCOUNT_ONLY_FOR_CUSTOMER_1
+    )
+
+    # Test whether discount is or is not applied when the product category is not targeted
+    discounted_product2.category = Category.objects.create(name='New category', slug='new-cat')
+    discounted_product2.save()
+    test_on_customers(
+        discounted_product2,
+
+        # -- Nobody should get the discount on this category
+        *NO_DISCOUNT_FOR_EVERYONE
+    )
+
+    # Test whether discount is or is not applied when the product category is not targeted but the product is targeted
+    sale.products.add(discounted_product2)
+    sale.save()
+    test_on_customers(
+        discounted_product2,
+
+        # -- Only the first customer should get the discount on this category
+        *DISCOUNT_ONLY_FOR_CUSTOMER_1
+    )

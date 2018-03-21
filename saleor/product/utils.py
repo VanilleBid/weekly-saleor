@@ -11,6 +11,7 @@ from prices import Price, PriceRange
 from . import ProductAvailabilityStatus, VariantAvailabilityStatus
 from ..cart.utils import get_cart_from_request, get_or_create_cart_from_request
 from ..core.utils import get_paginator_items, to_local_currency
+from ..core.utils.billing import get_tax_price, price_range_get_taxed
 from ..core.utils.filters import get_now_sorted_by
 from .forms import ProductForm
 
@@ -57,7 +58,9 @@ def products_with_availability(products, discounts, local_currency):
 
 ProductAvailability = namedtuple(
     'ProductAvailability', (
-        'available', 'on_sale', 'price_range', 'price_range_undiscounted',
+        'available', 'on_sale',
+        'price_range', 'price_range_undiscounted',
+        'taxed_price_range', 'taxed_price_range_undiscounted',
         'discount', 'price_range_local_currency', 'discount_local_currency'))
 
 
@@ -96,6 +99,8 @@ def get_availability(product, discounts=None, local_currency=None):
         on_sale=is_on_sale,
         price_range=price_range,
         price_range_undiscounted=undiscounted,
+        taxed_price_range=price_range_get_taxed(price_range),
+        taxed_price_range_undiscounted=price_range_get_taxed(undiscounted),
         discount=discount,
         price_range_local_currency=price_range_local,
         discount_local_currency=discount_local_currency)
@@ -192,6 +197,8 @@ def get_variant_picker_data(product, discounts=None, local_currency=None):
             'availability': in_stock,
             'price': price_as_dict(price),
             'priceUndiscounted': price_as_dict(price_undiscounted),
+            'taxedPrice': price_as_dict(get_tax_price(total=price)[0]),
+            'taxedPriceUndiscounted': price_as_dict(get_tax_price(total=price_undiscounted)[0]),
             'attributes': variant.attributes,
             'priceLocalCurrency': price_as_dict(price_local_currency),
             'schemaData': schema_data}
@@ -216,6 +223,8 @@ def get_variant_picker_data(product, discounts=None, local_currency=None):
 
     data['availability'] = {
         'discount': price_as_dict(availability.discount),
+        'taxedPriceRange': price_range_as_dict(availability.taxed_price_range),
+        'taxedPriceRangeUndiscounted': price_range_as_dict(availability.taxed_price_range_undiscounted),
         'priceRange': price_range_as_dict(availability.price_range),
         'priceRangeUndiscounted': price_range_as_dict(
             availability.price_range_undiscounted),

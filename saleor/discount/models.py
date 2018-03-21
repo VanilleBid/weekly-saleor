@@ -14,6 +14,7 @@ from prices import FixedDiscount, Price, percentage_discount
 from . import DiscountValueType, VoucherApplyToProduct, VoucherType
 from ..cart.utils import (
     get_category_variants_and_prices, get_product_variants_and_prices)
+from ..core.middleware import get_current_user
 
 
 class NotApplicable(ValueError):
@@ -199,6 +200,7 @@ class Sale(models.Model):
     value = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     products = models.ManyToManyField('product.Product', blank=True)
     categories = models.ManyToManyField('product.Category', blank=True)
+    customers = models.ManyToManyField('userprofile.User', blank=True)
 
     class Meta:
         app_label = 'discount'
@@ -229,15 +231,41 @@ class Sale(models.Model):
             product.category.is_descendant_of(category, include_self=True)
             for category in discounted_categories])
 
-    def modifier_for_product(self, product):
-        discounted_products = {p.pk for p in self.products.all()}
-        discounted_categories = set(self.categories.all())
+    def _is_not_applicable(self):
+        return NotApplicable(
+            pgettext(
+                'Voucher not applicable',
+                'Discount not applicable for this product'))
+
+    def _get_discount(self, product, discounted_products, discounted_categories):
         if product.pk in discounted_products:
             return self.get_discount()
         if self._product_has_category_discount(
                 product, discounted_categories):
             return self.get_discount()
-        raise NotApplicable(
-            pgettext(
-                'Voucher not applicable',
-                'Discount not applicable for this product'))
+        raise self._is_not_applicable()
+
+    def modifier_for_product(self, product):
+        discounted_products = {p.pk for p in self.products.all()}
+        discounted_categories = set(self.categories.all())
+        discounted_customers = {p.pk for p in self.customers.all()}
+
+        # get the current user from the thread's stack
+        user = get_current_user()
+
+        # if the discount targets customers, check the discount requirements
+        if discounted_customers:
+            # if the current user is not one of the targeted customers,
+            # raise exception.
+            if user.pk not in discounted_customers:
+                raise self._is_not_applicable()
+
+            # if the discount is not for specific items or categories,
+            # just return the discount value
+            if not (discounted_products or discounted_categories):
+                return self.get_discount()
+
+        # otherwise, if the discount doesn't target any customers
+        # or if the discount targeting specific customers is only on specific products/ categories,
+        # check if the discount applies or not the current product.
+        return self._get_discount(product, discounted_products, discounted_categories)

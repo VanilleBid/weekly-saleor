@@ -1,13 +1,13 @@
-import json
-
 from datetime import timedelta
-from uuid import uuid4
+from decimal import Decimal
+import json
 from unittest.mock import MagicMock, Mock
+from uuid import uuid4
 
 from django.contrib.auth.models import AnonymousUser
 from django.core import signing
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.test import Client
 from django.urls import reverse
 from django_babel.templatetags.babel import currencyfmt
@@ -17,9 +17,12 @@ from satchless.item import InsufficientStock
 
 from saleor.cart import CartStatus, forms, utils
 from saleor.cart.context_processors import cart_counter
-from saleor.cart.models import Cart, ProductGroup, find_open_cart_for_user
-from saleor.cart.views import update
+from saleor.cart.models import (
+    Cart, CartLine, ProductGroup, find_open_cart_for_user)
+from saleor.cart.views import (
+    _get_variant_quantity_value, _parse_variant_quantity, update)
 from saleor.discount.models import Sale
+from saleor.product.models import ProductVariant, Stock, StockLocation
 from saleor.shipping.utils import get_shipment_options
 
 
@@ -766,3 +769,146 @@ def test_get_cart_data_no_shipping(request_cart_with_item):
     cart_total = cart_data['cart_total']
     assert cart_total == Price(net=10, currency='USD')
     assert cart_data['total_with_shipping'].min_price == cart_total
+
+
+def test_cart_models_get_permalink(request_cart_with_item: Cart, variant_list):
+    cart = request_cart_with_item
+    assert cart.lines.count() == 1
+
+    cart_line = cart.lines.first()  # type: CartLine
+    assert cart_line.quantity == 1
+
+    variant = cart_line.variant
+
+    def get_expected_url(variant_quantity):
+        return reverse(
+            'cart:get-cart', kwargs={'variant_quantity': variant_quantity})
+
+    assert cart.generate_permalink() == get_expected_url('{0.pk}-1'.format(variant))
+
+    cart_line.quantity = 3
+    cart_line.save()
+
+    assert cart.generate_permalink() == get_expected_url('{0.pk}-3'.format(variant))
+
+    assert len(variant_list) == 3
+    quantity_to_add = (1, 2, 8)
+    warehouse = StockLocation.objects.first()
+    for _variant, quantity in zip(variant_list, quantity_to_add):
+        Stock.objects.create(
+            variant=_variant, cost_price=1, quantity=quantity,
+            location=warehouse)
+        cart.add(_variant, quantity)
+
+    assert cart.lines.count() == 4
+    assert cart.generate_permalink() == get_expected_url(
+        '{0.pk}-3-{1[0].pk}-1-{1[1].pk}-2-{1[2].pk}-8'.format(variant, variant_list))
+
+    with pytest.raises(NotImplementedError):
+        cart.generate_permalink(True)
+
+    cart.clear()
+    assert cart.lines.count() == 0
+    assert cart.generate_permalink() is None
+
+
+def test_get_variant_quantity_value(product_in_stock):
+    variant = product_in_stock.variants.first()  # type: ProductVariant
+    assert variant.get_price().net == Decimal('10.00')
+
+    def verify_results(*args):
+        args_quantity = args[1]
+        _variant, _quantity_in_cart, _total_price = _get_variant_quantity_value(*args)
+        assert _variant.pk == variant.pk
+        assert type(_quantity_in_cart) is int
+        assert _quantity_in_cart == int(args_quantity)
+        assert _total_price.net == variant.get_price().net * _quantity_in_cart
+
+    verify_results(str(variant.pk), '2')
+    verify_results(str(variant.pk), '1')
+
+    with pytest.raises(Http404):
+        _get_variant_quantity_value(str(variant.pk), '0')
+
+    with pytest.raises(Http404):
+        _get_variant_quantity_value('100', '1')
+
+
+def test_parse_variant_quantity(variant_list):
+    assert variant_list[0].get_price().net == Decimal('10.00')
+    assert variant_list[1].get_price().net == Decimal('20.00')
+
+    def verify_results(expected, *args):
+        iterations = 0
+        for variant, quantity, price in _parse_variant_quantity(*args):
+            expected_variant, expected_quantity, expected_price = expected[iterations]
+
+            assert variant.pk == expected_variant
+            assert quantity == expected_quantity
+            assert price.net == expected_price
+
+            iterations += 1
+
+        assert iterations == len(expected)
+
+    pk_s = (variant_list[0].pk, variant_list[1].pk)
+
+    verify_results((
+        (pk_s[0], 1, Decimal('10.00')),
+    ), '{}-1'.format(pk_s[0]))
+
+    verify_results((
+        (pk_s[1], 1, Decimal('20.00')),
+    ), '{}-1'.format(pk_s[1]))
+
+    verify_results((
+        (pk_s[0], 4, Decimal('40.00')),
+        (pk_s[1], 3, Decimal('60.00')),
+    ), '{}-4-{}-3'.format(*pk_s))
+
+
+def test_get_cart(client: Client, variant_list):
+    assert len(variant_list) == 3
+    pk_s = (variant_list[0].pk, variant_list[1].pk)
+    url = reverse('cart:get-cart', kwargs={'variant_quantity': '{}-2-{}-1'.format(*pk_s)})
+
+    for variant in variant_list:  # type: ProductVariant
+        assert variant.get_stock_quantity() == 0
+
+    response = client.get(url)
+    assert response.status_code == 200
+
+    response = client.post(url, follow=False, data={'was_expecting_csrf_token': 1})
+    assert response.status_code == 302
+
+    anonymous_cart = Cart.objects.filter(user=None).first()  # type: Cart
+    assert anonymous_cart.lines.count() == 2
+    assert anonymous_cart.count() == {'total_quantity': 3}
+
+    warehouse = StockLocation.objects.first()
+    for variant in variant_list:
+        Stock.objects.create(
+            variant=variant, cost_price=1, quantity=10,
+            location=warehouse)
+
+    response = client.post(url, follow=False, data={'was_expecting_csrf_token': 1})
+    assert response.status_code == 302
+    assert anonymous_cart.lines.count() == 2
+    assert anonymous_cart.count() == {'total_quantity': 3}
+
+
+def test_get_cart_permalink(client: Client, request_cart_with_item: Cart):
+    url = reverse('cart:get-cart-permalink')
+    variant = request_cart_with_item.lines.first().variant
+
+    response = client.get(url, data={'was_expecting_csrf_token': 0})
+    assert response.status_code == 404
+
+    response = client.post(url, data={'was_expecting_csrf_token': 1})
+    assert response.status_code == 200
+    assert 'value="http://testserver/cart/get/{.pk}-1/"' \
+           ''.format(variant) in response.content.decode('utf-8')
+
+    request_cart_with_item.clear()
+    response = client.post(url, data={'was_expecting_csrf_token': 1})
+    assert response.status_code == 404

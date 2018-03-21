@@ -10,6 +10,8 @@ from mptt.forms import TreeNodeMultipleChoiceField, TreeNodeChoiceField
 from ...discount import DiscountValueType, VoucherApplyToProduct
 from ...discount.models import Sale, Voucher
 from ...product.models import Product, Category
+from ...userprofile.models import User
+from ...product.models import Product
 from ...shipping.models import COUNTRY_CODE_CHOICES, ShippingMethodCountry
 from ..forms import AjaxSelect2ChoiceField, AjaxSelect2MultipleChoiceField
 
@@ -17,7 +19,10 @@ from ..forms import AjaxSelect2ChoiceField, AjaxSelect2MultipleChoiceField
 class SaleForm(forms.ModelForm):
     products = AjaxSelect2MultipleChoiceField(
         queryset=Product.objects.all(),
-        fetch_data_url=reverse_lazy('dashboard:ajax-products'), required=True)
+        fetch_data_url=reverse_lazy('dashboard:ajax-products'), required=False)
+    customers = AjaxSelect2MultipleChoiceField(
+        queryset=User.objects.all(),
+        fetch_data_url=reverse_lazy('dashboard:ajax-customers'), required=False)
     categories = TreeNodeMultipleChoiceField(queryset=Category.objects.all())
 
     class Meta:
@@ -38,12 +43,16 @@ class SaleForm(forms.ModelForm):
                 'Discounted products'),
             'categories': pgettext_lazy(
                 'Discounted categories',
-                'Discounted categories')}
+                'Discounted categories'),
+            'customers': pgettext_lazy(
+                'Discounted customers for sale (discount)',
+                'Discounted customers')}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.pk:
             self.fields['products'].set_initial(self.instance.products.all())
+            self.fields['customers'].set_initial(self.instance.customers.all())
 
     def clean(self):
         cleaned_data = super().clean()
@@ -53,6 +62,15 @@ class SaleForm(forms.ModelForm):
             self.add_error('value', pgettext_lazy(
                 'Sale (discount) error',
                 'Sale cannot exceed 100%'))
+
+        products = cleaned_data.get('products')
+        categories = cleaned_data.get('categories')
+        customers = cleaned_data.get('customers')
+        if not products and not categories and not customers:
+            raise forms.ValidationError(pgettext_lazy(
+                'Sale (discount) error',
+                'A single sale must point to at least one product and/or '
+                'category and/or customer.'))
         return cleaned_data
 
 

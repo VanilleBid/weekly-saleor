@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-12 04:42+0100\n"
+"POT-Creation-Date: 2018-03-19 02:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: ax003d <ax003d@gmail.com>, 2017\n"
 "Language-Team: Chinese (https://www.transifex.com/mirumee/teams/34782/zh/)\n"
@@ -389,26 +389,26 @@ msgctxt "Order status history entry"
 msgid "Order cancelled. No items in order"
 msgstr "订单已取消"
 
-#: saleor/order/views.py:115
+#: saleor/order/views.py:127
 #, python-format
 msgctxt "Payment description"
 msgid "Order %(order_number)s"
 msgstr "订单 %(order_number)s"
 
-#: saleor/order/views.py:134
+#: saleor/order/views.py:146
 msgctxt "Payment gateway error"
 msgid ""
 "Oops, it looks like we were unable to contact the selected payment service"
 msgstr "我们无法联系到选择的支付服务"
 
-#: saleor/order/views.py:197
+#: saleor/order/views.py:209
 msgctxt "Connect order with user warning message"
 msgid ""
 "We couldn't assign the order to your account as the email addresses don't "
 "match"
 msgstr ""
 
-#: saleor/order/views.py:204
+#: saleor/order/views.py:216
 msgctxt "storefront message"
 msgid "The order is now assigned to your account"
 msgstr ""
@@ -746,37 +746,37 @@ msgctxt "Address form"
 msgid "This value is invalid for selected country"
 msgstr ""
 
-#: saleor/userprofile/models.py:113
+#: saleor/userprofile/models.py:115
 msgctxt "Permission description"
 msgid "Can view users"
 msgstr "可以查看用户"
 
-#: saleor/userprofile/models.py:115
+#: saleor/userprofile/models.py:117
 msgctxt "Permission description"
 msgid "Can edit users"
 msgstr "可以编辑用户"
 
-#: saleor/userprofile/models.py:117
+#: saleor/userprofile/models.py:119
 msgctxt "Permission description"
 msgid "Can view groups"
 msgstr "可以查看分组"
 
-#: saleor/userprofile/models.py:119
+#: saleor/userprofile/models.py:121
 msgctxt "Permission description"
 msgid "Can edit groups"
 msgstr "可以编辑分组"
 
-#: saleor/userprofile/models.py:121
+#: saleor/userprofile/models.py:123
 msgctxt "Permission description"
 msgid "Can view staff"
 msgstr "可以查看职员"
 
-#: saleor/userprofile/models.py:123
+#: saleor/userprofile/models.py:125
 msgctxt "Permission description"
 msgid "Can edit staff"
 msgstr "可以编辑职员"
 
-#: saleor/userprofile/models.py:125
+#: saleor/userprofile/models.py:127
 msgctxt "Permission description"
 msgid "Can impersonate users"
 msgstr ""
@@ -909,7 +909,9 @@ msgstr ""
 msgid "Google"
 msgstr ""
 
-#: templates/account/password_change.html:7 templates/cart/index.html:11
+#: templates/account/password_change.html:7
+#: templates/cart/cart_clone_prompt.html:11
+#: templates/cart/generated_permalink.html:11 templates/cart/index.html:11
 #: templates/order/details.html:18 templates/order/payment.html:20
 #: templates/page/details.html:11 templates/product/details.html:39
 #: templates/userprofile/address_edit.html:16
@@ -1147,7 +1149,7 @@ msgid "Selling Contract"
 msgstr ""
 
 #: templates/cart/_subtotal_table.html:9 templates/cart_dropdown.html:36
-#: templates/dashboard/order/detail.html:394
+#: templates/dashboard/order/detail.html:397
 msgctxt "Order subtotal"
 msgid "Subtotal"
 msgstr ""
@@ -1159,50 +1161,98 @@ msgstr ""
 
 #: templates/cart/_subtotal_table.html:56
 msgctxt "Order subtotal"
-msgid "Total"
+msgid "Total (excl. VAT)"
 msgstr ""
+
+#: templates/cart/_subtotal_table.html:77
+msgctxt "Order subtotal"
+msgid "Total (with VAT)"
+msgstr ""
+
+#: templates/cart/cart_clone_prompt.html:7
+#: templates/cart/generated_permalink.html:7
+msgctxt "Linked cart page title"
+msgid "Linked cart"
+msgstr ""
+
+#: templates/cart/cart_clone_prompt.html:12
+#: templates/cart/generated_permalink.html:12 templates/cart/index.html:12
+msgctxt "Cart breadcrumb"
+msgid "Cart"
+msgstr "购物车"
+
+#: templates/cart/cart_clone_prompt.html:13
+msgctxt "Linked cart breadcrumb"
+msgid "Linked cart"
+msgstr ""
+
+#: templates/cart/cart_clone_prompt.html:27 templates/cart/index.html:30
+msgctxt "Cart table header"
+msgid "Product"
+msgstr "产品"
+
+#: templates/cart/cart_clone_prompt.html:30 templates/cart/index.html:33
+msgctxt "Cart table header"
+msgid "Quantity"
+msgstr "数量"
+
+#: templates/cart/cart_clone_prompt.html:33
+msgctxt "Cart table header"
+msgid "Price"
+msgstr "价格"
+
+#: templates/cart/cart_clone_prompt.html:67
+#, fuzzy
+#| msgctxt "Product details primary action"
+#| msgid "Add to cart"
+msgctxt "Linked cart primary action"
+msgid "Add to cart"
+msgstr "加入购物车"
+
+#: templates/cart/generated_permalink.html:13
+msgctxt "Cart permalink generation result breadcrumb"
+msgid "Permalink"
+msgstr ""
+
+#: templates/cart/generated_permalink.html:37
+#, fuzzy
+#| msgctxt "Cart page title"
+#| msgid "Your cart"
+msgctxt "Cart permalink generation result"
+msgid "Your cart permalink"
+msgstr "您的购物车"
 
 #: templates/cart/index.html:7
 msgctxt "Cart page title"
 msgid "Your cart"
 msgstr "您的购物车"
 
-#: templates/cart/index.html:12
-msgctxt "Cart breadcrumb"
-msgid "Cart"
-msgstr "购物车"
-
 #: templates/cart/index.html:22
 msgctxt "Cart message"
 msgid "Product has been removed from cart"
 msgstr "产品从购物车删除"
 
-#: templates/cart/index.html:30
-msgctxt "Cart table header"
-msgid "Product"
-msgstr "产品"
-
-#: templates/cart/index.html:33
-msgctxt "Cart table header"
-msgid "Quantity"
-msgstr "数量"
-
 #: templates/cart/index.html:36
 msgctxt "Cart table header"
-msgid "Price"
-msgstr "价格"
+msgid "Price (excl. VAT)"
+msgstr ""
 
 #: templates/cart/index.html:79
 msgctxt "Cart primary action"
 msgid "Checkout"
 msgstr "结账"
 
-#: templates/cart/index.html:86 templates/cart_dropdown.html:57
+#: templates/cart/index.html:84
+msgctxt "Cart secondary action allowing to generate a permalink from cart"
+msgid "Permalink"
+msgstr ""
+
+#: templates/cart/index.html:92 templates/cart_dropdown.html:57
 msgctxt "Empty cart message"
 msgid "There are no products in your shopping cart."
 msgstr "您的购物车是空的"
 
-#: templates/cart/index.html:87 templates/cart_dropdown.html:58
+#: templates/cart/index.html:93 templates/cart_dropdown.html:58
 msgctxt "Empty cart link"
 msgid "Check out our sales"
 msgstr ""
@@ -1226,9 +1276,9 @@ msgctxt "Cart dropdown primary action"
 msgid "Checkout"
 msgstr "结账"
 
-#: templates/category/_items.html:34 templates/product/details.html:148
+#: templates/category/_items.html:34
 msgctxt "Product details Net price"
-msgid "W/O VAT"
+msgid "With VAT"
 msgstr ""
 
 #: templates/category/index.html:53
@@ -1993,67 +2043,67 @@ msgid ""
 "  "
 msgstr ""
 
-#: templates/dashboard/customer/detail.html:51
+#: templates/dashboard/customer/detail.html:69
 msgctxt "Customer field"
 msgid "Date joined"
 msgstr ""
 
-#: templates/dashboard/customer/detail.html:63
+#: templates/dashboard/customer/detail.html:81
 msgctxt "Customer action"
 msgid "Edit customer"
 msgstr ""
 
-#: templates/dashboard/customer/detail.html:68
+#: templates/dashboard/customer/detail.html:86
 msgctxt "Customer impersonate action"
 msgid "Impersonate customer"
 msgstr ""
 
-#: templates/dashboard/customer/detail.html:78
+#: templates/dashboard/customer/detail.html:96
 msgctxt "Customer recent orders table title"
 msgid "Recent orders"
 msgstr ""
 
-#: templates/dashboard/customer/detail.html:87
+#: templates/dashboard/customer/detail.html:105
 msgctxt "Customer orders table header"
 msgid "Number"
 msgstr ""
 
-#: templates/dashboard/customer/detail.html:90
+#: templates/dashboard/customer/detail.html:108
 msgctxt "Customer orders table header"
 msgid "Placed on"
 msgstr ""
 
-#: templates/dashboard/customer/detail.html:93
+#: templates/dashboard/customer/detail.html:111
 msgctxt "Customer orders table header"
 msgid "Order status"
 msgstr "订单状态"
 
-#: templates/dashboard/customer/detail.html:96
+#: templates/dashboard/customer/detail.html:114
 msgctxt "Customer orders table header"
 msgid "Total"
 msgstr ""
 
-#: templates/dashboard/customer/detail.html:123
+#: templates/dashboard/customer/detail.html:141
 msgctxt "Empty customer orders table message"
 msgid "No orders found."
 msgstr "无订单"
 
-#: templates/dashboard/customer/detail.html:137
+#: templates/dashboard/customer/detail.html:155
 msgctxt "Customer default shipping address card title"
 msgid "Default shipping address"
 msgstr "默认配送地址"
 
-#: templates/dashboard/customer/detail.html:144
+#: templates/dashboard/customer/detail.html:162
 msgctxt "Customer without default shipping address message"
 msgid "No default shipping address."
 msgstr "没有默认配送地址"
 
-#: templates/dashboard/customer/detail.html:157
+#: templates/dashboard/customer/detail.html:175
 msgctxt "Customer default billing address card title"
 msgid "Default billing address"
 msgstr "默认账单地址"
 
-#: templates/dashboard/customer/detail.html:165
+#: templates/dashboard/customer/detail.html:183
 msgctxt "Customer without default billing address message"
 msgid "No default billing address."
 msgstr "没有默认账单地址"
@@ -2508,13 +2558,13 @@ msgid "Edit address"
 msgstr "编辑地址"
 
 #: templates/dashboard/order/address_form.html:39
-#: templates/dashboard/order/detail.html:219
+#: templates/dashboard/order/detail.html:222
 msgctxt ""
 msgid "Shipping address"
 msgstr "配送地址"
 
 #: templates/dashboard/order/address_form.html:41
-#: templates/dashboard/order/detail.html:241
+#: templates/dashboard/order/detail.html:244
 msgctxt ""
 msgid "Billing address"
 msgstr "账单地址"
@@ -2535,13 +2585,13 @@ msgid "Details"
 msgstr "详情"
 
 #: templates/dashboard/order/detail.html:81
-#: templates/dashboard/order/detail.html:467
+#: templates/dashboard/order/detail.html:470
 msgctxt "Order detail tab"
 msgid "Payments"
 msgstr "支付"
 
 #: templates/dashboard/order/detail.html:89
-#: templates/dashboard/order/detail.html:523
+#: templates/dashboard/order/detail.html:526
 #: templates/order/_order_history.html:5
 msgctxt "Order detail tab"
 msgid "History"
@@ -2593,210 +2643,221 @@ msgctxt "Order summary card header"
 msgid "Captured amount"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:194
+#: templates/dashboard/order/detail.html:192
+#, fuzzy
+#| msgctxt "Order detail action"
+#| msgid "Invoice"
+msgctxt "Order detail action"
+msgid "Client Invoice"
+msgstr "发票"
+
+#: templates/dashboard/order/detail.html:195
+#, fuzzy
+#| msgctxt "Order detail action"
+#| msgid "Invoice"
+msgctxt "Order detail action"
+msgid "Internal Invoice"
+msgstr "发票"
+
+#: templates/dashboard/order/detail.html:200
 msgctxt "Order summary card action"
 msgid "Capture"
 msgstr "抓取"
 
-#: templates/dashboard/order/detail.html:198
+#: templates/dashboard/order/detail.html:204
 msgctxt "Order summary card action"
 msgid "Refund"
 msgstr "退款"
 
-#: templates/dashboard/order/detail.html:203
+#: templates/dashboard/order/detail.html:209
 msgctxt "Order summary card action"
 msgid "Release"
 msgstr "释放"
 
-#: templates/dashboard/order/detail.html:207
-msgctxt "Order detail action"
-msgid "Invoice"
-msgstr "发票"
-
-#: templates/dashboard/order/detail.html:224
+#: templates/dashboard/order/detail.html:227
 msgctxt "Missing shipping address message"
 msgid "No shipping address"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:230
-#: templates/dashboard/order/detail.html:248
+#: templates/dashboard/order/detail.html:233
+#: templates/dashboard/order/detail.html:251
 #: templates/dashboard/product/product_image/list.html:82
 #: templates/dashboard/product/product_image/list.html:127
 msgctxt "Dashboard edit action"
 msgid "Edit"
 msgstr "编辑"
 
-#: templates/dashboard/order/detail.html:260
+#: templates/dashboard/order/detail.html:263
 #, python-format
 msgctxt "Shipment group table title"
 msgid "Shipment #%(shipment)s - %(group_shipping_method_name)s"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:271
+#: templates/dashboard/order/detail.html:274
 #: templates/dashboard/order/pdf/packing_slip.html:66
 msgctxt "Shipment group table header"
 msgid "Item"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:274
+#: templates/dashboard/order/detail.html:277
 msgctxt "Shipment group table header"
 msgid "Price"
 msgstr "价格"
 
-#: templates/dashboard/order/detail.html:277
+#: templates/dashboard/order/detail.html:280
 #: templates/dashboard/order/pdf/packing_slip.html:72
 msgctxt "Shipment group table header"
 msgid "Quantity"
 msgstr "数量"
 
-#: templates/dashboard/order/detail.html:280
+#: templates/dashboard/order/detail.html:283
 msgctxt "Shipment group table header"
 msgid "Total"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:295
+#: templates/dashboard/order/detail.html:298
 #, python-format
 msgctxt "Shipment group table text"
 msgid "SKU: %(sku)s"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:311
-#: templates/dashboard/order/detail.html:312
+#: templates/dashboard/order/detail.html:314
+#: templates/dashboard/order/detail.html:315
 msgctxt "Shipment group table row action"
 msgid "Change quantity"
 msgstr "修改数量"
 
-#: templates/dashboard/order/detail.html:317
+#: templates/dashboard/order/detail.html:320
 msgctxt "Shipment group table row action"
 msgid "Change stock location"
 msgstr "修改库存地址"
 
-#: templates/dashboard/order/detail.html:318
+#: templates/dashboard/order/detail.html:321
 msgctxt "Shipment group table row action"
 msgid "Change stock"
 msgstr "修改库存"
 
-#: templates/dashboard/order/detail.html:323
+#: templates/dashboard/order/detail.html:326
 msgctxt "Shipment group table row action"
 msgid "Split line"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:324
+#: templates/dashboard/order/detail.html:327
 msgctxt "Shipment group table row action"
 msgid "Split order line"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:328
-#: templates/dashboard/order/detail.html:329
+#: templates/dashboard/order/detail.html:331
+#: templates/dashboard/order/detail.html:332
 msgctxt "Shipment group table row action"
 msgid "Remove line"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:350
+#: templates/dashboard/order/detail.html:353
 msgctxt "Shipment group table action"
 msgid "Dispatch"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:354
+#: templates/dashboard/order/detail.html:357
 msgctxt "Shipment group table action"
 msgid "Cancel group"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:355
+#: templates/dashboard/order/detail.html:358
 msgctxt "Shipment group table action"
 msgid "Cancel shipment"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:359
+#: templates/dashboard/order/detail.html:362
 msgctxt "Order summary card action title"
 msgid "Add product to order"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:360
+#: templates/dashboard/order/detail.html:363
 msgctxt "Order summary card action"
 msgid "Add product"
 msgstr "添加产品"
 
-#: templates/dashboard/order/detail.html:364
+#: templates/dashboard/order/detail.html:367
 msgctxt "Order detail action"
 msgid "Packing Slips"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:371
+#: templates/dashboard/order/detail.html:374
 #, python-format
 msgctxt "Shipment group table text"
 msgid "Tracking number: %(tracking)s"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:384
+#: templates/dashboard/order/detail.html:387
 msgctxt "Order totals header"
 msgid "Grand total"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:402
+#: templates/dashboard/order/detail.html:405
 msgctxt "Order totals header"
 msgid "Shipping"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:412
+#: templates/dashboard/order/detail.html:415
 #, python-format
 msgctxt "Order totals header"
 msgid "Voucher %(voucher)s"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:420
-#: templates/dashboard/order/detail.html:421
+#: templates/dashboard/order/detail.html:423
+#: templates/dashboard/order/detail.html:424
 msgctxt "Order totals action"
 msgid "Remove voucher"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:438
+#: templates/dashboard/order/detail.html:441
 msgctxt "Order notes card title"
 msgid "Order notes"
 msgstr "订单备注"
 
-#: templates/dashboard/order/detail.html:451
+#: templates/dashboard/order/detail.html:454
 msgctxt "Empty order notes card message"
 msgid "There are no notes associated with this order."
 msgstr "订单无备注"
 
-#: templates/dashboard/order/detail.html:458
+#: templates/dashboard/order/detail.html:461
 msgctxt "Order notes card action"
 msgid "Add note"
 msgstr "添加备注"
 
-#: templates/dashboard/order/detail.html:474
+#: templates/dashboard/order/detail.html:477
 msgctxt "Payment history table header"
 msgid "Transaction ID"
 msgstr "交易 ID"
 
-#: templates/dashboard/order/detail.html:477
+#: templates/dashboard/order/detail.html:480
 msgctxt "Payment history table header"
 msgid "Date"
 msgstr "日期"
 
-#: templates/dashboard/order/detail.html:480
+#: templates/dashboard/order/detail.html:483
 msgctxt "Payment history table header"
 msgid "Payment status"
 msgstr "支付状态"
 
-#: templates/dashboard/order/detail.html:483
+#: templates/dashboard/order/detail.html:486
 msgctxt "Payment history table header"
 msgid "Fraud status"
 msgstr "欺诈状态"
 
-#: templates/dashboard/order/detail.html:486
+#: templates/dashboard/order/detail.html:489
 msgctxt "Payment history table header"
 msgid "Amount"
 msgstr "金额"
 
-#: templates/dashboard/order/detail.html:494
+#: templates/dashboard/order/detail.html:497
 #, python-format
 msgctxt "Payment item column data"
 msgid "#%(payment_id)s"
 msgstr ""
 
-#: templates/dashboard/order/detail.html:518
+#: templates/dashboard/order/detail.html:521
 msgctxt "Empty payment history table message"
 msgid "No payments made for this order."
 msgstr "订单未支付"
@@ -3108,15 +3169,15 @@ msgctxt "Order total shipping price header"
 msgid "Shipping total"
 msgstr ""
 
-#: templates/dashboard/order/pdf/invoice.html:139
+#: templates/dashboard/order/pdf/invoice.html:140
+msgctxt "Order voucher header"
+msgid "Voucher"
+msgstr ""
+
+#: templates/dashboard/order/pdf/invoice.html:149
 #: templates/order/_ordered_items_table.html:131
 msgctxt "Order total tax price header"
 msgid "Tax"
-msgstr ""
-
-#: templates/dashboard/order/pdf/invoice.html:148
-msgctxt "Order voucher header"
-msgid "Voucher"
 msgstr ""
 
 #: templates/dashboard/order/pdf/invoice.html:159
@@ -4940,54 +5001,50 @@ msgid "Price per Unit"
 msgstr "范围"
 
 #: templates/pdf_invoice.html:107
-msgid "Tax Rate"
-msgstr ""
-
-#: templates/pdf_invoice.html:108
 #, fuzzy
 #| msgid "Price"
 msgid "Net Price"
 msgstr "价格"
 
-#: templates/pdf_invoice.html:129
+#: templates/pdf_invoice.html:127
 msgid "Total discounted"
 msgstr ""
 
-#: templates/pdf_invoice.html:137
+#: templates/pdf_invoice.html:135
 #, fuzzy
 #| msgctxt "Shipping method form field label"
 #| msgid "Shipping method"
 msgid "Shipping"
 msgstr "配送方式"
 
-#: templates/pdf_invoice.html:144
+#: templates/pdf_invoice.html:142
 msgid "Net total"
 msgstr ""
 
-#: templates/pdf_invoice.html:150
+#: templates/pdf_invoice.html:148
 #, python-format
 msgid "VAT (%(tax)s%%)"
 msgstr ""
 
-#: templates/pdf_invoice.html:156
+#: templates/pdf_invoice.html:154
 #, fuzzy
 #| msgid "Gross margin"
 msgid "Gross total"
 msgstr "毛利"
 
-#: templates/pdf_invoice.html:164
+#: templates/pdf_invoice.html:162
 #, fuzzy
 #| msgctxt "Order details primary action"
 #| msgid "Pay for order"
 msgid "Thank you for your order."
 msgstr "支付订单"
 
-#: templates/pdf_invoice.html:167
+#: templates/pdf_invoice.html:165
 #, python-format
 msgid "Please settle the payment by %(date)s"
 msgstr ""
 
-#: templates/pdf_invoice.html:172
+#: templates/pdf_invoice.html:170
 #, python-format
 msgid "Order will be delivered between %(from)s and %(to)s."
 msgstr ""
@@ -5036,17 +5093,22 @@ msgctxt "Product details link text"
 msgid "Edit in dashboard"
 msgstr "在后台中编辑"
 
-#: templates/product/details.html:166
+#: templates/product/details.html:141
+msgctxt "Product details Net price"
+msgid "WITH VAT"
+msgstr ""
+
+#: templates/product/details.html:159
 msgctxt "Product details primary action"
 msgid "Add to cart"
 msgstr "加入购物车"
 
-#: templates/product/details.html:178
+#: templates/product/details.html:171
 msgctxt "Product details text"
 msgid "This product is currently <strong>unavailable</strong>."
 msgstr ""
 
-#: templates/product/details.html:182
+#: templates/product/details.html:175
 msgctxt "Product details title"
 msgid "Description"
 msgstr "描述"

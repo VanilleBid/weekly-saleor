@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load gross from prices_i18n %}
+{% load i18n %}
+{% load staticfiles %}
+{% load get_thumbnail from product_images %}
+
+{% block title %}{% trans "Linked cart" context "Linked cart page title" %} — {{ block.super }}{% endblock %}
+
+{% block breadcrumb %}
+  <ul class="breadcrumbs list-unstyled">
+    <li><a href="{% url 'home' %}">{% trans "Home" context "Main navigation item" %}</a></li>
+    <li><a rel="nofollow" href="{% url 'cart:index' %}">{% trans "Cart" context "Cart breadcrumb" %}</a></li>
+    <li>{% trans "Linked cart" context "Linked cart breadcrumb" %}</li>
+  </ul>
+{% endblock breadcrumb %}
+
+{% block meta_tags %}
+  <meta name="robots" content="nofollow">
+{% endblock meta_tags %}
+
+{% block content %}
+  <div class="cart">
+    <div class="mb-5">
+    <div class="table__header d-none d-md-block">
+      <div class="row">
+        <div class="col-md-7">
+          <small>{% trans "Product" context "Cart table header" %}</small>
+        </div>
+        <div class="col-md-3">
+          <small>{% trans "Quantity" context "Cart table header" %}</small>
+        </div>
+        <div class="col-md-2 text-right">
+          <small>{% trans "Price" context "Cart table header" %}</small>
+        </div>
+      </div>
+    </div>
+    {% for variant, quantity, total_price in cart %}
+      <div class="cart__line table__row">
+        <div class="row">
+          <div class="col-7 cart__line__product">
+            <a class="link--clean" href="{{ variant.get_absolute_url }}">
+              <img class="lazyload lazypreload" data-src="{% get_thumbnail variant.product.images.first.image method="fit" size="60x60" %}"
+                   data-srcset="{% get_thumbnail variant.product.images.first.image method="fit" size="60x60" %} 1x, {% get_thumbnail variant.product.images.first.image method="fit" size="120x120" %} 2x"
+                   alt="">
+              <p>{{ variant.product }}<br><small>{{ variant }}</small></p>
+            </a>
+          </div>
+          <div class="col-5">
+            <div class="row">
+              <div class="cart__line__quantity col-md-7 col-12">
+                {{ quantity }}
+              </div>
+              <div class="cart-item-price col-md-5 col-12" data-product-id="{{ variant.pk }}">
+                <p class="text-right">{% gross total_price html=True %}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <form method="POST">
+          {% csrf_token %}
+          <button type="submit" class="btn primary float-right">
+            {% trans "Add to cart" context "Linked cart primary action" %}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load gross from prices_i18n %}
+{% load i18n %}
+{% load staticfiles %}
+{% load get_thumbnail from product_images %}
+
+{% block title %}{% trans "Linked cart" context "Linked cart page title" %} — {{ block.super }}{% endblock %}
+
+{% block breadcrumb %}
+  <ul class="breadcrumbs list-unstyled">
+    <li><a href="{% url 'home' %}">{% trans "Home" context "Main navigation item" %}</a></li>
+    <li><a rel="nofollow" href="{% url 'cart:index' %}">{% trans "Cart" context "Cart breadcrumb" %}</a></li>
+    <li>{% trans "Permalink" context "Cart permalink generation result breadcrumb" %}</li>
+  </ul>
+{% endblock breadcrumb %}
+
+{% block meta_tags %}
+  <meta name="robots" content="nofollow">
+{% endblock meta_tags %}
+
+{% block stylesheet %}
+  <style>
+    #permalink * {
+      display: block;
+      width: 100%;
+      text-align: center;
+      -webkit-user-select: inherit;
+      -moz-user-select: inherit;
+      -ms-user-select: inherit;
+      user-select: inherit;
+    }
+  </style>
+{% endblock stylesheet %}
+
+{% block content %}
+  <div id="permalink">
+    <h2 class="mb-4">{% trans 'Your cart permalink' context 'Cart permalink generation result' %}</h2>
+    <label>
+      <input class="btn btn-secondary active text-lowercase center-block pagination" type="text" value="{{ permalink }}"
+             onclick="this.select()" />
+    </label>
+  </div>
+{% endblock content %}

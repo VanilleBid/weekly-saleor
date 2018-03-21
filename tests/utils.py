@@ -1,6 +1,9 @@
+import json
 from contextlib import contextmanager
 from urllib.parse import urlparse
 
+import html5lib
+from cssselect2 import ElementWrapper
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import Q
 from django.utils.encoding import smart_text
@@ -57,3 +60,33 @@ def set_value(o, attr, value, default=None):
         setattr(o, attr, val)
         if not i:
             yield
+
+
+def get_wrapper_html(content):
+    if isinstance(content, bytes):
+        content = content.decode('utf-8')
+
+    html_tree = html5lib.parse(content, namespaceHTMLElements=False)
+    document = ElementWrapper.from_html_root(html_tree)
+
+    return document
+
+
+def json_variant_details(content):
+    document = get_wrapper_html(content)
+    element = document.query('#variant-picker').etree_element
+    data = element.get('data-variant-picker-data')
+    results = json.loads(data)
+    return results
+
+
+def extract_json_ld(content):
+    json_ld = None
+    document = get_wrapper_html(content)
+    raw_json = document.query(r'script[type="application/ld+json"]')
+
+    if raw_json:
+        raw_json = raw_json.etree_element.text
+        json_ld = json.loads(raw_json)
+
+    return json_ld

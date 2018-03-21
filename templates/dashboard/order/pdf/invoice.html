@@ -134,6 +134,16 @@
         {% gross order.shipping_price html=True %}
       </td>
     </tr>
+    {% if order.discount_amount %}
+      <tr>
+        <td>
+          {% trans "Voucher" context "Order voucher header" %} {{ order.discount_name }}
+        </td>
+        <td class="right-align">
+          -{% gross order.discount_amount html=True %}
+        </td>
+      </tr>
+    {% endif %}
     <tr>
       <td>
         {% trans "Tax" context "Order total tax price header" %}
@@ -142,16 +152,6 @@
         {% gross order.total_tax html=True %}
       </td>
     </tr>
-    {% if order.voucher %}
-      <tr>
-        <td>
-          {% trans "Voucher" context "Order voucher header" %} {{ order.voucher }}
-        </td>
-        <td class="right-align">
-          {% gross order.discount|discount_amount_for:order.total html=True %}
-        </td>
-      </tr>
-    {% endif %}
   </tbody>
   <tfoot>
     <tr>
