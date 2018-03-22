@@ -818,9 +818,10 @@ def ajax_products_list(request):
         else Product.objects.available_products())
     search_query = request.GET.get('q', '')
     if search_query:
-        queryset = queryset.filter(Q(name__icontains=search_query))
+        queryset = queryset.filter(Q(
+            name__icontains=search_query, _connector=Q.OR, variants__sku__icontains=search_query))
     products = [
-        {'id': product.id, 'text': str(product)} for product in queryset
+        {'id': product.id, 'text': product.__str_staff__} for product in queryset
     ]
     return JsonResponse({'results': products})
 

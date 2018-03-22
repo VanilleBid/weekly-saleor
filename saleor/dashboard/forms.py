@@ -30,7 +30,18 @@ class RichTextField(forms.CharField):
         return value
 
 
-class AjaxSelect2ChoiceField(forms.ChoiceField):
+class AjaxSelectMixin(object):
+    def __init__(self, *args, **kwargs):
+        super(AjaxSelectMixin, self).__init__(*args, **kwargs)
+
+    def label_from_instance(self, node):
+        """Creates labels which will represent each node when generating option labels."""
+        if hasattr(node, '__str_staff__'):
+            return getattr(node, '__str_staff__')
+        return str(node)
+
+
+class AjaxSelect2ChoiceField(AjaxSelectMixin, forms.ChoiceField):
     """An AJAX-based choice field using Select2.
 
     fetch_data_url - specifies url, from which select2 will fetch data
@@ -61,11 +72,11 @@ class AjaxSelect2ChoiceField(forms.ChoiceField):
 
     def set_initial(self, obj):
         """Set initially selected objects on field's widget."""
-        selected = {'id': obj.pk, 'text': str(obj)}
+        selected = {'id': obj.pk, 'text': self.label_from_instance(obj)}
         self.widget.attrs['data-initial'] = json.dumps(selected)
 
 
-class AjaxSelect2MultipleChoiceField(forms.MultipleChoiceField):
+class AjaxSelect2MultipleChoiceField(AjaxSelectMixin, forms.MultipleChoiceField):
     """An AJAX-base multiple choice field using Select2.
 
     fetch_data_url - specifies url, from which select2 will fetch data
@@ -105,5 +116,5 @@ class AjaxSelect2MultipleChoiceField(forms.MultipleChoiceField):
 
     def set_initial(self, objects):
         """Set initially selected objects on field's widget."""
-        selected = [{'id': obj.pk, 'text': str(obj)} for obj in objects]
+        selected = [{'id': obj.pk, 'text': self.label_from_instance(obj)} for obj in objects]
         self.widget.attrs['data-initial'] = json.dumps(selected)
