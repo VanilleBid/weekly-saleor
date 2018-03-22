@@ -48,7 +48,6 @@ class Category(MPTTModel):
     def __str__(self):
         return self.name
 
-    @shared_task
     def create_category_thumbnails(self):
         CategoryWarmer(items=[self])()
 
@@ -433,7 +432,6 @@ class ProductImage(models.Model):
         ordering = ('order', )
         app_label = 'product'
 
-    @shared_task
     def create_product_thumbnails(self):
         ProductWarmer(items=[self])()
 

@@ -284,7 +284,7 @@ class ProductImageForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(ProductImageForm, self).save(commit)
-        self.instance.create_product_thumbnails.delay(instance)
+        self.instance.create_product_thumbnails()
         return instance
 
 
@@ -388,7 +388,7 @@ class UploadImageForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(UploadImageForm, self).save(commit)
-        self.instance.create_product_thumbnails.delay(instance)
+        self.instance.create_product_thumbnails()
         return instance
 
 

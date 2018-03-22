@@ -32,6 +32,6 @@ class CategoryForm(forms.ModelForm):
 
         instance = super().save(commit=commit)
         if 'image' in self.changed_data:
-            self.instance.create_category_thumbnails.delay(instance)
+            self.instance.create_category_thumbnails()
 
         return instance
