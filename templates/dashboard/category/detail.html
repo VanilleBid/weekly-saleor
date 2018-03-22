@@ -95,7 +95,10 @@
             </a>
             {% if perms.product.edit_category %}
             <a class="btn-flat waves-effect" href="{% url 'dashboard:category-edit' root_pk=root.pk %}">
-              {% trans "Edit category" context "Category detail view action" %}
+              {% trans "Edit category" context "Category detail edit action" %}
+            </a>
+            <a class="btn-flat waves-effect" href="{% url 'dashboard:category-move' root_pk=root.pk %}">
+              {% trans "Move category" context "Category detail move action" %}
             </a>
             <a href="#base-modal" class="btn-flat waves-effect modal-trigger-custom" data-href="{% url 'dashboard:category-delete' pk=root.pk %}">
               {% trans "Remove category" context "Category detail view action" %}

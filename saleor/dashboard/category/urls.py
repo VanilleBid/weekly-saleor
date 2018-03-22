@@ -13,5 +13,7 @@ urlpatterns = [
         views.category_create, name='category-add'),
     url(r'^(?P<root_pk>[0-9]+)/edit/$',
         views.category_edit, name='category-edit'),
+    url(r'^(?P<root_pk>[0-9]+)/move/$',
+        views.category_move, name='category-move'),
     url(r'^(?P<pk>[0-9]+)/delete/$',
         views.category_delete, name='category-delete')]
