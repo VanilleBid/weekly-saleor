@@ -5,13 +5,15 @@ from django.forms.widgets import CheckboxSelectMultiple
 from django.utils.encoding import smart_text
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy, pgettext_lazy
+from mptt.forms import TreeNodeChoiceField
 
 from . import ProductBulkAction
 from ...core.utils.text import generate_seo_description
 from ...product.models import (
     AttributeChoiceValue, Collection, Product, ProductAttribute, ProductImage,
-    ProductType, ProductVariant, Stock, StockLocation, VariantImage)
+    ProductType, ProductVariant, Stock, StockLocation, VariantImage, Category)
 from ..forms import RichTextField
+from ..widgets import StaffValuesMultipleChoiceField, StaffValuesChoiceField
 from .widgets import ImagePreviewWidget
 
 
@@ -60,6 +62,9 @@ class StockForm(forms.ModelForm):
 
 
 class ProductTypeForm(forms.ModelForm):
+    variant_attributes = StaffValuesMultipleChoiceField(queryset=ProductAttribute.objects.all(), required=False)
+    product_attributes = StaffValuesMultipleChoiceField(queryset=ProductAttribute.objects.all(), required=False)
+
     class Meta:
         model = ProductType
         exclude = []
@@ -134,6 +139,7 @@ class ProductForm(forms.ModelForm):
             'collections': pgettext_lazy(
                 'Add to collection select', 'Collections')}
 
+    category = TreeNodeChoiceField(Category.objects.all())
     collections = forms.ModelMultipleChoiceField(
         required=False, queryset=Collection.objects.all())
     description = RichTextField()

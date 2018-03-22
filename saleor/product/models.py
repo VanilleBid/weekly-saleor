@@ -149,6 +149,10 @@ class Product(models.Model, ItemRange):
     def __str__(self):
         return self.name
 
+    @property
+    def __str_staff__(self):
+        return '{} ({})'.format(self.name, ', '.join([variant.sku for variant in self.variants.all()]))
+
     def get_absolute_url(self):
         return reverse(
             'product:details',
@@ -396,9 +400,11 @@ class ProductAttribute(models.Model):
         ordering = ('slug', )
 
     def __str__(self):
-        # debug purposes!
-        # return '{0.name} ({0.slug})'.format(self)
         return self.name
+
+    @property
+    def __str_staff__(self):
+        return '{0.name} ({0.slug})'.format(self)
 
     def get_formfield_name(self):
         return slugify('attribute-%s' % self.slug, allow_unicode=True)
