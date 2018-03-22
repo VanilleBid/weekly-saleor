@@ -12,4 +12,4 @@ import './selects';
 import './side-menu';
 import './tab';
 import './vouchers';
-import './create-order';
+import './createOrder/createOrder';

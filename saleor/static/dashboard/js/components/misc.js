@@ -2,7 +2,7 @@ import SVGInjector from 'svg-injector-2';
 
 import { initSelects } from './selects';
 import { onScroll } from './utils';
-import { initCreateOrderAngularApp } from './create-order'
+import { initCreateOrderAngularApp } from './createOrder/createOrder';
 
 const screenSizes = {
   sm: 600,
