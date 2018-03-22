@@ -3,8 +3,18 @@ from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 from django.utils.translation import pgettext_lazy
 from text_unidecode import unidecode
+from mptt.forms import MoveNodeForm, TreeNodeChoiceField, TreeNodePositionField
 
 from ...product.models import Category
+
+
+class MoveCategoryForm(MoveNodeForm):
+    target = TreeNodeChoiceField(
+        label=pgettext_lazy('Move category form field: parent to set to category', 'Target'),
+        queryset=None, required=False)
+    position = TreeNodePositionField(
+        label=pgettext_lazy(
+            'Move category form field: position of the category in parent children', 'Position'))
 
 
 class CategoryForm(forms.ModelForm):

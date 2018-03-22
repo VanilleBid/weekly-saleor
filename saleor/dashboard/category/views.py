@@ -1,3 +1,5 @@
+import mptt.forms
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
@@ -11,7 +13,7 @@ from ...core.utils import get_paginator_items
 from ...product.models import Category
 from ..views import staff_member_required
 from .filters import CategoryFilter
-from .forms import CategoryForm
+from .forms import CategoryForm, MoveCategoryForm
 
 
 @staff_member_required
@@ -74,6 +76,27 @@ def category_edit(request, root_pk=None):
         status = 400
     ctx = {'category': category, 'form': form, 'status': status, 'path': path}
     template = 'dashboard/category/form.html'
+    return TemplateResponse(request, template, ctx, status=status)
+
+
+@staff_member_required
+@permission_required('product.edit_category')
+def category_move(request, root_pk):
+    category = get_object_or_404(Category, pk=root_pk)
+    form = MoveCategoryForm(category, request.POST or None, initial={'target': category.parent})
+    status = 200
+
+    if form.is_valid():
+        form.save()
+        return redirect('dashboard:category-detail', pk=root_pk)
+    elif form.errors:
+        status = 400
+
+    path = category.get_ancestors(include_self=True)
+
+    ctx = {'category': category, 'form': form, 'status': status, 'path': path}
+    template = 'dashboard/category/move_category_form.html'
+
     return TemplateResponse(request, template, ctx, status=status)
 
 

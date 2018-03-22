@@ -101,6 +101,42 @@ def test_category_edit_image(admin_client, default_category):
     warmer.create_if_not_exists.assert_has_calls(expected_calls, True)
 
 
+def test_category_move(admin_client, default_category):
+    child_category = Category.objects.create(slug='child', name='child', parent=default_category)
+
+    def _get_url(_pk):
+        _url = reverse(
+            'dashboard:category-move', kwargs={'root_pk': _pk})
+        return _url
+
+    def _test_post(_category, _data=None, _expected_code=302):
+        _url = _get_url(_category.pk)
+        _data = _data or {}
+        _data.setdefault('position', 'first-child')
+
+        _response = admin_client.post(_url, _data)
+        _category = Category.objects.get(pk=_category.pk)
+
+        assert _response.status_code == _expected_code
+        return _category
+
+    # set default category parent to children, should raise a 400
+    category = _test_post(default_category, {'target': child_category.pk}, 400)
+    assert category.parent is None
+
+    # set default category parent to itself, should raise a 400
+    category = _test_post(default_category, {'target': default_category.pk}, 400)
+    assert category.parent is None
+
+    # set child parent to default_category
+    category = _test_post(child_category, {'target': default_category.pk})
+    assert category.parent.pk == default_category.pk
+
+    # set child parent to none (root)
+    category = _test_post(child_category, {'target': ''}, 302)
+    assert category.parent is None
+
+
 def test_category_detail(admin_client, default_category):
     assert len(Category.objects.all()) == 1
     url = reverse('dashboard:category-detail',
