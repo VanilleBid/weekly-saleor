@@ -10,7 +10,7 @@ PRODUCT_IMAGE_SETS = [
 ]
 
 
-CATEGORY_IMAGE_SETS = (('crop', '400x400'), ('crop', '120x120'))
+CATEGORY_IMAGE_SETS = (('crop', '400x400'), ('crop', '255x255'), ('crop', '120x120'))
 
 logger = logging.getLogger(__name__)
 
