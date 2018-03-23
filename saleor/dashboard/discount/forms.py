@@ -9,9 +9,8 @@ from mptt.forms import TreeNodeMultipleChoiceField, TreeNodeChoiceField
 
 from ...discount import DiscountValueType, VoucherApplyToProduct
 from ...discount.models import Sale, Voucher
-from ...product.models import Product, Category
 from ...userprofile.models import User
-from ...product.models import Product
+from ...product.models import Product, Category
 from ...shipping.models import COUNTRY_CODE_CHOICES, ShippingMethodCountry
 from ..forms import AjaxSelect2ChoiceField, AjaxSelect2MultipleChoiceField
 
@@ -20,10 +19,11 @@ class SaleForm(forms.ModelForm):
     products = AjaxSelect2MultipleChoiceField(
         queryset=Product.objects.all(),
         fetch_data_url=reverse_lazy('dashboard:ajax-products'), required=False)
+    categories = TreeNodeMultipleChoiceField(
+        queryset=Category.objects.all(), required=False)
     customers = AjaxSelect2MultipleChoiceField(
         queryset=User.objects.all(),
         fetch_data_url=reverse_lazy('dashboard:ajax-customers'), required=False)
-    categories = TreeNodeMultipleChoiceField(queryset=Category.objects.all(), required=False)
 
     class Meta:
         model = Sale
@@ -214,7 +214,8 @@ class ProductVoucherForm(CommonVoucherForm):
 
 
 class CategoryVoucherForm(CommonVoucherForm):
-    category = TreeNodeChoiceField(queryset=Category.objects.all())
+    category = TreeNodeChoiceField(
+        queryset=Category.objects.all(), required=False)
 
     class Meta:
         model = Voucher

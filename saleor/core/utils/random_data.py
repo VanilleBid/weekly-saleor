@@ -13,6 +13,7 @@ from faker.providers import BaseProvider
 from payments import PaymentStatus
 from prices import Price
 
+from .text import generate_seo_description
 from ...discount import DiscountValueType, VoucherType
 from ...discount.models import Sale, Voucher
 from ...order import GroupStatus
@@ -268,10 +269,12 @@ def get_or_create_collection(name, **kwargs):
 
 
 def create_product(**kwargs):
+    description = fake.paragraphs(5)
     defaults = {
         'name': fake.company(),
         'price': fake.price(),
-        'description': '\n\n'.join(fake.paragraphs(5))}
+        'description': '\n\n'.join(description),
+        'seo_description': generate_seo_description(description[0], 300)}
     defaults.update(kwargs)
     return Product.objects.create(**defaults)
 

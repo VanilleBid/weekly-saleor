@@ -25,6 +25,15 @@
   {% endif %}
 {% endblock %}
 
+{% block custom_css %}
+  <style>
+  .card_255x255 {
+    width: 255px;
+    height: 255px;
+  }
+  </style>
+{% endblock %}
+
 {% block breadcrumbs %}
   <ul class="breadcrumbs breadcrumbs--history">
     {% if path %}
@@ -70,7 +79,7 @@
 {% block content %}
   {% if root %}
     <div class="row">
-      <div class="col m12 l9">
+      <div class="col m8">
         <div class="card">
           <div class="card-content">
             <span class="card-title">
@@ -95,7 +104,10 @@
             </a>
             {% if perms.product.edit_category %}
             <a class="btn-flat waves-effect" href="{% url 'dashboard:category-edit' root_pk=root.pk %}">
-              {% trans "Edit category" context "Category detail view action" %}
+              {% trans "Edit category" context "Category detail edit action" %}
+            </a>
+            <a class="btn-flat waves-effect" href="{% url 'dashboard:category-move' root_pk=root.pk %}">
+              {% trans "Move category" context "Category detail move action" %}
             </a>
             <a href="#base-modal" class="btn-flat waves-effect modal-trigger-custom" data-href="{% url 'dashboard:category-delete' pk=root.pk %}">
               {% trans "Remove category" context "Category detail view action" %}
@@ -167,6 +179,11 @@
       <div class="col s12 l3" id="filters">
         {% if not is_empty %}{% filters filter_set %}{% endif %}
       </div>
+      {% if root.image %}
+        <div class="col m4 s12">
+          <div class="card card_255x255" style="background-image: url('{{ root.image.crop.255x255 }}')"></div>
+        </div>
+      {% endif %}
     </div>
   {% endif %}
 {% endblock %}

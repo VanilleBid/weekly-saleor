@@ -35,3 +35,27 @@ class RichTextEditorWidget(Textarea):
         if attrs:
             default_attrs.update(attrs)
         super().__init__(default_attrs)
+
+
+class StaffValuesChoiceFieldMixin(object):
+    DEFAULT_REPR_ATTR = '__str_staff__'
+
+    def __init__(self, queryset, *args, **kwargs):
+        self._representation_attribut = kwargs.pop('representation_attribute', self.DEFAULT_REPR_ATTR)
+        super(StaffValuesChoiceFieldMixin, self).__init__(queryset, *args, **kwargs)
+
+    def _get_attribute_for_node(self, node):
+        return getattr(node, self._representation_attribut)
+
+    def label_from_instance(self, node):
+        """Creates labels which will represent each node when generating option labels."""
+        result = self._get_attribute_for_node(node)
+        return result
+
+
+class StaffValuesChoiceField(StaffValuesChoiceFieldMixin, forms.ModelChoiceField):
+    pass
+
+
+class StaffValuesMultipleChoiceField(StaffValuesChoiceFieldMixin, forms.ModelMultipleChoiceField):
+    pass

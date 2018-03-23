@@ -1,10 +1,10 @@
 import datetime
 from decimal import Decimal
 
-from celery import shared_task
 from django.conf import settings
 from django.contrib.postgres.fields import HStoreField
-from django.core.validators import MinValueValidator, RegexValidator
+from django.core.validators import (
+    MaxLengthValidator, MinValueValidator, RegexValidator)
 from django.db import models
 from django.db.models import F, Max, Q
 from django.urls import reverse
@@ -115,6 +115,9 @@ class Product(models.Model, ItemRange, JSONModel):
         ProductType, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     description = models.TextField()
+    seo_description = models.CharField(
+        max_length=300, blank=True, null=True,
+        validators=[MaxLengthValidator(300)])
     category = models.ForeignKey(
         Category, related_name='products', on_delete=models.CASCADE)
     price = PriceField(
@@ -153,6 +156,10 @@ class Product(models.Model, ItemRange, JSONModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def __str_staff__(self):
+        return '{} ({})'.format(self.name, ', '.join([variant.sku for variant in self.variants.all()]))
 
     def as_dict(self):
         # 'product_attributes': product_attributes,
@@ -425,9 +432,11 @@ class ProductAttribute(models.Model):
         ordering = ('slug', )
 
     def __str__(self):
-        # debug purposes!
-        # return '{0.name} ({0.slug})'.format(self)
         return self.name
+
+    @property
+    def __str_staff__(self):
+        return '{0.name} ({0.slug})'.format(self)
 
     def get_formfield_name(self):
         return slugify('attribute-%s' % self.slug, allow_unicode=True)
