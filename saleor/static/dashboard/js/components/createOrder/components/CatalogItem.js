@@ -1,12 +1,32 @@
 import * as React from 'react';
+import * as $ from 'jquery';
+import PropTypes from 'prop-types';
 
 export default class CatalogItem extends React.Component {
-  constructor (data) {
-    super();
-    this.data = data;
-    this.variants = [];
-    this.inCartCount = 0;
-    this.productAttributes = {};
+  static propTypes = {
+    productData: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+      product_images: PropTypes.arrayOf(PropTypes.string.isRequired),
+      variants: PropTypes.arrayOf(PropTypes.shape({
+        variant_id: PropTypes.number.isRequired,
+        sku: PropTypes.string.isRequired,
+        in_stock: PropTypes.number.isRequired,
+        unit_price: PropTypes.string.optional
+      }))
+    }).isRequired
+  };
+
+  constructor (props) {
+    super(props);
+
+    this.data = props.productData;
+    this.variants = this.data.variants;
+
+    // initialize each variant
+    this.variants.forEach((variant) => {
+      variant.inCartCount = 0;
+    });
   }
   getFirstImage() {
     return this.data.product_images[0] || '/static/images/placeholder540x540.png';
@@ -17,30 +37,30 @@ export default class CatalogItem extends React.Component {
   render () {
     return (
       <div className="card">
-        <a ng-href="[[ product.url ]]" target="_blank" className="img-container">
-          <div className="img-overlay"></div>
+        <a href={ this.data.url } target="_blank" className="img-container">
+          <div className="img-overlay" />
           <img src={ this.getFirstImage() } className="responsive-img" />
         </a>
 
         <div className="card-content">
           <div className="card-title">
-            { this.name }
+            { this.data.name }
           </div>
 
           <div className="table-toggle">
             { /* TODO handle it in ReactJS */ }
-            <span ng-click="show=!show" is-toggled="[[show]]"></span>
+            <span ng-click="show=!show" data-is-toggled="[[show]]" />
           </div>
 
           { /* TODO handle it in ReactJS */ }
           <table ng-show="show">
-            {this.productAttributes.map(
-              (attributeName, i) => (
+            {$.each(this.data.attributes,
+              (attributeName, attributeValue) => (
                 <tr>
                   <td>{ attributeName }</td>
                   <td>
                     <strong>
-                      { this.productAttributes[attributeName].name || this.productAttributes[attributeName] }
+                      { attributeValue.name || attributeValue }
                     </strong>
                   </td>
                 </tr>
@@ -57,7 +77,7 @@ export default class CatalogItem extends React.Component {
                   <span>{ variant.sku } — { variant.unit_price }€ </span>
                   <label>
                     <span className="right help-cursor" title="% trans 'in stock' %">{ variant.in_stock }</span>
-                    <input type="number" min="0" value="0" className="right"
+                    <input type="number" min="0" value={ variant.inCartCount } className="right"
                       onChange={this.handleVariantCartChange(this, {variant})} />
                   </label>
                 </div>

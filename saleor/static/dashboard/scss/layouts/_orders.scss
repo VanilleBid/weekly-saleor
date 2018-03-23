@@ -79,7 +79,7 @@
             padding-bottom: 1rem;
 
             span {
-              &[is-toggled="true"]:before {
+              &[data-is-toggled="true"]:before {
                 content: '-';
               }
               &:before {
