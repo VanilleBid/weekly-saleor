@@ -980,11 +980,12 @@ def test_staff_with_permissions_can_update_add_and_delete_products_notes(
         assert staff_client.get(url).status_code == 302
         assert staff_client.post(url).status_code == 302
 
+    staff_group.permissions.add(permission_edit_properties)
+    staff_user.groups.add(staff_group)
+    staff_user = User.objects.get(pk=staff_user.pk)
+    assert staff_user.has_perm("product.edit_properties")
+
     for url in urls:
-        staff_group.permissions.add(permission_edit_properties)
-        staff_user.groups.add(staff_group)
-        staff_user = User.objects.get(pk=staff_user.pk)
-        assert staff_user.has_perm("product.edit_properties")
         assert staff_client.get(url).status_code == 200
 
 
@@ -997,9 +998,52 @@ def test_staff_with_permissions_can_view_products_notes(
     for url in urls:
         assert staff_client.get(url).status_code == 302
 
+    staff_group.permissions.add(permission_view_properties)
+    staff_user.groups.add(staff_group)
+    staff_user = User.objects.get(pk=staff_user.pk)
+    assert staff_user.has_perm("product.view_properties")
+
     for url in urls:
-        staff_group.permissions.add(permission_view_properties)
-        staff_user.groups.add(staff_group)
-        staff_user = User.objects.get(pk=staff_user.pk)
-        assert staff_user.has_perm("product.view_properties")
         assert staff_client.get(url).status_code == 200
+
+
+def test_staff_with_permissions_can_view_gross_margin(
+        staff_client: Client, staff_user, staff_group, product_in_stock,
+        permission_view_stock_location, permission_view_product):
+
+    assert not staff_user.has_perm("product.view_properties")
+
+    staff_group.permissions.add(permission_view_product)
+    staff_user.groups.add(staff_group)
+    staff_user = User.objects.get(pk=staff_user.pk)
+    assert staff_user.has_perm("product.view_product")
+
+    urls = [
+        reverse('dashboard:product-detail', kwargs={'pk': product_in_stock.pk})]
+
+    def _check_url(_url):
+        can_view_stock_location = staff_user.has_perm("product.view_stock_location")
+
+        _response = staff_client.get(_url)
+        assert _response.status_code == 200
+
+        gross_margin = b'Gross margin' in _response.content
+        purchase_cost = b'Purchase cost' in _response.content
+
+        if can_view_stock_location:
+            assert gross_margin
+            assert purchase_cost
+        else:
+            assert not gross_margin
+            assert not purchase_cost
+
+    for url in urls:
+        _check_url(url)
+
+    staff_group.permissions.add(permission_view_stock_location)
+    staff_user.groups.add(staff_group)
+    staff_user = User.objects.get(pk=staff_user.pk)
+    assert staff_user.has_perm("product.view_stock_location")
+
+    for url in urls:
+        _check_url(url)
