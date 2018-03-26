@@ -1,13 +1,18 @@
 from decimal import Decimal
+
+from django.conf import settings
+from django.http import Http404
 from django.urls import reverse
 from django_countries.fields import Country
 from prices import Price
+from pytest import raises
 
 from saleor.order import models, OrderStatus
 from saleor.order.forms import OrderNoteForm
 from saleor.order.utils import add_variant_to_delivery_group
 from saleor.userprofile.models import Address, User
-from tests.utils import get_redirect_location, assert_decimal
+from tests.utils import get_redirect_location, assert_decimal, set_value
+from unittest import mock
 
 
 def test_total_property():
@@ -140,7 +145,8 @@ def test_view_connect_order_with_user_authorized_user(
     assert order.user == customer_user
 
 
-def test_view_order_invoice_non_logged(order, client):
+def test_view_order_invoice_non_logged(order_with_lines_and_stock, client):
+    order = order_with_lines_and_stock
     url = reverse(
         'order:invoice', kwargs={'token': order.token})
     response = client.get(url)
@@ -160,6 +166,7 @@ def test_view_order_invoice_authorized(
         'order:invoice', kwargs={'token': order.token})
     response = authorized_client.get(url)
 
+    # note: the file was retrieved from cache
     assert response.status_code == 200
     assert response['content-type'] == 'application/pdf'
     name = "invoice-%s" % order.id
@@ -213,6 +220,36 @@ def test_view_order_invoice_staff_access(
     staff_user.is_active = False
     staff_user.save()
     assert _get().status_code == 302
+
+
+def test_order_invoice_cached(order_with_lines_and_stock):
+    order = order_with_lines_and_stock
+    mocked = order.create_invoice_pdf = mock.Mock(wraps=order.create_invoice_pdf)
+    order.get_invoice()  # shouldn't raise Http404 if was cached
+    mocked.assert_not_called()
+
+
+def test_order_invoice_non_cached(order_with_lines_and_stock):
+    order = order_with_lines_and_stock
+    mocked = order.create_invoice_pdf = mock.Mock(wraps=order.create_invoice_pdf)
+    with raises(Http404):
+        with mock.patch.object(order, 'invoice_path') as patched:
+            patched.return_value = 'invoices/0.pdf'
+            order.get_invoice()  # should raise a Http404 as `0.pdf` was not created
+    mocked.assert_not_called()
+
+
+def test_order_invoice_cache_disabled(order_with_lines_and_stock):
+    order = order_with_lines_and_stock
+    mocked = order.create_invoice_pdf = mock.Mock(wraps=order.create_invoice_pdf)
+
+    with set_value(settings, 'PRIVATE_STORAGE_DISABLE_CACHE', True):
+        assert settings.PRIVATE_STORAGE_DISABLE_CACHE
+        order.get_invoice()
+        order.get_invoice()
+
+    assert not settings.PRIVATE_STORAGE_DISABLE_CACHE
+    assert mocked.call_count == 2
 
 
 def test_view_connect_order_with_user_different_email(

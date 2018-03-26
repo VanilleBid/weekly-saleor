@@ -356,6 +356,7 @@ class Checkout:
             order.notes.create(user=order.user, content=self.note)
 
         order.create_delivery_dates(min_days, max_days)
+        order.place_order()
         order.save()
 
         return order

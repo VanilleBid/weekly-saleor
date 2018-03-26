@@ -7,12 +7,14 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q, BooleanField
+from django.http import Http404
 from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy
 from django.utils.functional import cached_property
 from django_fsm import FSMField, transition
 from django_prices.models import PriceField
+from io import BytesIO
 from payments import PaymentStatus, PurchasedItem
 from payments.models import BasePayment
 from prices import FixedDiscount, Price
@@ -21,10 +23,12 @@ from satchless.item import ItemLine, ItemSet
 from django_webhooking.utils import register_model, Model as WebhookModel
 from django_webhooking.Embed import Embed
 
+from .invoice import create_invoice_pdf
 from ..core.utils.billing import get_tax_price, float_rate_to_percentage
 from ..core.utils import build_absolute_uri
 from ..discount.models import Voucher
 from ..product.models import Product
+from ..private import private_storage
 from ..userprofile.models import Address
 from .transitions import (
     cancel_delivery_group, process_delivery_group, ship_delivery_group)
@@ -158,6 +162,32 @@ class Order(models.Model, ItemSet, WebhookModel):
 
     def __str__(self):
         return '#%d' % (self.id,)
+
+    @cached_property
+    def invoice_path(self):
+        return 'invoices/{0.id}.pdf'.format(self)
+
+    def create_invoice_pdf(self):
+        return create_invoice_pdf(self)
+
+    def create_and_save_invoice(self):
+        pdf = BytesIO()
+        self.create_invoice_pdf().write_pdf(target=pdf)
+        private_storage.save(self.invoice_path, pdf)
+        return pdf
+
+    def get_invoice(self):
+        if settings.PRIVATE_STORAGE_DISABLE_CACHE:
+            pdf = self.create_invoice_pdf().write_pdf()
+        else:
+            try:
+                pdf = private_storage.open(self.invoice_path)
+            except OSError:
+                raise Http404
+        return pdf
+
+    def place_order(self):
+        self.create_and_save_invoice()
 
     @property
     def discount(self):

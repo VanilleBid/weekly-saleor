@@ -62,7 +62,7 @@ def details(request, token):
 @login_required
 @_can_view_pdf_invoice
 def invoice(request, order):
-    pdf = create_invoice_pdf(order).write_pdf()
+    pdf = order.get_invoice()
     response = HttpResponse(pdf, content_type='application/pdf')
     name = "invoice-%s" % order.id
     response['Content-Disposition'] = 'filename=%s.pdf' % name

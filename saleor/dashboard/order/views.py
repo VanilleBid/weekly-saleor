@@ -205,6 +205,7 @@ def place_order(request, order_pk):
     if request.method == 'POST':
         order.is_draft = False
         order.save()
+        order.place_order()
         return redirect('dashboard:order-details', order_pk=order.pk)
 
     return TemplateResponse(

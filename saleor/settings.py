@@ -130,6 +130,15 @@ ORDER_FROM_EMAIL = os.getenv('ORDER_FROM_EMAIL', DEFAULT_FROM_EMAIL)
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 
+PRIVATE_STORAGE_S3_STORAGE_BACKEND_CACHE_DIR = os.path.join(PROJECT_ROOT, 'private')
+PRIVATE_STORAGE_S3_STORAGE_BUCKET_NAME = os.environ.get('PRIVATE_STORAGE_S3_STORAGE_BUCKET_NAME')
+PRIVATE_STORAGE_DISABLE_CACHE = get_bool('PRIVATE_STORAGE_DISABLE_CACHE', False)
+
+if PRIVATE_STORAGE_S3_STORAGE_BUCKET_NAME:
+    PRIVATE_STORAGE_S3_STORAGE = 'saleor.core.storages.S3PrivateStorage'
+else:
+    PRIVATE_STORAGE_S3_STORAGE = 'saleor.core.storages.PrivateStorageLocalOnly'
+
 REAL_STATIC_ROOT = os.path.join(PROJECT_ROOT, 'saleor', 'static')
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
@@ -228,6 +237,7 @@ INSTALLED_APPS = [
     'saleor.site',
     'saleor.data_feeds',
     'saleor.page',
+    'saleor.private',
 
     # External apps
     'versatileimagefield',

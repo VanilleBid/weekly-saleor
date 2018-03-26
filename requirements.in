@@ -56,3 +56,4 @@ vatlayer_european_taxes>=0.0.1.3
 invoice-generator==0.0.3rc6
 django-webhooking==0.0.2.0
 pip-tools==1.11.0
+S3CachedStorage==0.0.0rc1

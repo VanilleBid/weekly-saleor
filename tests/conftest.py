@@ -85,7 +85,8 @@ def request_checkout(checkout):
 
 @pytest.fixture
 def order(billing_address):
-    return Order.objects.create(billing_address=billing_address)
+    order = Order.objects.create(billing_address=billing_address)
+    return order
 
 
 @pytest.fixture()
@@ -520,6 +521,7 @@ def order_with_lines_and_stock(order, product_type, default_category):
         stock_location=stock.location.name)
     recalculate_order(order)
     order.refresh_from_db()
+    order.place_order()
     return order
 
 
