@@ -6,7 +6,7 @@ from uuid import uuid4
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, BooleanField
 from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import pgettext_lazy
@@ -85,6 +85,8 @@ class Order(models.Model, ItemSet, WebhookModel):
 
     min_delivery_date = models.DateField(null=True, blank=True)
     max_delivery_date = models.DateField(null=True, blank=True)
+
+    is_draft = BooleanField(default=False, blank=True)
 
     objects = OrderQuerySet.as_manager()
 

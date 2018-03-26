@@ -12,10 +12,12 @@ class OrderAppConfig(AppConfig):
 
 
 class OrderStatus:
+    DRAFT = 'draft'
     OPEN = 'open'
     CLOSED = 'closed'
 
     CHOICES = [
+        (DRAFT, pgettext_lazy('order status', 'Draft')),
         (OPEN, pgettext_lazy('order status', 'Open')),
         (CLOSED, pgettext_lazy('order status', 'Closed'))]
 

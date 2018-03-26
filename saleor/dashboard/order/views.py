@@ -199,6 +199,20 @@ def order_add_note(request, order_pk):
 
 @staff_member_required
 @permission_required('order.edit_order')
+def place_order(request, order_pk):
+    order = get_object_or_404(Order, pk=order_pk, is_draft=True)
+
+    if request.method == 'POST':
+        order.is_draft = False
+        order.save()
+        return redirect('dashboard:order-details', order_pk=order.pk)
+
+    template = 'dashboard/order/modal/place_order.html'
+    return TemplateResponse(request, template, {'order': order})
+
+
+@staff_member_required
+@permission_required('order.edit_order')
 def capture_payment(request, order_pk, payment_pk):
     order = get_object_or_404(Order, pk=order_pk)
     payment = get_object_or_404(order.payments, pk=payment_pk)
@@ -518,7 +532,7 @@ def order_invoice(request, order_pk):
     pdf_file, order = create_invoice_pdf(order, absolute_url)
     response = HttpResponse(pdf_file, content_type='application/pdf')
     name = "invoice-%s" % order.id
-    response['Content-Disposition'] = 'filename=%s' % name
+    response['Content-Disposition'] = 'filename=%s.pdf' % name
     return response
 
 
@@ -533,7 +547,7 @@ def order_packing_slip(request, group_pk):
     pdf_file, group = create_packing_slip_pdf(group, absolute_url)
     response = HttpResponse(pdf_file, content_type='application/pdf')
     name = "packing-slip-%s-%s" % (group.order.id, group.id)
-    response['Content-Disposition'] = 'filename=%s' % name
+    response['Content-Disposition'] = 'filename=%s.pdf' % name
     return response
 
 

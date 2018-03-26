@@ -293,7 +293,7 @@ def test_view_order_invoice(
     assert response.status_code == 200
     assert response['content-type'] == 'application/pdf'
     name = "invoice-%s" % order_with_lines_and_stock.id
-    assert response['Content-Disposition'] == 'filename=%s' % name
+    assert response['Content-Disposition'] == 'filename=%s.pdf' % name
 
 
 @pytest.mark.integration
@@ -327,7 +327,7 @@ def test_view_order_packing_slips(
     name = "packing-slip-%s-%s" % (
         order_with_lines_and_stock.id,
         order_with_lines_and_stock.groups.all()[0].pk)
-    assert response['Content-Disposition'] == 'filename=%s' % name
+    assert response['Content-Disposition'] == 'filename=%s.pdf' % name
 
 
 @pytest.mark.integration

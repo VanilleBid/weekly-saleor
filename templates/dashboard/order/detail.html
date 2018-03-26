@@ -188,12 +188,23 @@
         </div>
         {% if perms.order.edit_order %}
           <div class="data-table-action">
-            <a href="{% url 'order:invoice' token=order.token %}" data-href="" class="btn-flat waves-effect green white-text" target="_blank">
-              {% trans "Client Invoice" context "Order detail action" %}
-            </a>
+            {% if order.is_draft %}
+              <a data-href="{% url 'dashboard:confirm-order' order_pk=order.pk %}" class="modal-trigger-custom red btn-flat waves-effect white-text" href="#base-modal">
+                {% trans "Place Order" context "Order detail action" %}
+              </a>
+              <a href="{% url 'order:invoice' token=order.token %}" data-href="" class="btn-flat waves-effect green white-text" target="_blank">
+                {% trans "PDF Quote" context "Order detail action" %}
+              </a>
+            {% else %}
+              <a href="{% url 'order:invoice' token=order.token %}" data-href="" class="btn-flat waves-effect green white-text" target="_blank">
+                {% trans "Client Invoice" context "Order detail action" %}
+              </a>
+            {% endif %}
+
             <a href="{% url 'dashboard:order-invoice' order_pk=order.pk %}" data-href="" class="btn-flat waves-effect" target="_blank">
               {% trans "Internal Invoice" context "Order detail action" %}
             </a>
+
             {% if can_capture or can_refund or can_release %}
               {% if can_capture %}
                 <a href="#base-modal" data-href="{% url 'dashboard:capture-payment' order_pk=order.pk payment_pk=payment.pk %}" class="btn-flat modal-trigger-custom waves-effect">

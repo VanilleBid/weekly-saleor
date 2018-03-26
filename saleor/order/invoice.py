@@ -23,6 +23,7 @@ def _generate_pdf_billing_address(order):
 def _generate_pdf_data(order):
     order_total = order.total
     order_data = dict(
+        order=order,
         date=order.created,
         tax_rate=order.tax_rate,
         payment_date_limit=None,

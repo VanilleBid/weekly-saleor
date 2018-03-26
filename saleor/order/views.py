@@ -65,7 +65,7 @@ def invoice(request, order):
     pdf = create_invoice_pdf(order).write_pdf()
     response = HttpResponse(pdf, content_type='application/pdf')
     name = "invoice-%s" % order.id
-    response['Content-Disposition'] = 'filename=%s' % name
+    response['Content-Disposition'] = 'filename=%s.pdf' % name
     return response
 
 

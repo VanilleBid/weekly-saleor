@@ -163,7 +163,7 @@ def test_view_order_invoice_authorized(
     assert response.status_code == 200
     assert response['content-type'] == 'application/pdf'
     name = "invoice-%s" % order.id
-    assert response['Content-Disposition'] == 'filename=%s' % name
+    assert response['Content-Disposition'] == 'filename=%s.pdf' % name
 
 
 def test_view_order_invoice_unauthorized(
@@ -208,7 +208,7 @@ def test_view_order_invoice_staff_access(
     assert response.status_code == 200
     assert response['content-type'] == 'application/pdf'
     name = "invoice-%s" % order.id
-    assert response['Content-Disposition'] == 'filename=%s' % name
+    assert response['Content-Disposition'] == 'filename=%s.pdf' % name
 
     staff_user.is_active = False
     staff_user.save()

@@ -18,6 +18,8 @@ urlpatterns = [
         views.order_details, name='order-details'),
     url(r'^(?P<order_pk>\d+)/add-note/$',
         views.order_add_note, name='order-add-note'),
+    url(r'^(?P<order_pk>\d+)/confirm/$',
+        views.place_order, name='confirm-order'),
     url(r'^(?P<order_pk>\d+)/cancel/$',
         views.cancel_order, name='order-cancel'),
     url(r'^(?P<order_pk>\d+)/address/(?P<address_type>billing|shipping)/$',

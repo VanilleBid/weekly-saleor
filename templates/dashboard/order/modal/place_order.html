@@ -1,0 +1,25 @@
+{% extends "dashboard/base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+
+{% block action_url %}
+  {% url 'dashboard:confirm-order' order_pk=order.pk %}
+{% endblock %}
+
+{% block title %}
+  {% trans "Place order" context "Modal place order title" %}
+{% endblock %}
+
+{% block content %}
+  {% csrf_token %}
+  <div class="col s12">
+    {% blocktrans trimmed with order=order context "Modal place order information text" %}
+      Are you sure you want to place this order?
+    {% endblocktrans %}
+  </div>
+{% endblock %}
+
+{% block primary_action %}
+  {% trans "Place order" context "Modal place order primary action" %}
+{% endblock %}

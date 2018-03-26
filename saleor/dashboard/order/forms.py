@@ -122,10 +122,12 @@ class OrderCreationForm(forms.Form):
                     checkout.note = order_note
 
                 order = checkout.create_order()
+                order.is_draft = True
 
                 if customer:
                     order.user = customer
-                    order.save()
+
+                order.save()
 
                 return order
             except Exception as e:

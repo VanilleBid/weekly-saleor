@@ -78,12 +78,18 @@
       <table class="infoTable">
         <tr>
           <td class="bold">
-            {% blocktrans with order_id=order.order_id %}Order ID: {{ order_id }}{% endblocktrans %}
+            {% if order.order.is_draft %}
+              {% blocktrans with order_id=order.order_id %}Quote ID: {{ order_id }}{% endblocktrans %}
+            {% else %}
+              {% blocktrans with order_id=order.order_id %}Order ID: {{ order_id }}{% endblocktrans %}
+            {% endif %}
           </td>
 
+          {% if order.customer_id %}
           <td>
             {% blocktrans with customer_id=order.customer_id %}Customer ID: {{ customer_id }}{% endblocktrans %}
           </td>
+          {% endif %}
         </tr>
         <tr>
           {% if order.shipping_date_range %}
@@ -158,6 +164,7 @@
       </table>
     </div>
 
+    {% if not order.order.is_draft %}
     <div class="section">
       <p>{% blocktrans %}Thank you for your order.{% endblocktrans %}</p>
 
@@ -173,6 +180,7 @@
         </p>
       {% endif %}
     </div>
+    {% endif %}
 
   </body>
 </html>
