@@ -62,7 +62,7 @@ graphql-core==2.0         # via graphene, graphql-relay
 graphql-relay==0.4.5      # via graphene
 html5lib==1.0.1           # via bleach, weasyprint
 idna==2.6                 # via cryptography, requests, vatlayer-european-taxes, yarl
-invoice-generator==0.0.3rc4
+invoice-generator==0.0.3rc6
 iso8601==0.1.12           # via graphene-django
 jmespath==0.9.3           # via boto3, botocore
 jsonfield==2.0.2
