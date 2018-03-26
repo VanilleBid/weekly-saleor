@@ -129,10 +129,15 @@ class Order(models.Model, ItemSet, WebhookModel):
     def get_lines(self):
         return OrderLine.objects.filter(delivery_group__order=self)
 
-    def is_fully_paid(self):
+    @property
+    def total_paid(self):
         total_paid = sum(
             [payment.total for payment in
              self.payments.filter(status=PaymentStatus.CONFIRMED)], Decimal())
+        return total_paid
+
+    def is_fully_paid(self):
+        total_paid = self.total_paid
         total = self.get_total()
         return total_paid >= total.gross
 

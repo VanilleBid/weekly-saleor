@@ -25,6 +25,9 @@ urlpatterns = [
     url(r'^(?P<order_pk>\d+)/address/(?P<address_type>billing|shipping)/$',
         views.address_view, name='address-edit'),
 
+    url(r'^(?P<order_pk>\d+)/fully-pay/$',
+        views.mark_as_paid, name='mark-fully-paid'),
+
     url(r'^(?P<order_pk>\d+)/payment/(?P<payment_pk>\d+)/capture/$',
         views.capture_payment, name='capture-payment'),
     url(r'^(?P<order_pk>\d+)/payment/(?P<payment_pk>\d+)/release/$',

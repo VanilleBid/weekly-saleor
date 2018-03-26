@@ -1,0 +1,30 @@
+{% extends "dashboard/base_modal.html" %}
+
+{% load i18n %}
+{% load materializecss %}
+
+{% block action_url %}
+  {% url 'dashboard:mark-fully-paid' order_pk=order.pk %}
+{% endblock %}
+
+{% block title %}
+  {% trans "Mark order as fully paid" context "Modal mark order order as fully paid - title" %}
+{% endblock %}
+
+{% block content %}
+  {% csrf_token %}
+
+  {% for error in errors %}
+    <blockquote>{{ error }}</blockquote>
+  {% endfor %}
+
+  <div class="col s12">
+    {% blocktrans trimmed with order=order context "Modal mark order as fully paid information text" %}
+      Are you sure you want to mark this order as fully paid?
+    {% endblocktrans %}
+  </div>
+{% endblock %}
+
+{% block primary_action %}
+  {% trans "Mark as fully paid" context "Modal mark order as fully paid, primary action" %}
+{% endblock %}

@@ -207,8 +207,39 @@ def place_order(request, order_pk):
         order.save()
         return redirect('dashboard:order-details', order_pk=order.pk)
 
-    template = 'dashboard/order/modal/place_order.html'
-    return TemplateResponse(request, template, {'order': order})
+    return TemplateResponse(
+        request, 'dashboard/order/modal/place_order.html', {'order': order})
+
+
+@staff_member_required
+@permission_required('order.edit_order')
+def mark_as_paid(request, order_pk):
+    order = get_object_or_404(Order, pk=order_pk)
+    status = 200
+    errors = []
+
+    if request.method == 'POST':
+        if order.is_fully_paid():
+            status = 400
+            errors.append(pgettext_lazy(
+                'Modal \'mark order as fully paid\' error - order is already paid', 'Order is already paid'))
+        else:
+            total = order.get_total()
+            amount = total.gross - order.total_paid
+
+            order.payments.create(
+                variant='', status=PaymentStatus.CONFIRMED,
+                currency=total.currency,
+                total=amount, captured_amount=amount)
+
+            return redirect('dashboard:order-details', order_pk=order.pk)
+
+    return TemplateResponse(
+        request, 'dashboard/order/modal/mark_fully_paid.html',
+        {
+            'order': order,
+            'errors': errors
+        }, status=status)
 
 
 @staff_member_required
