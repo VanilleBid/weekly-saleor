@@ -1,19 +1,21 @@
 from decimal import Decimal
 from unittest.mock import patch
 
+from django.test import Client
 from django.urls import reverse
 import pytest
 from django_fsm import TransitionNotAllowed
+from payments import PaymentStatus
 from prices import Price
 
-from tests.utils import get_redirect_location, get_url_path
+from tests.utils import get_redirect_location, get_url_path, assert_decimal
 
 from saleor.cart.models import Cart
 from saleor.dashboard.order.forms import ChangeQuantityForm
 from saleor.order import GroupStatus
 from saleor.dashboard.order.forms import OrderNoteForm
 from saleor.order.models import (
-    DeliveryGroup, Order, OrderHistoryEntry, OrderLine, OrderNote)
+    DeliveryGroup, Order, OrderHistoryEntry, OrderLine, OrderNote, Payment)
 from saleor.order.transitions import process_delivery_group
 from saleor.order.utils import (
     add_variant_to_existing_lines, change_order_line_quantity,
@@ -671,3 +673,61 @@ def test_note_form_sent_email(
     form = OrderNoteForm({'content': 'test_note'}, instance=note)
     form.send_confirmation_email()
     assert mock_send_note_confirmation.called_once()
+
+
+def test_mark_as_paid(admin_client: Client, order_with_lines: Order):
+    payment_count = order_with_lines.payments.count()
+
+    def _button_is_in_order_details(_order):
+        kwargs = dict(order_pk=_order.pk)
+        _url = reverse('dashboard:order-details', kwargs=kwargs)
+        _response = admin_client.get(_url)
+        assert _response.status_code == 200
+
+        _expected_url = reverse('dashboard:mark-fully-paid', kwargs=kwargs)
+        _expected_content = ' data-href="%s" ' % _expected_url
+        return _expected_content in _response.content.decode('utf-8')
+
+    def _request(_expected_status, _post=False, _order: Order=order_with_lines):
+        _url = reverse('dashboard:mark-fully-paid', kwargs=dict(order_pk=_order.pk))
+        _meth = _post and admin_client.post or admin_client.get
+        _response = _meth(_url)
+        assert _response.status_code == _expected_status
+
+        button_in_order_details = _button_is_in_order_details(_order)
+
+        if _expected_status != 200:
+            assert not button_in_order_details
+        else:
+            assert button_in_order_details
+
+        return _response
+
+    def _assert_payment(_payment: Payment, _expected_price: Price):
+        _expected_gross = _expected_price.gross
+        assert_decimal(_payment.total, _expected_gross)
+        assert_decimal(_payment.captured_amount, _expected_gross)
+        assert _payment.currency == _expected_price.currency
+        assert _payment.status == PaymentStatus.CONFIRMED
+
+    _request(200, False)  # get order that wasn't fully paid
+    _request(302, True)   # mark it as fully paid
+    _request(400, True)   # try to mark it as fully paid again, it should return an error
+
+    payment_count += 1
+
+    payment = order_with_lines.payments.last()
+    _assert_payment(payment, order_with_lines.get_total())
+
+    price_to_add = Price(Decimal(2.0), currency=order_with_lines.total.currency)
+    order_with_lines.total += price_to_add
+    order_with_lines.save()
+    assert not order_with_lines.is_fully_paid()
+
+    _request(200, False)  # get order that wasn't fully paid
+    _request(302, True)   # mark it as fully paid
+    payment_count += 1
+
+    assert order_with_lines.payments.count() == payment_count
+    payment = order_with_lines.payments.last()
+    _assert_payment(payment, price_to_add)
