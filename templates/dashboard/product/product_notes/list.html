@@ -1,0 +1,74 @@
+{% extends "dashboard/base.html" %}
+{% load i18n %}
+{% load prices_i18n %}
+{% load materializecss %}
+{% load staticfiles %}
+{% load utils %}
+
+{% block title %}
+  {% trans "Product notes" context "Dashboard product notes list" %} - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-products{% endblock %}
+
+{% block menu_product_notes_class %}active{% endblock %}
+
+{% block header_extra %}
+  {% if perms.product.edit_properties %}
+  <div class="btn-fab-fixed">
+    <a class="btn-fab-default waves-effect waves-light" title="{% trans "Add product note" context "Product note add button text" %}" href="{% url 'dashboard:product-notes-add' %}">
+      <svg data-src="{% static "dashboard/images/add.svg" %}" />
+    </a>
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs">
+    <li class="visible-s">
+      {% trans "Product notes" context "Dashboard product notes list" %}
+    </li>
+  </ul>
+{% endblock %}
+
+{% block menu_catalogue_class %} active{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col s12 l9">
+      {% if notes %}
+        <div class="card">
+          <div class="data-table-container">
+            <table class="bordered highlight data-table data-table-description">
+              <thead>
+                <tr>
+                  {% trans "Name" context "Dashboard product notes list table header name" as label %}
+                  {% sorting_header 'name' label is_wide=True %}
+
+                  <th>
+                    {% trans "Text" context "Product notes 'text' table header" %}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for note in notes %}
+                <tr data-action-go="{% if perms.product.edit_properties %}{% url 'dashboard:product-notes-edit' note_pk=note.pk %}{% endif %}">
+                  <td>
+                    {{ note.name }}
+                  </td>
+                  <td>
+                    {{ note.text }}
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% paginate notes %}
+      {% else %}
+        {% include 'dashboard/product/product_notes/zero_page.html' %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

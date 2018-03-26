@@ -12,9 +12,10 @@ from django_prices.templatetags.prices_i18n import gross
 from . import forms
 from ...userprofile.models import User
 from ...core.utils import get_paginator_items
+from ...dashboard.product.forms import ProductNoteForm
 from ...product.models import (
     AttributeChoiceValue, Product, ProductAttribute, ProductImage, ProductType,
-    ProductVariant, Stock, StockLocation)
+    ProductVariant, Stock, StockLocation, ProductNote)
 from ...product.utils import (
     get_availability, get_product_costs_data, get_variant_costs_data)
 from ..views import staff_member_required
@@ -729,6 +730,36 @@ def stock_location_delete(request, location_pk):
         request,
         'dashboard/product/stock_location/modal/confirm_delete.html',
         ctx)
+
+
+@staff_member_required
+@permission_required('product.view_properties')
+def product_notes_list(request):
+    ctx = {'notes': ProductNote.objects.all()}
+    return TemplateResponse(request, 'dashboard/product/product_notes/list.html', ctx)
+
+
+@staff_member_required
+@permission_required('product.edit_properties')
+def product_notes_add(request):
+    form = ProductNoteForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('dashboard:product-notes-list')
+    ctx = {'form': form}
+    return TemplateResponse(request, 'dashboard/product/product_notes/form.html', ctx)
+
+
+@staff_member_required
+@permission_required('product.edit_properties')
+def product_notes_edit(request, note_pk):
+    product_note = get_object_or_404(ProductNote, pk=note_pk)
+    form = ProductNoteForm(request.POST or None, instance=product_note)
+    if form.is_valid():
+        form.save()
+        return redirect('dashboard:product-notes-list')
+    ctx = {'form': form, 'product_note': product_note}
+    return TemplateResponse(request, 'dashboard/product/product_notes/form.html', ctx)
 
 
 @require_POST

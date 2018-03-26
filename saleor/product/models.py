@@ -1,7 +1,6 @@
 import datetime
 from decimal import Decimal
 
-from celery import shared_task
 from django.conf import settings
 from django.contrib.postgres.fields import HStoreField
 from django.core.validators import (
@@ -87,6 +86,19 @@ class ProductType(models.Model):
             class_.__module__, class_.__name__, self.pk, self.name)
 
 
+class ProductNote(models.Model):
+    name = models.CharField(max_length=60, validators=[MaxLengthValidator(60)], blank=False)
+
+    # FIXME: create a CharIln8Field
+    text = models.CharField(max_length=255, validators=[MaxLengthValidator(255)], blank=False)
+
+    class Meta:
+        app_label = 'product'
+
+    def __str__(self):
+        return self.name
+
+
 class ProductQuerySet(models.QuerySet):
     def available_products(self):
         today = datetime.date.today()
@@ -121,6 +133,7 @@ class Product(models.Model, ItemRange):
     is_featured = models.BooleanField(default=False)
 
     objects = ProductQuerySet.as_manager()
+    notes = models.ManyToManyField('ProductNote', related_name='products', blank=True)
 
     class Meta:
         app_label = 'product'

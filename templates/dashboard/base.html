@@ -107,11 +107,16 @@
                       {% trans "Products" context "Dashboard products list" %}
                     </a>
                   </li>
+                  <li class="{% block menu_product_notes_class %}{% endblock %}">
+                    <a href="{% url 'dashboard:product-notes-list' %}">
+                      &mdash; {% trans "Product Notes" context "Dashboard product notes list" %}
+                    </a>
+                  </li>
                 {% endif %}
                 {% if perms.product.view_category %}
                   <li class="{% block menu_categories_class %}{% endblock %}">
                     <a href="{% url 'dashboard:category-list' %}">
-                      {% trans "Categories" context "Dashboard categories list" %}
+                      &mdash; {% trans "Categories" context "Dashboard categories list" %}
                     </a>
                   </li>
                 {% endif %}

@@ -6,19 +6,19 @@ from unittest.mock import Mock, MagicMock, call
 from django.conf import settings
 from django.db.models import Q
 from django.forms import HiddenInput
-from django.test import Client
+from django.test import Client, RequestFactory
 from django.urls import reverse
 from django.utils.encoding import smart_text
 from django.forms.models import model_to_dict
 
 from saleor.core.utils import warmer
-from saleor.dashboard.product import ProductBulkAction
+from saleor.dashboard.product import ProductBulkAction, views
 from saleor.dashboard.product.forms import (
-    ProductBulkUpdate, ProductTypeForm, ProductForm)
+    ProductBulkUpdate, ProductTypeForm, ProductForm, ProductNoteForm)
 from saleor.product.forms import VariantChoiceField
 from saleor.product.models import (
     Collection, AttributeChoiceValue, Product, ProductAttribute, ProductImage,
-    ProductType, ProductVariant, Stock, StockLocation)
+    ProductType, ProductVariant, Stock, StockLocation, ProductNote)
 from saleor.userprofile.models import User
 
 from ..utils import create_image
@@ -789,3 +789,120 @@ def test_ajax_customer_list(admin_user: User, admin_client: Client):
     values = _search('admin@example.com')
     assert len(values) == 1
     assert values[0] == {'id': admin_user.pk, 'text': 'admin@example.com'}
+
+
+def test_view_product_notes_list(admin_user: User, product_in_stock: Product):
+    post_url = reverse('dashboard:product-notes-add')
+
+    request_get = RequestFactory().get(reverse('dashboard:product-notes-list'))
+    request_get.user = admin_user
+
+    ProductNote.objects.all().delete()
+
+    def _get():
+        response = views.product_notes_list(request_get)
+        ctx = response.context_data
+        return sorted(ctx['notes'], key=lambda _note: _note.id)
+
+    def _post(_data):
+        request_post = RequestFactory().post(post_url, _data)
+        request_post.user = admin_user
+        return views.product_notes_add(request_post)
+
+    assert len(_get()) == 0
+
+    form = ProductNoteForm({'name': 'test name', 'text': 'test text'})
+    assert form.is_valid()
+    form.save()
+    notes = _get()
+    assert len(notes) == 1
+    note = notes[-1]
+    assert note.name == 'test name'
+    assert note.text == 'test text'
+
+    _post({'name': 'another test name', 'text': 'another test text'})
+    notes = _get()
+    assert len(notes) == 2
+    note = notes[-1]
+    assert note.name == 'another test name'
+    assert note.text == 'another test text'
+
+    product_in_stock.refresh_from_db()
+    assert product_in_stock.notes.count() == 0
+
+
+def test_view_product_notes_add(admin_client: Client):
+    post_url = reverse('dashboard:product-notes-add')
+    get_url = reverse('dashboard:product-notes-list')
+
+    ProductNote.objects.all().delete()
+
+    def _get():
+        _response = admin_client.get(get_url)
+        assert _response.status_code == 200
+        return _response
+
+    def _post(_data, _expected_status):
+        _count = ProductNote.objects.count()
+        _response = admin_client.post(post_url, _data)
+        assert _response.status_code == _expected_status
+        if _expected_status == 302:
+            assert ProductNote.objects.count() == _count + 1
+            _get_content = _get().content.decode('utf-8')
+            assert _data['name'] in _get_content
+            assert _data['text'] in _get_content
+        return _response
+
+    _post({'name': '1_test name', 'text': '1_test text'}, 302)
+    _post({'name': '2_another test name', 'text': '2_another test text'}, 302)
+
+
+def test_view_product_notes_edit(admin_client: Client):
+    note = ProductNote.objects.create(name='1st test note', text='this is the 1st test note')
+    post_url = reverse('dashboard:product-notes-edit', kwargs={'note_pk': note.pk})
+
+    count = ProductNote.objects.count()
+
+    response = admin_client.post(
+        post_url, {
+            'name': '1st test note was edited',
+            'text': 'this 1st test note was edited...'
+        })
+
+    note.refresh_from_db()
+
+    assert response.status_code == 302
+    assert ProductNote.objects.count() == count
+    assert note.name == '1st test note was edited'
+    assert note.text == 'this 1st test note was edited...'
+
+
+def test_assign_notes_to_product(product_in_stock):
+    product = product_in_stock
+    product_notes_pks = []
+    product_notes_data = (
+        ('test note', 'this a test note'),
+        ('another test note', 'this another test note'))
+
+    for name, text in product_notes_data:
+        product_note = ProductNote.objects.create(name=name, text=text)
+        product_notes_pks.append(product_note.pk)
+
+    assert len(product_notes_pks) == 2
+
+    data = {
+        'name': product.name,
+        'price': product.price.gross,
+        'category': product.category.pk,
+        'description': 'description',
+        'notes': product_notes_pks}
+    form = ProductForm(data, instance=product)
+    assert form.is_valid()
+    form.save()
+
+    assert product.notes.count() == 2
+
+    for pk in product_notes_pks:
+        note = product.notes.filter(pk=pk).first()
+        assert note
+        assert note.products.first().pk == product.pk

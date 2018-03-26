@@ -1,4 +1,6 @@
+from django.test import Client
 from django.urls import reverse
+from saleor.product.models import ProductNote
 
 from saleor.userprofile.models import User
 
@@ -964,3 +966,40 @@ def test_staff_group_member_can_view_and_edit_site_settings(
     response = staff_client.get(reverse('dashboard:site-update',
                                         args=[site_settings.pk]))
     assert response.status_code == 200
+
+
+def test_staff_with_permissions_can_update_add_and_delete_products_notes(
+        staff_client: Client, staff_user, staff_group, permission_edit_properties):
+    assert not staff_user.has_perm("product.edit_properties")
+    ProductNote.objects.create(name='test', text='test')
+    urls = [
+        reverse('dashboard:product-notes-add'),
+        reverse('dashboard:product-notes-edit', kwargs={'note_pk': 1})]
+
+    for url in urls:
+        assert staff_client.get(url).status_code == 302
+        assert staff_client.post(url).status_code == 302
+
+    for url in urls:
+        staff_group.permissions.add(permission_edit_properties)
+        staff_user.groups.add(staff_group)
+        staff_user = User.objects.get(pk=staff_user.pk)
+        assert staff_user.has_perm("product.edit_properties")
+        assert staff_client.get(url).status_code == 200
+
+
+def test_staff_with_permissions_can_view_products_notes(
+        staff_client: Client, staff_user, staff_group, permission_view_properties):
+    assert not staff_user.has_perm("product.view_properties")
+    urls = [
+        reverse('dashboard:product-notes-list')]
+
+    for url in urls:
+        assert staff_client.get(url).status_code == 302
+
+    for url in urls:
+        staff_group.permissions.add(permission_view_properties)
+        staff_user.groups.add(staff_group)
+        staff_user = User.objects.get(pk=staff_user.pk)
+        assert staff_user.has_perm("product.view_properties")
+        assert staff_client.get(url).status_code == 200
