@@ -95,6 +95,13 @@ urlpatterns = [
     url(r'stocklocations/(?P<location_pk>[0-9]+)/delete/$',
         views.stock_location_delete, name='product-stock-location-delete'),
 
+    url(r'^notes/$',
+        views.product_notes_list, name='product-notes-list'),
+    url(r'^notes/add/$',
+        views.product_notes_add, name='product-notes-add'),
+    url(r'^notes/edit/(?P<note_pk>[0-9]+)/$',
+        views.product_notes_edit, name='product-notes-edit'),
+
     url(r'^ajax/variants/$',
         views.ajax_available_variants_list, name='ajax-available-variants'),
     url(r'^ajax/products/$',

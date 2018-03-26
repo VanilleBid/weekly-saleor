@@ -1,0 +1,87 @@
+{% extends "dashboard/base.html" %}
+{% load i18n %}
+{% load prices_i18n %}
+{% load materializecss %}
+{% load staticfiles %}
+{% load utils %}
+
+{% block title %}
+  {% if product_note.pk %}
+    {{ product_note }}
+  {% else %}
+    {% trans "Add new product note" context "Product note creation page title" %}
+  {% endif %}
+  - {% trans "Product notes" context "Dashboard product notes list" %} - {{ block.super }}
+{% endblock %}
+
+{% block body_class %}body-products{% endblock %}
+
+{% block menu_product_notes_class %}active{% endblock %}
+
+{% block header_menu %}
+  {% url "dashboard:product-notes-list" as url %}
+  {% include "dashboard/includes/_back_link.html" with url=url %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  <ul class="breadcrumbs breadcrumbs--history">
+    <li>
+      <a href="{% url "dashboard:product-notes-list" %}" class="breadcrumb">
+        {% trans "Product notes" context "Dashboard product notes list" %}
+      </a>
+    </li>
+    <li class="back-mobile">
+      <a href="{% url "dashboard:product-notes-list" %}">
+        <svg data-src="{% static "dashboard/images/arrow-left.svg" %}" fill="#fff" width="20px" height="20px" />
+      </a>
+    </li>
+    <li>
+      <span class="breadcrumbs--ellipsed-item">
+        {% if product_note.pk %}
+          {{ product_note }}
+        {% else %}
+          {% trans 'Add new product note' context "Product notes breadcrumbs" %}
+        {% endif %}
+      </span>
+    </li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col m12">
+      <div class="card">
+        <form method="post" id="form-product" enctype="multipart/form-data" novalidate>
+          <div class="card-content card-content-form">
+            {% csrf_token %}
+            <div class="row">
+              {{ form.name|materializecss }}
+            </div>
+            <div class="row">
+              {{ form.text|materializecss }}
+            </div>
+          </div>
+          {% if perms.product.edit_properties %}
+          <div class="card-action right-align">
+            {% if product_note.pk %}
+              <a href="{% url 'dashboard:product-notes-list' %}" class="btn-flat waves-effect">
+                {% trans "Cancel" context "Dashboard cancel action" %}
+              </a>
+              <button type="submit" class="btn waves-effect">
+                {% trans "Update" context "Dashboard update action" %}
+              </button>
+            {% else %}
+              <a href="{% url 'dashboard:product-notes-list' %}" class="btn-flat waves-effect">
+                {% trans "Cancel" context "Dashboard cancel action" %}
+              </a>
+              <button type="submit" class="btn waves-effect">
+                {% trans "Create" context "Dashboard create action" %}
+              </button>
+            {% endif %}
+          </div>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

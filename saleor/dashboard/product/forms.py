@@ -11,9 +11,9 @@ from . import ProductBulkAction
 from ...core.utils.text import generate_seo_description
 from ...product.models import (
     AttributeChoiceValue, Collection, Product, ProductAttribute, ProductImage,
-    ProductType, ProductVariant, Stock, StockLocation, VariantImage, Category)
+    ProductType, ProductVariant, Stock, StockLocation, VariantImage, Category, ProductNote)
 from ..forms import RichTextField
-from ..widgets import StaffValuesMultipleChoiceField, StaffValuesChoiceField
+from ..widgets import StaffValuesMultipleChoiceField
 from .widgets import ImagePreviewWidget
 
 
@@ -118,6 +118,17 @@ class ProductTypeForm(forms.ModelForm):
         return data
 
 
+class ProductNoteForm(forms.ModelForm):
+
+    class Meta:
+        model = ProductNote
+        exclude = ['products']
+        labels = {
+            'name': pgettext_lazy('Product note name', 'Name'),
+            'text': pgettext_lazy('Product note text', 'Text')
+        }
+
+
 class ProductForm(forms.ModelForm):
     category = TreeNodeChoiceField(queryset=Category.objects.all())
 
@@ -138,7 +149,9 @@ class ProductForm(forms.ModelForm):
             'is_featured': pgettext_lazy(
                 'Featured product toggle', 'Feature this product on homepage'),
             'collections': pgettext_lazy(
-                'Add to collection select', 'Collections')}
+                'Add to collection select', 'Collections'),
+            'notes': pgettext_lazy(
+                'Add notes to product - select box', 'Notes')}
 
     category = TreeNodeChoiceField(Category.objects.all())
     collections = forms.ModelMultipleChoiceField(

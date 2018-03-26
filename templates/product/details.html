@@ -121,12 +121,6 @@
       {% endif %}
 
       {% if availability.available %}
-        {% with availability_range=product.availability_range %}
-          {% if availability_range %}
-            <p class="alert alert-warning">{{ availability_range }}</p>
-          {% endif %}
-        {% endwith %}
-
         <div class="price-container">
           {% if show_variant_picker %}
               <div id="variant-price-component"></div>
@@ -165,6 +159,18 @@
         <div class="product__info__form-error">
           <small class="text-danger"></small>
         </div>
+
+        {% with availability_range=product.availability_range %}
+          {% if availability_range %}
+            <p class="alert alert-warning">{{ availability_range }}</p>
+          {% endif %}
+        {% endwith %}
+
+        {% for note in product.notes.all %}
+          <blockquote class="alert alert-warning">
+            <strong>{{ note.name }}</strong> &mdash; {{ note.text }}
+          </blockquote>
+        {% endfor %}
 
       {% else %}
         <p class="alert alert-warning">
