@@ -691,6 +691,7 @@ def test_mark_as_paid(admin_client: Client, order_with_lines: Order):
     def _request(_expected_status, _post=False, _order: Order=order_with_lines):
         _url = reverse('dashboard:mark-fully-paid', kwargs=dict(order_pk=_order.pk))
         _meth = _post and admin_client.post or admin_client.get
+        _history_count = _order.history.count()
         _response = _meth(_url)
         assert _response.status_code == _expected_status
 
@@ -698,6 +699,9 @@ def test_mark_as_paid(admin_client: Client, order_with_lines: Order):
 
         if _expected_status != 200:
             assert not button_in_order_details
+            if _expected_status == 200:
+                _order.refresh_from_db()
+                assert _order.history.count() == _history_count + 1
         else:
             assert button_in_order_details
 

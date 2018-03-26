@@ -12,7 +12,7 @@ from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.translation import pgettext_lazy
 from django.views.decorators.cache import cache_page
-from django_prices.templatetags.prices_i18n import gross
+from django_prices.templatetags.prices_i18n import gross, format_price
 from payments import PaymentStatus
 from prices import Price
 from satchless.item import InsufficientStock
@@ -232,6 +232,10 @@ def mark_as_paid(request, order_pk):
                 variant='', status=PaymentStatus.CONFIRMED,
                 currency=total.currency,
                 total=amount, captured_amount=amount)
+            order.create_history_entry(pgettext_lazy(
+                'Staff user marked order as fully paid',
+                'Order was manually marked as fully paid, capturing: %s'
+            ) % format_price(amount, total.currency), request.user)
 
             return redirect('dashboard:order-details', order_pk=order.pk)
 
