@@ -199,17 +199,17 @@
               <a href="{% url 'order:invoice' token=order.token %}" data-href="" class="btn-flat waves-effect green white-text" target="_blank">
                 {% trans "Client Invoice" context "Order detail action" %}
               </a>
+
+              {% if not order.is_fully_paid %}
+                <a href="#base-modal" data-href="{% url 'dashboard:mark-fully-paid' order_pk=order.pk %}" class="btn-flat modal-trigger-custom waves-effect">
+                  {% trans "Mark fully paid" context "Order summary card action" %}
+                </a>
+              {% endif %}
             {% endif %}
 
             <a href="{% url 'dashboard:order-invoice' order_pk=order.pk %}" data-href="" class="btn-flat waves-effect" target="_blank">
               {% trans "Internal Invoice" context "Order detail action" %}
             </a>
-
-            {% if not order.is_fully_paid %}
-              <a href="#base-modal" data-href="{% url 'dashboard:mark-fully-paid' order_pk=order.pk %}" class="btn-flat modal-trigger-custom waves-effect">
-                {% trans "Mark fully paid" context "Order summary card action" %}
-              </a>
-            {% endif %}
 
             {% if can_capture or can_refund or can_release %}
               {% if can_capture %}
