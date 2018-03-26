@@ -8,13 +8,14 @@ from mptt.forms import MoveNodeForm, TreeNodeChoiceField, TreeNodePositionField
 from ...product.models import Category
 
 
+LABEL_MOVE_CATEGORY_TARGET = pgettext_lazy('Move category form field: parent to set to category', 'Target')
+LABEL_MOVE_CATEGORY_POSITION = pgettext_lazy('Move category form field: parent to set to category', 'Position')
+
+
 class MoveCategoryForm(MoveNodeForm):
-    target = TreeNodeChoiceField(
-        label=pgettext_lazy('Move category form field: parent to set to category', 'Target'),
-        queryset=None, required=False)
-    position = TreeNodePositionField(
-        label=pgettext_lazy(
-            'Move category form field: position of the category in parent children', 'Position'))
+    # FIXME: i8ln is not working here (not extracting); no idea why.
+    target = TreeNodeChoiceField(label=LABEL_MOVE_CATEGORY_TARGET, queryset=None, required=False)
+    position = TreeNodePositionField(label=LABEL_MOVE_CATEGORY_POSITION)
 
 
 class CategoryForm(forms.ModelForm):
