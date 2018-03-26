@@ -55,36 +55,38 @@
             <div class="col s7 m6">
               <p class="text-padding right-align">{% gross variant.get_price %}</p>
             </div>
-            <div class="col s5 m6">
-              <p class="text-padding">{% trans "Cost price range" context "Dashboard variant details view" %}</p>
-            </div>
-            <div class="col s7 m6">
-              <p class="text-padding right-align">
-                {% if costs|length > 1 %}
-                  {% gross costs|first %} - {% gross costs|last %}
-                {% elif costs|length == 1 %}
-                  {% gross costs|first %}
-                {% else %}
-                  -
-                {% endif %}
-              </p>
-            </div>
-            <div class="col s5 m6">
-              <p class="text-padding">{% trans "Gross margin" context "Dashboard variant details view" %}</p>
-            </div>
-            <div class="col s7 m6">
-              <p class="text-padding right-align">
-                {% if margins|length > 1 %}
-                  {{ margins|first }}% - {{ margins|last }}%
-                {% else %}
-                  {% if margins %}
-                    {{ margins|first }}% - {{ margins|last }}%
+            {% if perms.product.view_stock_location %}
+              <div class="col s5 m6">
+                <p class="text-padding">{% trans "Cost price range" context "Dashboard variant details view" %}</p>
+              </div>
+              <div class="col s7 m6">
+                <p class="text-padding right-align">
+                  {% if costs|length > 1 %}
+                    {% gross costs|first %} - {% gross costs|last %}
+                  {% elif costs|length == 1 %}
+                    {% gross costs|first %}
                   {% else %}
                     -
                   {% endif %}
-                {% endif %}
-              </p>
-            </div>
+                </p>
+              </div>
+              <div class="col s5 m6">
+                <p class="text-padding">{% trans "Gross margin" context "Dashboard variant details view" %}</p>
+              </div>
+              <div class="col s7 m6">
+                <p class="text-padding right-align">
+                  {% if margins|length > 1 %}
+                    {{ margins|first }}% - {{ margins|last }}%
+                  {% else %}
+                    {% if margins %}
+                      {{ margins|first }}% - {{ margins|last }}%
+                    {% else %}
+                      -
+                    {% endif %}
+                  {% endif %}
+                </p>
+              </div>
+            {% endif %}
           </div>
         </div>
         {% if perms.product.edit_product %}
