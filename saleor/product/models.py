@@ -279,10 +279,15 @@ class ProductVariant(models.Model, Item):
     def __str__(self):
         return self.name or self.display_variant_attributes()
 
+    @property
+    def can_ignore_stock(self):
+        return self.stock.filter(ignore_stock=True).exists()
+
     def check_quantity(self, quantity):
-        total_available_quantity = self.get_stock_quantity()
-        if quantity > total_available_quantity:
-            raise InsufficientStock(self)
+        if not self.can_ignore_stock:
+            total_available_quantity = self.get_stock_quantity()
+            if quantity > total_available_quantity:
+                raise InsufficientStock(self)
 
     def get_stock_quantity(self):
         return sum([stock.quantity_available for stock in self.stock.all()])
@@ -344,7 +349,7 @@ class ProductVariant(models.Model, Item):
         # By default selects stock with lowest cost price. If stock cost price
         # is None we assume price equal to zero to allow sorting.
         stock = [
-            stock_item for stock_item in self.stock.all()
+            stock_item for stock_item in self.stock.filter(ignore_stock=False).all()
             if stock_item.quantity_available >= quantity]
         zero_price = Price(0, currency=settings.DEFAULT_CURRENCY)
         stock = sorted(
@@ -391,6 +396,8 @@ class Stock(models.Model):
 
     min_days = models.PositiveIntegerField(blank=True, null=True)
     max_days = models.PositiveIntegerField(blank=True, null=True)
+
+    ignore_stock = models.BooleanField(blank=True, default=False)
 
     class Meta:
         app_label = 'product'
