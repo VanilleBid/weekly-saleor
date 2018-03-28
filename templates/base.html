@@ -42,10 +42,7 @@
     <div class="navbar__login container-fluid {% if user.is_impersonate %} bg-warning{% endif %}">
       <div class=" d-none d-md-block container">
       <div class="row">
-        <div class="col-6">
-          <p class="text-left">{{ site.settings.header_text }}</p>
-        </div>
-        <div class="col-6">
+        <div class="col-12">
           <ul class="float-right">
             {% if user.is_authenticated %}
               {% if user.is_staff or request.impersonator.is_staff %}
@@ -177,12 +174,12 @@
   <footer class="footer">
     <div class="container">
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
           <a href="{% url 'home' %}" class="footer__logo">
             <svg data-src="{% static "images/logo.svg" %}" height="38px" width="176px"/>
           </a>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-md-4 col-sm-6">
           <ul>
             {% for category in categories %}
               <li>
@@ -193,7 +190,7 @@
             {% endfor %}
           </ul>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-md-4 col-sm-6">
           <ul>
             <li>
               <a rel="nofollow" href="{% url "cart:index" %}">
@@ -205,11 +202,6 @@
                 <li>
                   <a href="{% url "dashboard:index" %}" target="_blank" rel="noopener">
                     {% trans "Dashboard" context "Main navigation item" %}
-                  </a>
-                </li>
-                <li>
-                  <a href="{% url "styleguide" %}" target="_blank">
-                    {% trans "Style guide" context "Main navigation item" %}
                   </a>
                 </li>
               {% endif %}
@@ -244,20 +236,18 @@
             {% endif %}
           </ul>
         </div>
-        <div class="col-md-3 col-sm-12">
+      </div>
+
+      <div class="row policies">
           <a target="_blank" rel="noopener" class="social-footer" href="https://www.facebook.com/{{ social_links.facebook }}">
             <svg data-src="{% static "images/facebook-logo.svg" %}" width="45px" height="45px"/>
           </a>
           <a target="_blank" rel="noopener" class="social-footer" href="https://twitter.com/{{ social_links.twitter }}">
             <svg data-src="{% static "images/twitter-logo.svg" %}" width="45px" height="45px"/>
           </a>
-          <a target="_blank" rel="noopener" class="social-footer" href="https://plus.google.com/{{ social_links.google }}">
-            <svg data-src="{% static "images/google-logo.svg" %}" width="45px" height="45px"/>
-          </a>
           <a target="_blank" rel="noopener" class="social-footer" href="https://www.instagram.com/{{ social_links.instagram }}">
             <svg data-src="{% static "images/instagram-logo.svg" %}" width="45px" height="45px"/>
           </a>
-        </div>
       </div>
 
       <div class="row policies">

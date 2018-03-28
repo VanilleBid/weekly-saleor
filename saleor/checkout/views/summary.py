@@ -41,6 +41,7 @@ def handle_order_placement(request, checkout):
     try:
         order, redirect_url = create_order(checkout)
     except InsufficientStock:
+        # FIXME: we should show an error to the user here
         return redirect('cart:index')
     if not order:
         msg = pgettext('Checkout warning', 'Please review your checkout.')

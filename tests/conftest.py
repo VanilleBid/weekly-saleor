@@ -15,6 +15,7 @@ from saleor.cart import utils
 from saleor.cart.models import Cart
 from saleor.checkout.core import Checkout
 from saleor.discount.models import Sale, Voucher
+from saleor.homepage.models import HomePageItem
 from saleor.order import GroupStatus
 from saleor.order.models import DeliveryGroup, Order, OrderLine
 from saleor.order.utils import recalculate_order
@@ -42,6 +43,13 @@ def site_settings(db, settings):
     obj = SiteSettings.objects.get_or_create(site=site)[0]
     settings.SITE_ID = site.pk
     return obj
+
+
+@pytest.fixture
+def homepage_block():
+    res = HomePageItem.objects.create(
+        title='Dummy block', subtitle='Dummy subtitle', primary_button_text='Dummy button')
+    return res
 
 
 @pytest.fixture
@@ -711,6 +719,7 @@ def collection(db):
 @pytest.fixture
 def tax_rates_countries():
     return {'FR': .20, 'FI': .24}
+
 
 @pytest.fixture
 def page(db):

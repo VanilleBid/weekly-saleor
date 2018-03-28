@@ -238,6 +238,7 @@ INSTALLED_APPS = [
     'saleor.data_feeds',
     'saleor.page',
     'saleor.private',
+    'saleor.homepage',
 
     # External apps
     'versatileimagefield',
