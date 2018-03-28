@@ -11,6 +11,7 @@ PRODUCT_IMAGE_SETS = [
 
 
 CATEGORY_IMAGE_SETS = (('crop', '400x400'), ('crop', '255x255'), ('crop', '120x120'))
+HOMEPAGE_BLOCK_SETS = (('thumbnail', '1080x720'), )
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +85,19 @@ class CategoryWarmer:
     def all(cls):
         from saleor.product.models import Category
         return cls(Category.objects.all())
+
+    def __call__(self, *args, **kwargs):
+        return self._wrapper(*args, **kwargs)
+
+
+class HomePageBlockWarmer:
+    def __init__(self, items):
+        self._wrapper = Warmer(items, HOMEPAGE_BLOCK_SETS, 'cover')
+
+    @classmethod
+    def all(cls):
+        from saleor.homepage.models import HomePageItem
+        return cls(HomePageItem.objects.all())
 
     def __call__(self, *args, **kwargs):
         return self._wrapper(*args, **kwargs)

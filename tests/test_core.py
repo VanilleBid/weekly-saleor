@@ -10,7 +10,9 @@ from saleor.core.utils import (
     Country, create_superuser, get_country_by_ip, get_currency_for_country,
     random_data)
 from saleor.core.utils.billing import get_tax_country_code, get_tax_price
-from saleor.core.utils.warmer import CategoryWarmer, ProductWarmer, PRODUCT_IMAGE_SETS, CATEGORY_IMAGE_SETS
+from saleor.core.utils.warmer import (
+    CategoryWarmer, ProductWarmer, HomePageBlockWarmer,
+    PRODUCT_IMAGE_SETS, CATEGORY_IMAGE_SETS)
 from saleor.core.utils.text import get_cleaner, strip_html
 from saleor.discount.models import Sale, Voucher
 from saleor.order.models import Order
@@ -277,9 +279,11 @@ def test_warmer(product_in_stock, product_type):
 
     product_warmer = ProductWarmer.all()
     category_warmer = CategoryWarmer.all()
+    homepage_block_warmer = HomePageBlockWarmer.all()
 
     assert category_warmer._wrapper.query_set.count() == 3
     assert product_warmer._wrapper.query_set.count() == 0
+    assert homepage_block_warmer._wrapper.query_set.count() == 0
 
     assert category_warmer() == 1 * len(CATEGORY_IMAGE_SETS)
     assert product_warmer() == 0

@@ -14,11 +14,6 @@ class SocialLinks:
         return settings.SOCIAL_LINKS_TWITTER
 
     @cached_property
-    def google(self):
-        from django.conf import settings
-        return settings.SOCIAL_LINKS_GOOGLE
-
-    @cached_property
     def instagram(self):
         from django.conf import settings
         return settings.SOCIAL_LINKS_INSTAGRAM

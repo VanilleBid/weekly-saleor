@@ -6,6 +6,7 @@ from django.utils.translation import pgettext_lazy
 from impersonate.views import impersonate as orig_impersonate
 
 from ..dashboard.views import staff_member_required
+from ..homepage.models import HomePageItem
 from ..product.utils import products_for_homepage, products_with_availability
 from ..userprofile.models import User
 from .utils.schema import get_webpage_schema
@@ -14,6 +15,7 @@ from .utils.schema import get_webpage_schema
 def home(request):
     products = products_for_homepage()[:8]
     featured_products = products.exists()
+    blocks = HomePageItem.objects.all()
     products = products_with_availability(
         products, discounts=request.discounts, local_currency=request.currency)
     webpage_schema = get_webpage_schema(request)
@@ -22,6 +24,7 @@ def home(request):
             'parent': None,
             'products': products,
             'featured_products': featured_products,
+            'blocks': blocks,
             'webpage_schema': json.dumps(webpage_schema)})
 
 

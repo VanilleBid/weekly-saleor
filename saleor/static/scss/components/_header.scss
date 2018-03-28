@@ -108,11 +108,16 @@
     padding: $global-padding * 2 0;
     position: relative;
     form {
+      input {
+        border-color: $light-gray;
+        box-shadow: none;
+      }
       svg {
         width: 1.5rem;
         height: 1.5rem;
         vertical-align: middle;
         padding: 0.1rem;
+        fill: darken($light-gray, 20);
       }
     }
     .mobile-search-icon {
@@ -121,7 +126,6 @@
     }
   }
   &__brand {
-    background-color: $light-gray;
     @include media-breakpoint-down(sm) {
       position: fixed;
       top: 0;
