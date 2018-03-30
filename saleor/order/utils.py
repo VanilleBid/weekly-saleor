@@ -82,30 +82,35 @@ def add_variant_to_delivery_group(
         add_variant_to_existing_lines(group, variant, total_quantity)
         if add_to_existing else total_quantity)
     price = variant.get_price_per_item(discounts)
-    while quantity_left > 0:
-        stock = variant.select_stockrecord()
-        if not stock:
-            raise InsufficientStock(variant)
-        quantity = (
-            stock.quantity_available
-            if quantity_left > stock.quantity_available
-            else quantity_left
-        )
-        group.lines.create(
-            product=variant.product,
-            product_name=variant.display_product(),
-            product_sku=variant.sku,
-            is_shipping_required=(
-                variant.product.product_type.is_shipping_required),
-            quantity=quantity,
-            unit_price_net=price.net,
-            unit_price_gross=price.gross,
-            stock=stock,
-            stock_location=stock.location.name)
-        allocate_stock(stock, quantity)
-        # refresh stock for accessing quantity_allocated
-        stock.refresh_from_db()
-        quantity_left -= quantity
+    line_base_data = dict(
+        product=variant.product,
+        product_name=variant.display_product(),
+        product_sku=variant.sku,
+        is_shipping_required=(
+            variant.product.product_type.is_shipping_required),
+        unit_price_net=price.net,
+        unit_price_gross=price.gross)
+
+    if variant.can_ignore_stock:
+        group.lines.create(quantity=quantity_left, **line_base_data)
+    else:
+        while quantity_left > 0:
+            stock = variant.select_stockrecord()
+            if not stock:
+                raise InsufficientStock(variant)
+            quantity = (
+                stock.quantity_available
+                if quantity_left > stock.quantity_available
+                else quantity_left
+            )
+            group.lines.create(
+                quantity=quantity,
+                stock=stock,
+                stock_location=stock.location.name, **line_base_data)
+            allocate_stock(stock, quantity)
+            # refresh stock for accessing quantity_allocated
+            stock.refresh_from_db()
+            quantity_left -= quantity
 
 
 def add_variant_to_existing_lines(group, variant, total_quantity):

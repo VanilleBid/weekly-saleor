@@ -395,8 +395,9 @@ def allocate_stock(stock, quantity):
 
 
 def deallocate_stock(stock, quantity):
-    stock.quantity_allocated = F('quantity_allocated') - quantity
-    stock.save(update_fields=['quantity_allocated'])
+    if stock.ignore_stock:
+        stock.quantity_allocated = F('quantity_allocated') - quantity
+        stock.save(update_fields=['quantity_allocated'])
 
 
 def increase_stock(stock, quantity):
@@ -405,9 +406,10 @@ def increase_stock(stock, quantity):
 
 
 def decrease_stock(stock, quantity):
-    stock.quantity = F('quantity') - quantity
-    stock.quantity_allocated = F('quantity_allocated') - quantity
-    stock.save(update_fields=['quantity', 'quantity_allocated'])
+    if stock.ignore_stock:
+        stock.quantity = F('quantity') - quantity
+        stock.quantity_allocated = F('quantity_allocated') - quantity
+        stock.save(update_fields=['quantity', 'quantity_allocated'])
 
 
 def get_product_list_context(request, filter_set):

@@ -38,7 +38,9 @@ class StockForm(forms.ModelForm):
             'cost_price': pgettext_lazy(
                 'Currency amount', 'Cost price'),
             'min_days': gettext_lazy('Min availability days'),
-            'max_days': gettext_lazy('Max availability days')}
+            'max_days': gettext_lazy('Max availability days'),
+            'ignore_stock': pgettext_lazy(
+                'Ignore the stock form label', 'Ignore stock')}
 
     def __init__(self, *args, **kwargs):
         self.variant = kwargs.pop('variant')
