@@ -46,6 +46,9 @@
   .policies, .policies a {
     color: lighten($gray-700, 30%);
   }
+  .footer-text {
+    color: lighten($gray-700, 8%);
+  }
 }
 
 .maincontent {

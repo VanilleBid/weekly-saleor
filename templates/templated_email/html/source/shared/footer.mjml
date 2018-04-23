@@ -20,7 +20,7 @@
 <mj-section>
   <mj-column>
     <mj-text align="center" color="#999" line-height="1.4" font-size=".7rem">
-        {{ footer_text }}
+      {% if footer_text %}{{ footer_text }}{% endif %}
     </mj-text>
   </mj-column>
 </mj-section>

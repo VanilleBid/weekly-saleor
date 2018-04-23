@@ -16,6 +16,7 @@ def send_set_password_email(staff):
     ctx = {
         'protocol': 'https' if settings.ENABLE_SSL else 'http',
         'domain': site.domain,
+        'footer_text': site.settings.footer_text,
         'site_name': site.name,
         'uid': urlsafe_base64_encode(force_bytes(staff.pk)).decode(),
         'token': default_token_generator.make_token(staff)}
@@ -33,6 +34,7 @@ def send_promote_customer_to_staff_email(staff):
         'protocol': 'https' if settings.ENABLE_SSL else 'http',
         'domain': site.domain,
         'url': build_absolute_uri(reverse('dashboard:index')),
+        'footer_text': site.settings.footer_text,
         'site_name': site.name}
     send_templated_mail(
         template_name='dashboard/staff/promote_customer',

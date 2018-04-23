@@ -13,6 +13,7 @@ def _send_confirmation(email, url, template, **context):
     site = Site.objects.get_current()
     ctx = {
         'protocol': 'https' if settings.ENABLE_SSL else 'http',
+        'footer_text': site.settings.footer_text,
         'site_name': site.name,
         'domain': site.domain,
         'url': url}
