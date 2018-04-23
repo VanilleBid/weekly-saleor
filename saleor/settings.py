@@ -567,5 +567,3 @@ SOCIAL_LINKS_FACEBOOK = os.environ.get('SOCIAL_LINKS_FACEBOOK', 'mirumeelabs')
 SOCIAL_LINKS_TWITTER = os.environ.get('SOCIAL_LINKS_TWITTER', 'getsaleor')
 SOCIAL_LINKS_GOOGLE = os.environ.get('SOCIAL_LINKS_GOOGLE', '+Mirumee')
 SOCIAL_LINKS_INSTAGRAM = os.environ.get('SOCIAL_LINKS_INSTAGRAM', 'explore/tags/mirumee/')
-
-EMAIL_FOOTER_TEXT = os.environ.get('EMAIL_FOOTER_TEXT', '')

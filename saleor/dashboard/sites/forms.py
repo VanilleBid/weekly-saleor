@@ -24,7 +24,9 @@ class SiteSettingsForm(forms.ModelForm):
             'header_text': pgettext_lazy(
                 'Header text', 'Header text'),
             'description': pgettext_lazy(
-                'Description', 'Description')}
+                'Description', 'Description'),
+            'footer_text': pgettext_lazy(
+                'Site Settings Forms - Footer Text label', 'Footer Text')}
 
 
 class AuthorizationKeyForm(forms.ModelForm):

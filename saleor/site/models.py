@@ -12,6 +12,7 @@ class SiteSettings(models.Model):
     site = models.OneToOneField(
         Site, related_name='settings', on_delete=models.CASCADE)
     header_text = models.CharField(max_length=200, blank=True)
+    footer_text = models.CharField(max_length=1024, blank=True)
     description = models.CharField(max_length=500, blank=True)
 
     class Meta:

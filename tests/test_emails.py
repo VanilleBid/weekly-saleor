@@ -7,6 +7,7 @@ import saleor.order.emails as emails
 EMAIL = "foo@bar.com"
 DOMAIN = 'mirumee.com'
 SITE_NAME = 'mirumee.com'
+FOOTER_TEXT = ''
 URL = 'wooba/looba'
 EMAIL_FROM = settings.ORDER_FROM_EMAIL
 
@@ -18,6 +19,7 @@ def test_send_confirmation_using_templated_email(
     context = {
         'protocol': 'http',
         'domain': DOMAIN,
+        'footer_text': FOOTER_TEXT,
         'site_name': SITE_NAME,
         'url': URL,
         'order': order}
@@ -34,6 +36,7 @@ def test_send_order_payment_confirmation(mocked_templated_email):
     context = {
         'protocol': 'http',
         'domain': DOMAIN,
+        'footer_text': FOOTER_TEXT,
         'site_name': SITE_NAME,
         'url': URL}
     mocked_templated_email.assert_called_once_with(
@@ -49,6 +52,7 @@ def test_send_note_confirmation(mocked_templated_email):
     context = {
         'protocol': 'http',
         'domain': DOMAIN,
+        'footer_text': FOOTER_TEXT,
         'site_name': SITE_NAME,
         'url': URL}
     mocked_templated_email.assert_called_once_with(
